@@ -1,0 +1,30 @@
+.bg-me {
+    background-color: #01a553 !important;
+    /* color: #b8c7ce; */
+    color: rgb(243, 243, 243);
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    border-radius: 10px 6px 10px 6px;
+}
+
+.tb-content {
+    padding: 10px 0 0 4px !important;
+    line-height: 15px !important;
+}
+
+.status-user {
+    text-align: center !important;
+}
+
+.box-custom {
+    background-color: #e9f9ff !important;
+    height: 40px;
+}
+
+.card-custom {
+    border-radius: 0px 20px 0px 20px;
+}
+
+.form-inputs{
+    border-radius: 6px 6px 6px 6px;
+    font-family: sans-serif;
+}

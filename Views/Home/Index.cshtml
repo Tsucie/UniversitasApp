@@ -1,0 +1,23 @@
+@using System;
+@using Microsoft.AspNetCore.Http;
+@using UniversitasApp.General;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Home";
+    ViewBag.Logo = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1>Menu Home</h1>
+    <h3><b>Welcome</b><em> @HttpContextAccessor.HttpContext.Session.GetString("u_username")</em></h3><br>
+    <h4><b>Date & Time: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</b></h4><br>
+    @* @{
+        var hashed = Crypto.Hash("password");
+
+        var verified = Crypto.Verify("password", hashed);
+    }
+    <h6>Hashed Word: @hashed</h6><br>
+    <h6>Is Verified? @verified</h6> *@
+</div>

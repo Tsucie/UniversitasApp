@@ -1,0 +1,67 @@
+@{
+    ViewBag.Title = "User";
+    ViewBag.Logo = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Contet Header -->
+<section class="content-header">
+    <h1>
+    Users
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User Activity</li>
+    </ol>
+</section>
+<!-- Main Content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box card-custom">
+                <div class="box-header">
+                    <h2 class="box-title"><b>User Activity</b></h2>
+                </div>
+                <div class="box-body">
+                    @* <div>
+                        <label>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Add User <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("AddStaff","User")" class="btn btn-sm btn-secondary"><strong>Add Staff</strong></a></li>
+                                    <li><a href="@Url.Action("AddMhs","User")" class="btn btn-sm btn-secondary"><strong>Add Mahasiswa</strong></a></li>
+                                </ul>
+                            </div>
+                        </label>
+                    </div> *@
+                    <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
+                        <div id="spinner"></div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="tblUser" class="table table-bordered table-striped table-hover">
+                                    <thead class="bg-me">
+                                        <tr>
+                                            <th>UserName<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Kategori<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            @* <th>Fakultas/Bagian<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th> *@
+                                            <th>Login<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Logout<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Status<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            @* <th>Action</th> *@
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/Scripts/User.js" type="text/javascript"></script>
+}

@@ -1,0 +1,144 @@
+@{
+    ViewBag.Link = "Mahasiswa";
+    ViewBag.BoxHeader = "Mahasiswa";
+    Layout = "~/Views/Shared/_AddLayout.cshtml";
+}
+<form id="form-mhs" class="form-horizontal">
+    <div class="box-body">
+        <div class="form-group">
+            <label for="u_username" class="col-sm-2 control-label">UserName</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control form-inputs" name="UserName" placeholder="UserName" id="u_username">
+                @* <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Username tidak boleh kosong!
+                </div> *@
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="u_password" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-4">
+                <input type="password" class="form-control form-inputs" name="Password" placeholder="Password" id="u_password">
+                @* <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Password Tidak boleh kosong!
+                </div> *@
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="u_uc_id" class="col-sm-2 control-label">Kategori</label>
+            <div class="col-sm-2">
+                <select class="form-control form-inputs" id="select-category"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="u_fks_id" class="col-sm-2 control-label">Fakultas</label>
+            <div class="col-sm-2">
+                <select class="form-control form-inputs" id="select-fakultas"></select>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-header with-border">
+        <h3 class="box-title">Details</h3>
+    </div>
+    <div class="box-body" id="form-section">
+        <div class="form-group">
+            <label for="mhs_fullname" class="col-sm-2 control-label">Nama Lengkap</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_fullname" placeholder="Nama Lengkap" id="mhs_fullname">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_nim" class="col-sm-2 control-label">Nomor Induk Mahasiswa</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_nim" placeholder="NIM" id="mhs_nim">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_kelas" class="col-sm-2 control-label">Kelas</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_kelas" placeholder="Kelas" id="mhs_kelas">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_address" class="col-sm-2 control-label">Alamat</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_address" placeholder="Alamat" id="mhs_address">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_province" class="col-sm-2 control-label">Provinsi</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_province" placeholder="Provinsi" id="mhs_province">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_city" class="col-sm-2 control-label">Kota</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_city" placeholder="Kota" id="mhs_city">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_birthplace" class="col-sm-2 control-label">Tempat Lahir</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_birthplace" placeholder="Tempat Lahir" id="mhs_birthplace">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_birthdate" class="col-sm-2 control-label">Tanggal Lahir</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_birthdate" placeholder="Tanggal Lahir" id="mhs_birthdate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_gender" class="col-sm-2 control-label">Jenis Kelamin</label>
+            <div class="col-sm-2">
+                <select class="form-control form-inputs" id="select-gender">
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_religion" class="col-sm-2 control-label">Agama</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_religion" placeholder="Agama" id="mhs_religion">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_state" class="col-sm-2 control-label">Kewarganegaraan</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_state" placeholder="Kewarganegaraan" id="mhs_state">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_email" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_email" placeholder="Email" id="mhs_email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_stat" class="col-sm-2 control-label">Status Karyawan</label>
+            <div class="col-sm-2">
+                <select class="form-control form-inputs" id="select-status">
+                    <option value="1">Aktif</option>
+                    <option value="0">Tidak Aktif</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mhs_telp" class="col-sm-2 control-label">Nomor Telpon</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-inputs" name="mhs_telp" placeholder="Nomor Telpon" id="mhs_telp">
+            </div>
+        </div>
+    </div>
+    <div class="box-footer card-custom">
+        <a class="btn btn-default" href="../User" role="button">Cancel</a>
+        <a><button type="button" class="btn btn-success pull-right" id="btn-create-mhs">Create</button></a>
+    </div>
+    <!-- /.box-footer -->
+</form>

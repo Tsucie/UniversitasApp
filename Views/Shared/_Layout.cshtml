@@ -1,0 +1,150 @@
+
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewData["Title"] - Univesitas App</title>
+    <link rel="stylesheet" href="~/Assets/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Assets/AdminLTE/bower_components/font-awesome/css/font-awesome.css" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/Assets/AdminLTE/bower_components/Ionicons/css/ionicons.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Assets/AdminLTE/dist/css/Adminlte.css" />
+    <link rel="stylesheet" href="~/Assets/AdminLTE/dist/css/skins/_all-skins.css" />
+    <link rel="stylesheet" href="~/Assets/notifIt/css/notifIt.css" />
+    <link rel="stylesheet" href="~/Assets/datatables.net/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/Css/Global.css" />
+</head>
+<body class="hold-transition skin-green sidebar-mini">
+    @{
+        var userini = HttpContextAccessor.HttpContext.Session.GetInt32("u_id");
+        var username = HttpContextAccessor.HttpContext.Session.GetString("u_username");
+        var usertype = HttpContextAccessor.HttpContext.Session.GetString("ut_name");
+    }
+    <div class="wrapper" id="app">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <span class="logo-mini"><b>C</b>MS</span>
+                <span class="logo-lg"><b>MyCampus - </b>@ViewData["Logo"]</span>
+            </a>
+            
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button -->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu toggle button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- User image in the navbar -->
+                                <img src="~/images/avatar-Tsucie.jpg" class="user-image" alt="User Image">
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs">@username</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- Photo Profile dan keterangan -->
+                                <li class="user-header">
+                                    <img src="~/images/avatar-Tsucie.jpg" class="img-circle" alt="User Image">
+                                    <br><b>@username</b>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <!-- Info User -->
+                                            <a href="#">Account: @username [@usertype]</a>
+                                        </div>
+                                    </div>
+                                    <!-- /.row -->
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat" id="btn-profile">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href='@Url.Action("Logout","Account")' class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                      <!-- Sidebar user panel (optional) -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/images/avatar-Tsucie.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <!-- Username -->
+                        <p>@username</p>
+                        <!-- Status -->
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <!-- search form -->
+                <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Cari.....">
+                        <span class="input-group-btn">
+                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <!-- /.search form -->
+                <!-- Sidebar Menu -->
+                @Html.Partial("_MainMenu")
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <section class="content container-fluid">
+                <main role="main">
+                    @RenderBody()
+                </main>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                <b>Created by: </b><em>Tsucie</em>
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2020 <a href="#">Tech Industry University</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+    <script src="~/Assets/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Assets/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Assets/AdminLTE/dist/js/adminlte.js"></script>
+    <script src="~/Assets/jquery.serializejson/js/jquery.serializejson.min.js"></script>
+    <script src="~/Assets/notifIt/js/notifIt.js" type="text/javascript"></script>
+    <script src="~/Assets/datatables.net/js/jquery.dataTables.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
