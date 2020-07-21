@@ -150,7 +150,6 @@ function addStfCategory() {
 // Modals for Edit Data
 function ShowEditModals() {
     actionTitle = 'Edit Kategori Staff';
-    $('sc_name').css('border-color', 'lightgray');
     $("#AddEditModal").on('show.bs.modal', function (event) {
         var modal = $(this);
         modal.find('.modal-title').text(actionTitle);
@@ -164,7 +163,6 @@ var edit; // Save data_id for update data
 function clickCategoryEdit(obj) {
     ShowEditModals();
     let obj_id = {"sc_id": parseInt(obj.attributes.data_id.value)};
-    actionTitle = 'Edit Kategori Staff';
     edit = obj_id;
     $.ajax({
         type: "GET",

@@ -42,7 +42,7 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT c.c_id, c.c_u_id, c.c_code, u.u_username, c.c_name, c.c_remark"+
+            string sqlStr = "SELECT c.c_id, c.c_u_id, u.u_username, c.c_name, c.c_remark"+
             " FROM `db_kampus`.`client` c INNER JOIN `db_kampus`.`users` u ON u.u_id = c.c_u_id"+
             " WHERE (`c_u_id` = '"+c_u_id+"');";
 
@@ -52,10 +52,9 @@ namespace UniversitasApp.CRUD
             {
                 c.c_id = _data.GetInt32(0);
                 c.c_u_id = _data.GetInt32(1);
-                c.c_code = _data.GetString(2);
-                c.u_username = _data.GetString(3);
-                c.c_name = _data.GetString(4);
-                c.c_remark = _data.GetString(5);
+                c.u_username = _data.GetString(2);
+                c.c_name = _data.GetString(3);
+                c.c_remark = _data.GetString(4);
             }
             _conn.Close();
             return c;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\App\\UniversitasApp\\UniversitasApp.csproj": {}
+    "D:\\UniversitasApp\\UniversitasApp\\UniversitasApp.csproj": {}
   },
   "projects": {
-    "D:\\App\\UniversitasApp\\UniversitasApp.csproj": {
+    "D:\\UniversitasApp\\UniversitasApp\\UniversitasApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\App\\UniversitasApp\\UniversitasApp.csproj",
+        "projectUniqueName": "D:\\UniversitasApp\\UniversitasApp\\UniversitasApp.csproj",
         "projectName": "UniversitasApp",
-        "projectPath": "D:\\App\\UniversitasApp\\UniversitasApp.csproj",
+        "projectPath": "D:\\UniversitasApp\\UniversitasApp\\UniversitasApp.csproj",
         "packagesPath": "C:\\Users\\TheGamer\\.nuget\\packages\\",
-        "outputPath": "D:\\App\\UniversitasApp\\obj\\",
+        "outputPath": "D:\\UniversitasApp\\UniversitasApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\TheGamer\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -26,7 +26,7 @@ namespace UniversitasApp.Controllers
                 if(clients.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] obj = {
-                    new {DataId = clients.Select(s => s.c_id).ToArray()},
+                    new {DataId = clients.Select(s => s.c_u_id).ToArray()},
                     new {DataCode = clients.Select(s => s.c_code).ToArray()},
                     new {DataUsername = clients.Select(s => s.u_username).ToArray()},
                     new {DataName = clients.Select(s => s.c_name).ToArray()},
@@ -84,12 +84,13 @@ namespace UniversitasApp.Controllers
                 Users u = new Users();
                 u.u_id = rand.Next();
                 c.c_u_id = u.u_id;
+                u.u_ut_id = 1;
                 u.u_username = c.u_username;
-                u.u_password = Crypto.Hash(c.u_password, DateTime.Now.Date.Ticks.GetHashCode());
+                u.u_password = Crypto.Hash(c.u_password);
                 u.u_login_time = DateTime.Now.Date.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_logout_time = DateTime.Now.Date.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_login_status = Convert.ToInt16(false);
-                u.u_rec_creator = "@root";
+                u.u_rec_creator = HttpContext.Session.GetString("u_username");
                 u.u_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 if(!ClientCRUD.CreateClientAndUser(Startup.db_kampus_ConnStr, c, u)) throw new Exception("", new Exception("Data is not Added in Database!"));
@@ -113,12 +114,12 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(c.c_id.Equals(null) || c.c_u_id.Equals(null) || string.IsNullOrEmpty(c.u_username) || string.IsNullOrEmpty(c.c_code) || string.IsNullOrEmpty(c.c_name)) throw new Exception("", new Exception("Can not Update, Incomplete Data!"));
+                if(c.c_id.Equals(null) || c.c_u_id.Equals(null) || string.IsNullOrEmpty(c.u_username) || string.IsNullOrEmpty(c.c_name)) throw new Exception("", new Exception("Can not Update, Incomplete Data!"));
 
                 Users u = new Users();
                 u.u_id = c.c_u_id;
                 u.u_username = c.u_username;
-                u.u_rec_updator = "@root";
+                u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 if(!c.u_r_id.Equals(null)) u.u_r_id = c.u_r_id;
                 if(!c.u_password.Equals(null)) u.u_password = Crypto.Hash(c.u_password);
