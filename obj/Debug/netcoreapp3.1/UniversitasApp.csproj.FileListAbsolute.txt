@@ -274,3 +274,4 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.Views.pd
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.csproj.CopyComplete
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.dll
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.pdb
+D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Site\Index.cshtml.g.cs

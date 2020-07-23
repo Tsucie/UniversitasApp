@@ -1,7 +1,3 @@
-using System;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace UniversitasApp.Models
 {
     public sealed class Site
@@ -22,5 +18,15 @@ namespace UniversitasApp.Models
         public string s_email { get; set; }
         public short? s_stat { get; set; }
         public string s_contact { get; set; }
+
+        // Users Join
+        public int? u_id { get; set; }
+        public int? u_ut_id { get; set; }
+        public int? u_r_id { get; set; }
+        public string u_username { get; set; }
+        public string u_password { get; set; }
+        public string u_login_time { get; set; }
+        public string u_logout_time { get; set; }
+        public short? u_login_status { get; set; }
     }
 }

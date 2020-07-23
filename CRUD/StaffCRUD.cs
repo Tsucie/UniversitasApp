@@ -15,6 +15,7 @@ namespace UniversitasApp.CRUD
         public static List<UserStaff> ReadAll(string connStr)
         {
             List<UserStaff> us = new List<UserStaff>();
+            string contact = "";
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
             string sqlStr = "SELECT stf.stf_u_id, stf.stf_fullname, sc.sc_name, stf.stf_nik, stf.stf_email, stf.stf_contact, stf.stf_stat"+
@@ -23,13 +24,14 @@ namespace UniversitasApp.CRUD
             using MySqlDataReader _data = _cmd.ExecuteReader();
             while (_data.Read())
             {
+                contact = (_data.GetString(5).Equals(null)) ? null : _data.GetString(5);
                 us.Add(new UserStaff {
                     stf_u_id = _data.GetInt32(0),
                     stf_fullname = _data.GetString(1),
                     sc_name = _data.GetString(2),
                     stf_nik = _data.GetString(3),
                     stf_email = _data.GetString(4),
-                    stf_contact = _data.GetString(5),
+                    stf_contact = contact,
                     stf_stat = _data.GetInt16(6)
                 });
             }
@@ -39,23 +41,20 @@ namespace UniversitasApp.CRUD
 
         public static UserStaff Read(string connStr, int stf_u_id)
         {
-            UserStaff stf = new UserStaff();
+            UserStaff stf = null;
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            // string sqlFks = "", sqlPs = "", sqlMk = "";
-            // if(!us.stf_fks_id.Equals(null)) sqlFks = ", stf.stf_fks_id";
-            // if(!us.stf_ps_id.Equals(null)) sqlPs = ", stf.stf_ps_id";
-            // if(!us.stf_mk_id.Equals(null)) sqlMk = ", stf.stf_mk_id";
-            string sqlStr = "SELECT stf.stf_id, stf.stf_u_id, stf.stf_sc_id, stf.stf_fullname, stf.stf_nik, stf.stf_address, stf.stf_province, stf.stf_city, stf.stf_birthplace, stf.stf_birthdate, stf.stf_gender, stf.stf_religion, stf.stf_state, stf.stf_email, stf.stf_stat, stf.stf_contact, u.u_id, u.u_ut_id, u.u_username"
-            // +sqlFks+sqlPs+sqlMk
-            +" FROM db_kampus.staff stf INNER JOIN users u ON stf.stf_u_id = u.u_id"+
+            string sqlStr = "SELECT stf.stf_id, stf.stf_u_id, stf.stf_sc_id, stf.stf_fullname, stf.stf_nik, stf.stf_address, stf.stf_province, stf.stf_city, stf.stf_birthplace, stf.stf_birthdate, stf.stf_gender, stf.stf_religion, stf.stf_state, stf.stf_email, stf.stf_stat, stf.stf_contact, u.u_id, u.u_ut_id, u.u_username"+ 
+            //stf.stf_fks_id, stf.stf_ps_id, stf.stf_mk_id"+
+            " FROM db_kampus.staff stf INNER JOIN users u ON stf.stf_u_id = u.u_id"+
             " WHERE stf.stf_u_id = '"+stf_u_id+"';";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
             using MySqlDataReader _data = _cmd.ExecuteReader();
-            if(_data.Read().Equals(true))
+            if(_data.Read())
             {
+                stf = new UserStaff();
                 stf.stf_id = _data.GetInt32(0);
                 stf.stf_u_id = _data.GetInt32(1);
                 stf.stf_sc_id = _data.GetInt32(2);
@@ -75,10 +74,9 @@ namespace UniversitasApp.CRUD
                 stf.u_id = _data.GetInt32(16);
                 stf.u_ut_id = _data.GetInt32(17);
                 stf.u_username = _data.GetString(18);
-                // if(!_data.GetInt32(19).Equals(null)) stf.u_r_id = _data.GetInt32(19);
-                // if(!_data.GetInt32(20).Equals(null)) stf.stf_fks_id = _data.GetInt32(20);
-                // if(!_data.GetInt32(21).Equals(null)) stf.stf_ps_id = _data.GetInt32(21);
-                // if(!_data.GetInt32(22).Equals(null)) stf.stf_mk_id = _data.GetInt32(22);
+                // stf.stf_fks_id = (_data.GetInt32(19).Equals(null)) ? (int?)null : _data.GetInt32(19);
+                // stf.stf_ps_id = (_data.GetInt32(20).Equals(null)) ? (int?)null : _data.GetInt32(20);
+                // stf.stf_mk_id = (_data.GetInt32(21).Equals(null)) ? (int?)null : _data.GetInt32(21);
             }
             _conn.Close();
             return stf;

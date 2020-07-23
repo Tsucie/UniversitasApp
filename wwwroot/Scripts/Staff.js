@@ -192,7 +192,7 @@ function clickStaffEdit(obj) {
         data: obj_id.stf_u_id,
         success: function (data) {
             if(data != null) {
-                window.location.href = '../StaffCategory/UpdateStaff/';
+                window.location.href = '../StaffCategory/UpdateStaff'; // Valuenya ga keisi
                 obj_id.stf_id = data.stf_id;
                 console.log(data);
                 console.log(obj_id);
