@@ -23,40 +23,8 @@ function validasi(txtbox) {
     }
     return isValid;
 }
-// Alert Notif
-function pesanAlert(obj) {
-    let color = "";
-    let msg = "";
-    let position = "";
-    switch (parseInt(obj.Code)) {
-        case 1:
-            color = "success";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        case 0:
-            color = "warning";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        case -1:
-            color = "default";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        default:
-            color = "primary";
-            msg = "Unknown Wild Error!";
-            position = "center";
-            break;
-    }
-    notif({
-        msg: "<b>" + msg + "</b>",
-        type: "danger",
-        position: "center"
-    });
-}
-// Staff_category datatables.net
+
+// Staff_category datatables
 function StaffCategoryDataTable() {
     var table = $("#tblStaff");
 
@@ -93,7 +61,7 @@ function StaffCategoryDataTable() {
             $(table).DataTable();
         },
         error: function (data) {
-            pesanAlert(data);
+            alert("ErrorConnection!");
         },
         complete: function () {
             $("#spinner-1").hide();

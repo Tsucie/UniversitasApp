@@ -221,7 +221,7 @@ namespace UniversitasApp.CRUD
             return affectedRow;
         }
 
-        public static bool DeleteStaffandUser(string connStr, Site s, int u_id)
+        public static bool DeleteSiteAndUser(string connStr, Site s, int u_id)
         {
             bool result = false;
             MySqlConnection _conn = null;

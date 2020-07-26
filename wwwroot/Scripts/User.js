@@ -8,36 +8,6 @@ $(document).ready(function () {
     // });
 });
 
-function pesanAlert(obj) {
-    let color = "";
-    let msg = "";
-    let position = "";
-    switch (parseInt(obj.code)) {
-        case 1:
-            color = "success";
-            msg = obj.pesan;
-            position = "center";
-            break;
-        case 0:
-            color = "warning";
-            msg = obj.pesan;
-            position = "center";
-            break;
-        case -1:
-            color = "danger";
-            msg = obj.pesan;
-            position = "center";
-            break;
-        default:
-            break;
-    }
-    notif({
-        msg: "<b>" + msg + "</b>",
-        type: color,
-        position: "center"
-    });
-}
-
 function UserdataTable() {
     var table = $("#tblUser");
 
@@ -62,26 +32,15 @@ function UserdataTable() {
                         '<td class="tb-content" id="name_table">' + data[0].dataName[i] + '</td>' +
                         '<td class="tb-content">' + data[1].dataKategori[i] + '</td>' +
                         '<td class="tb-content">' + data[2].dataLogin[i] + '</td>' +
-                        '<td class="tb-content">' + data[3].dataLogout[i] + '</td>' +
-                        status //+
-                        // '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + data[6].dataId[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + data[6].dataId[i] + '\'><i class="fa fa-remove"></i></a></td>' +
-                        // '</tr>';
+                        '<td class="tb-content">' + data[3].dataLogout[i] + '</td>' +status;
 
                     $(table).append(rowHTML);
-
-                    // $('#btnedit' + i).click(function (event) {
-                    //     clickEdit(this);
-                    // });
-
-                    // $('#btndelete' + i).click(function (event) {
-                    //     clickDelete(this);
-                    // });
                 }
 
             $(table).DataTable();
         },
         error: function (data) {
-            pesanAlert(data);
+            alert("ErrorConnection!");
         },
         complete: function () {
             $("#spinner").hide();

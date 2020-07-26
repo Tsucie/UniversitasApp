@@ -90,6 +90,7 @@ namespace UniversitasApp.Controllers
                 u.u_login_time = DateTime.Now.Date.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_logout_time = DateTime.Now.Date.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_login_status = Convert.ToInt16(false);
+                u.u_rec_status = Convert.ToInt16(true);
                 u.u_rec_creator = HttpContext.Session.GetString("u_username");
                 u.u_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -128,11 +129,6 @@ namespace UniversitasApp.Controllers
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
-
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {
@@ -158,11 +154,6 @@ namespace UniversitasApp.Controllers
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil dihapus!";
-            
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {

@@ -13,40 +13,6 @@ $(document).ready(function () {
     });
 });
 
-// Alert Notif
-function pesanAlert(obj) {
-    let color = "";
-    let msg = "";
-    let position = "";
-    switch (parseInt(obj.Code)) {
-        case 1:
-            color = "success";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        case 0:
-            color = "warning";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        case -1:
-            color = "default";
-            msg = obj.Pesan;
-            position = "center";
-            break;
-        default:
-            color = "primary";
-            msg = "Unknown Wild Error!";
-            position = "center";
-            break;
-    }
-    notif({
-        msg: "<b>" + msg + "</b>",
-        type: "danger",
-        position: "center"
-    });
-}
-
 // Clients datatables.net
 function ClientDataTable() {
     var table = $("#tblClient");

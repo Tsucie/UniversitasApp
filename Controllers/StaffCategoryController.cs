@@ -111,11 +111,6 @@ namespace UniversitasApp.Controllers
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
-
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {
@@ -139,11 +134,6 @@ namespace UniversitasApp.Controllers
 
                 ress.Code = 1;
                 ress.Message = "Data berhasil di Delete!";
-
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {
@@ -268,30 +258,43 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpPut("UpdateStaff/Update")]
-        public JsonResult EditUS([FromBody] UserStaff us)
+        public JsonResult EditUS([FromBody] UserStaff stf)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(us.stf_id.Equals(null) || us.stf_u_id.Equals(null) || string.IsNullOrEmpty(us.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
+                if(stf.stf_id.Equals(null) || stf.stf_u_id.Equals(null) || string.IsNullOrEmpty(stf.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
+
+                stf.stf_sc_id = stf.stf_sc_id;
+                stf.stf_fks_id = stf.stf_fks_id;
+                stf.stf_ps_id = stf.stf_ps_id;
+                stf.stf_mk_id = stf.stf_mk_id;
+                stf.stf_fullname = stf.stf_fullname;
+                stf.stf_nik = stf.stf_nik;
+                stf.stf_address = stf.stf_address;
+                stf.stf_province = stf.stf_province;
+                stf.stf_city = stf.stf_city;
+                stf.stf_birthplace = stf.stf_birthplace;
+                stf.stf_birthdate = stf.stf_birthdate;
+                stf.stf_gender = stf.stf_gender;
+                stf.stf_religion = stf.stf_religion;
+                stf.stf_state = stf.stf_state;
+                stf.stf_email = stf.stf_email;
+                stf.stf_stat = stf.stf_stat;
+                stf.stf_contact = stf.stf_contact;
 
                 Users u = new Users();
-                u.u_id = us.stf_u_id;
-                u.u_username = us.u_username;
+                u.u_id = stf.stf_u_id;
+                u.u_username = stf.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if(!us.u_r_id.Equals(null)) u.u_r_id = us.u_r_id;
-                if(!us.u_password.Equals(null)) u.u_password = Crypto.Hash(us.u_password);
+                if(!stf.u_r_id.Equals(null)) u.u_r_id = stf.u_r_id;
+                if(!stf.u_password.Equals(null)) u.u_password = Crypto.Hash(stf.u_password);
 
-                if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, us, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));
+                if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, stf, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
-
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {
@@ -317,11 +320,6 @@ namespace UniversitasApp.Controllers
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil dihapus!";
-            
-                return Json(new {
-                    Code = ress.Code,
-                    Pesan = ress.Message
-                });
             }
             catch (Exception ex)
             {
