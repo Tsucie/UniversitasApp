@@ -47,7 +47,7 @@ namespace UniversitasApp.CRUD
             Users u = new Users();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
-            string sqlStr = "SELECT u_id, ut_name, u_username, u_password, u_login_time, u_logout_time, u_login_status FROM db_kampus.users "+
+            string sqlStr = "SELECT u_id, ut_name, u_username, u_password, u_login_time, u_logout_time, u_login_status, u_r_id FROM db_kampus.users "+
             "INNER JOIN user_type ON user_type.ut_id = u_ut_id "+
             "WHERE (u_username = '@"+u_username+"')";
 
@@ -62,7 +62,7 @@ namespace UniversitasApp.CRUD
                 u.u_login_time = _datareader.GetDateTime(4).ToString("dd/MM/yyyy HH:mm:ss");
                 u.u_logout_time = _datareader.GetDateTime(5).ToString("dd/MM/yyyy HH:mm:ss");
                 u.u_login_status = _datareader.GetInt16(6);
-                // if(!_datareader.GetInt32(7).Equals(null)) u.u_r_id = _datareader.GetInt32(7);
+                u.u_r_id = _datareader.IsDBNull(7) ? (int?)null :_datareader.GetInt32(7);
             }
             _conn.Close();
             return u;

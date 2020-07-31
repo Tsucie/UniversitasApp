@@ -39,9 +39,9 @@ function StaffCategoryDataTable() {
             $(table).children('tbody').empty();
             var rowHTML = '';
                 for (let i = 0; i < data[0].nomor.length; i++) {
-                    var number = i+1;
+                    let number = i+1;
                     rowHTML = '<tr>' +
-                    '<td class="tb-content status-user">' + number + '</td>' +
+                    '<td class="tb-content status-user col-md-1">' + number + '</td>' +
                     '<td class="tb-content">' + data[1].kategori[i] + '</td>' +
                     '<td class="tb-content">' + data[2].deskripsi[i] + '</td>' +
                     '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + data[0].nomor[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + data[0].nomor[i] + '\'><i class="fa fa-remove"></i></a></td>' +
@@ -61,7 +61,7 @@ function StaffCategoryDataTable() {
             $(table).DataTable();
         },
         error: function (data) {
-            alert("ErrorConnection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $("#spinner-1").hide();
@@ -106,7 +106,7 @@ function addStfCategory() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $("#AddEditModal").modal('hide');
@@ -149,7 +149,7 @@ function clickCategoryEdit(obj) {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
 }
@@ -180,7 +180,7 @@ function UpdateCategory() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $('#AddEditModal').modal('hide');
@@ -211,7 +211,7 @@ function clickCategoryDelete(obj) {
                 }
             },
             error: function () {
-                alert("Error Connection!");
+                notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
             }
         });
     }

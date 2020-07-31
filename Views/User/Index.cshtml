@@ -22,33 +22,18 @@
                     <h2 class="box-title"><b>User Activity</b></h2>
                 </div>
                 <div class="box-body">
-                    @* <div>
-                        <label>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Add User <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("AddStaff","User")" class="btn btn-sm btn-secondary"><strong>Add Staff</strong></a></li>
-                                    <li><a href="@Url.Action("AddMhs","User")" class="btn btn-sm btn-secondary"><strong>Add Mahasiswa</strong></a></li>
-                                </ul>
-                            </div>
-                        </label>
-                    </div> *@
                     <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
                         <div id="spinner"></div>
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 table-responsive">
                                 <table id="tblUser" class="table table-bordered table-striped table-hover">
                                     <thead class="bg-me">
                                         <tr>
                                             <th>UserName<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Kategori<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
-                                            @* <th>Fakultas/Bagian<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th> *@
                                             <th>Login<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Logout<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Status<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
-                                            @* <th>Action</th> *@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

@@ -1,0 +1,89 @@
+@{
+    ViewBag.Title = "Roles";
+    ViewBag.Logo = "Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Modal -->
+<div class="modal fade" id="PreviledgeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Role Previledge</b></h4>
+            </div>
+            <div class="modal-body">
+                <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
+                    <div id="spinner"></div>
+                    <div class="row">
+                        <div class="card-table table-responsive">
+                            <table id="tblRP" class="my-table">
+                                <thead>
+                                    <tr>
+                                        <th class="status-user col-sm-1"><b>#</b></th>
+                                        <th>Previledge</th>
+                                        <th class="col-md-1">View</th>
+                                        <th class="col-md-1">Add</th>
+                                        <th class="col-md-1">Edit</th>
+                                        <th class="col-md-1">Delete</th>
+                                        <th class="col-md-1"><b>Action</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div hidden class="modal-footer" id="mod-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success" id="btn-simpan-role">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contet Header -->
+<section class="content-header">
+    <h1>
+    Roles
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Roles</li>
+    </ol>
+</section>
+<!-- Main Content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box card-custom">
+                <div class="box-header">
+                    <h2 class="box-title"><b>Role List</b></h2>
+                </div>
+                <div class="box-body">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
+                        <div id="spinner"></div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="tblRole" class="table table-bordered table-striped table-hover table-responsive">
+                                    <thead class="bg-me">
+                                        <tr>
+                                            <th class="col-md-1">No.<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Role Type<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Role Name<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/Scripts/Role.js" type="text/javascript"></script>
+}

@@ -1,18 +1,38 @@
 .bg-me {
     background-color: #01a553 !important;
-    /* color: #b8c7ce; */
     color: rgb(243, 243, 243);
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     border-radius: 10px 6px 10px 6px;
+}
+
+.card-image {
+    border-radius: 4px;
+    padding: 6px;
+    box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.6);
+    margin: auto;
+}
+
+.card-table {
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.6);
+    margin: auto 10px auto 10px;
+}
+
+.my-table {
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    border-radius: 4px !important;
+    border-collapse: initial;
 }
 
 .tb-content {
     padding: 10px 0 0 4px !important;
+    margin: 4px auto auto 4px !important;
     line-height: 15px !important;
 }
 
 .status-user {
     text-align: center !important;
+    font-weight: bold !important;
 }
 
 .box-custom {

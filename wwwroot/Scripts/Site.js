@@ -41,7 +41,7 @@ function SiteDataTable() {
             $(table).DataTable();
         },
         error: function () {
-            alert("ErrorConnection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $('#spinner').hide();

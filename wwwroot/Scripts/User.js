@@ -39,8 +39,8 @@ function UserdataTable() {
 
             $(table).DataTable();
         },
-        error: function (data) {
-            alert("ErrorConnection!");
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $("#spinner").hide();

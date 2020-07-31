@@ -39,23 +39,23 @@
 /* You are free to change all of this */
 #ui_notifIt.success{
     background-color: rgba(0,200,0,1);
-    color: white;
+    color: white !important;
 }
 #ui_notifIt.error {
     background-color: rgba(200,0,0,1);
-    color: white;
+    color: white !important;
 }
 #ui_notifIt.warning{
     background-color: orange;
-    color: white;
+    color: white !important;
 }
 #ui_notifIt.info{
     background-color: deepskyblue;
-    color: white;
+    color: white !important;
 }
 #ui_notifIt.default{
     background-color: #EEE;
-    color: #444;
+    color: #444 !important;
 }
 
 /* notifit confirm */

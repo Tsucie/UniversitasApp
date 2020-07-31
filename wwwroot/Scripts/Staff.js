@@ -53,7 +53,7 @@ function StaffDetailDataTable() {
             $(table).DataTable();
         },
         error: function () {
-            alert("ErrorConnection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $("#spinner-2").hide();
@@ -78,8 +78,8 @@ function addStaffPage() {
                 $(comboBox).append(opsi);
             }
         },
-        error: function (data) {
-            pesanAlert(data);
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
 }
@@ -142,7 +142,7 @@ function addStaff() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
 }
@@ -186,8 +186,8 @@ function clickStaffEdit(obj) {
                 pesanAlert(data);
             }
         },
-        error: function (data) {
-            alert("Error Connection!");
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
     edit = obj_id;
@@ -233,7 +233,7 @@ function updateStaff() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
 }
@@ -259,7 +259,7 @@ function clickStaffDelete(obj) {
                 }
             },
             error: function () {
-                alert("Error Connection!");
+                notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
             }
         });
     }

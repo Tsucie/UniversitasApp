@@ -7,7 +7,7 @@
   <title>Universitas | Login</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="~/images/icons/favicon.ico"/>
+  <link rel="icon" type="image/png" href="~/favicon.ico"/>
   <link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="~/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
@@ -16,6 +16,7 @@
   <link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
   <link rel="stylesheet" type="text/css" href="~/css/util.css">
   <link rel="stylesheet" type="text/css" href="~/css/main.css">
+  <link rel="stylesheet" href="~/Assets/notifIt/css/notifIt.css">
 </head>
 <body>
   <div class="limiter">
@@ -51,18 +52,18 @@
       </div>
     </div>
   </div>
-  
-<!--===============================================================================================-->  
   <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
   <script src="~/vendor/bootstrap/js/popper.js"></script>
   <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
   <script src="~/vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
+  <script src="~/Assets/notifIt/js/notifIt.js"></script>
   <script src="~/js/main.js"></script>
   <script>
   function Validate() {
+    if($('#username').val().trim() == "" || $('#password').val().trim() == "") {
+      notif({msg: "<b>" + "Username & Password is required!" + "</b>", type: "warning", position: "right"});
+      return false;
+    }
     var Data = {
         "username": $('#username').val(),
         "password": $('#password').val()
@@ -73,22 +74,21 @@
       data: Data,
       success: function (result) {
         if((result.code === -1) || (result.code === 0)) {
-          //console.log("Masuk if -1 dan 0");
-          alert("Gagal Login!");
+          notif({msg: "<b>" + "Gagal Login! Username atau Password salah!" + "</b>", type: "warning", position: "right"});
         }
         else
         {
           if (result.status === true) {
-            window.location.href = '@Url.Action("Index", "Home")';
+            setTimeout(() => window.location.href = '@Url.Action("Index", "Home")', 3000);
+            notif({msg: "<b>" + result.message + "</b>", type: "success", position: "right"});
           }
           else {
-            //console.log("Masuk nested else result status false");
-            alert(result.message);
+            notif({msg: "<b>" + result.message + "</b>", type: "warning", position: "right"});
           }
         }
       },
       error: function () {
-        alert("There is a Problem, Try Again!");
+        notif({msg: "<b>" + "Connection Error!" + "</b>", type: "error", position: "right"});
       }
     });
   }

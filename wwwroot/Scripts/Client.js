@@ -28,10 +28,11 @@ function ClientDataTable() {
             $(table).children('tbody').empty();
             var rowHTML = '';
                 for (let i = 0; i < data[1].dataCode.length; i++) {
+                    rowHTML = '<tr>' +
                     '<td class="tb-content">' + data[1].dataCode[i] + '</td>' +
-                    '<td class="tb-content>"' + data[2].dataUsername[i] + '</td>'+
-                    '<td class="tb-content>"' + data[3].dataName[i] + '</td>'+
-                    '<td class="tb-content>"' + data[4].dataRemark[i] + '</td>' +
+                    '<td class="tb-content">' + data[2].dataUsername[i] + '</td>'+
+                    '<td class="tb-content">' + data[3].dataName[i] + '</td>'+
+                    '<td class="tb-content">' + data[4].dataRemark[i] + '</td>' +
                     '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-remove"></i></a></td>' +
                     '</tr>';
 
@@ -48,11 +49,11 @@ function ClientDataTable() {
 
             $(table).DataTable();
         },
-        error: function (data) {
-            pesanAlert(data);
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner-1").hide();
+            $("#spinner").hide();
         }
     });
 }
@@ -122,7 +123,7 @@ function addClient() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $("#AddEditModal").modal('hide');
@@ -173,7 +174,7 @@ function ClientGetDataById(obj) {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         }
     });
 }
@@ -205,7 +206,7 @@ function UpdateClient() {
             }
         },
         error: function () {
-            alert("Error Connection!");
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
             $('#AddEditModal').modal('hide');
@@ -236,7 +237,7 @@ function ClientDelete(obj) {
                 }
             },
             error: function () {
-                alert("Error Connection!");
+                notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
             }
         });
     }

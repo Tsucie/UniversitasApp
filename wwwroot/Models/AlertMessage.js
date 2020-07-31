@@ -6,7 +6,6 @@
 function pesanAlert(obj) {
     let color = "";
     let msg = "";
-    let position = "";
     switch (parseInt(obj.code)) {
         case 1:
             color = "success";

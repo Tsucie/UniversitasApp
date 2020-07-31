@@ -275,3 +275,4 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.csproj.C
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.dll
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.pdb
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Site\Index.cshtml.g.cs
+D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Role\Index.cshtml.g.cs

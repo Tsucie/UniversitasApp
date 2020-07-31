@@ -24,24 +24,20 @@ namespace UniversitasApp.Controllers
             try
             {
                 var u_data = await Task.Run(() => UserCRUD.Read(Startup.db_kampus_ConnStr, username));
-                if(u_data.Equals(null)) throw new Exception("", new Exception("Login Gagal, Data tidak ditemukan"));
-            
-                if(u_data.u_username.Equals("@"+username))
-                {
-                    if(u_data.u_password.Equals(password) || Crypto.Verify(password, u_data.u_password))
-                    {
-                        HttpContext.Session.SetString("u_username", u_data.u_username);
-                        HttpContext.Session.SetInt32("u_id", (int)u_data.u_id);
-                        HttpContext.Session.SetString("ut_name", u_data.ut_name);
-                        // if(!u_data.u_r_id.Equals(null)) HttpContext.Session.SetInt32("u_r_id", (int)u_data.u_r_id);
+                if(u_data.Equals(null)) throw new Exception("", new Exception("Login Gagal, Username Salah!"));
 
-                        if(await Task.Run(() => UserCRUD.LoginUpdate(Startup.db_kampus_ConnStr, (int)u_data.u_id)) != 1) throw new Exception("", new Exception("An Error Accoured, Login Failed!"));
-                        
-                        return Json(new { status = true, message = "Login Successfull!"});
-                    }
-                    return Json(new { status = true, message = "Password Salah!" });
+                if(u_data.u_password.Equals(password) || Crypto.Verify(password, u_data.u_password))
+                {
+                    HttpContext.Session.SetString("u_username", u_data.u_username);
+                    HttpContext.Session.SetInt32("u_id", (int)u_data.u_id);
+                    HttpContext.Session.SetString("ut_name", u_data.ut_name);
+                    if(!u_data.u_r_id.Equals(null)) HttpContext.Session.SetInt32("u_r_id", (int)u_data.u_r_id);
+
+                    if(await Task.Run(() => UserCRUD.LoginUpdate(Startup.db_kampus_ConnStr, (int)u_data.u_id)) != 1) throw new Exception("", new Exception("An Error Accoured, Login Failed!"));
+                    
+                    return Json(new { status = true, message = "Login Berhasil!"});
                 }
-                return Json(new { status = false, message = "Username Salah!" });
+                return Json(new { status = false, message = "Password Salah!" });
             }
             catch (Exception ex)
             {
