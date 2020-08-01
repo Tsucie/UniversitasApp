@@ -28,7 +28,7 @@ function RoleDataTable() {
 
                     $(table).append(rowHTML);
 
-                    $('#btndetail' + i).click(function (event) {
+                    $('#btndetail' + i).click(function () {
                         clickPreviledge(this);
                     });
                 }
@@ -44,31 +44,46 @@ function RoleDataTable() {
     });
 }
 
-function statusCheck(id) {
+function iconStatus(id, element_id) {
     let icon = '';
     switch (id) {
         case 1:
-            icon = '<a data-toggle="tooltip" data-html="true" title="Enable" id=\'btnenable\' class="btn btn-success" data_id=\'' + id + '\'><i class="glyphicon glyphicon-ok-circle" style="color: green; font-size: 150%;"></i></a>';
+            // icon = '<i class="glyphicon glyphicon-ok-circle" style="color: green; font-size: 150%;"></i>';
+            icon = '<label class="switch">'+
+                        '<input id="'+element_id+'" type="checkbox" checked>'+
+                        '<span class="slider round" title="'+id+'"></span>'+
+                    '</label>';
             break;
-
         case 0:
-            icon = '<a data-toggle="tooltip" data-html="true" title="Disable" id=\'btndisable\' class="btn btn-danger" data_id=\'' + id + '\'><i class="glyphicon glyphicon-remove-circle" style="color: red; font-size: 150%;"></i></a>';
+            // icon = '<i class="glyphicon glyphicon-remove-circle" style="color: red; font-size: 150%;"></i>';
+            icon = '<label class="switch">'+
+                        '<input id="'+element_id+'" type="checkbox">'+
+                        '<span class="slider round" title="'+id+'"></span>'+
+                    '</label>';
             break;
-
         case -1:
-            icon = '<a data-toggle="tooltip" data-html="true" title="Unavailable" id=\'btnunavailable\' class="btn btn-default" data_id=\'' + id + '\'><i class="glyphicon glyphicon-ban-circle" style="color: lightgray; font-size: 150%;"></i></a>';
+            icon = '<i class="glyphicon glyphicon-ban-circle" style="color: lightgray; font-size: 150%;"></i>';
             break;
-
         default:
             break;
     }
     return icon;
 }
 
+function statusCheck(obj) {
+    let dataId = 0;
+    if($(obj).is(":checked")) dataId = 1;
+
+    return dataId;
+}
+
+var edit = {};
+
 function clickPreviledge(obj) {
     let DataId = {"r_id": parseInt(obj.attributes.data_id.value)};
     var table = $("#tblRP");
     $("#spinner").show();
+    $("#mod-footer").hide();
     $.ajax({
         type: "GET",
         url: "/Role/GetPreviledge/" + DataId.r_id,
@@ -82,18 +97,17 @@ function clickPreviledge(obj) {
                 row = '<tr>' +
                 '<td class="tb-content status-user col-sm-1"><i class="glyphicon glyphicon-option-horizontal"></i></td>' +
                 '<td class="tb-content">'+ result.r_name + '</td>'+
-                '<td class="tb-content status-user col-md-1>' + statusCheck(result.rp_view) + '</td>'+
-                '<td class="tb-content status-user col-md-1>' + statusCheck(result.rp_add) + '</td>'+
-                '<td class="tb-content status-user col-md-1>' + statusCheck(result.rp_edit) + '</td>'+
-                '<td class="tb-content status-user col-md-1>' + statusCheck(result.rp_delete) + '</td>'+
-                '<td class="tb-content col-md-1"><a data-toggle="tooltip" data-html="true" title="Role PreviledgeEdit" id=\'btneditRP\' class="btn" data_id=\'' + result.rp_id + '\'><i class="glyphicon glyphicon-edit" style="color: blue; font-size: 150%;"></i></a></td>'+
+                '<td class="tb-content status-user col-md-1">' + iconStatus(result.rp_view, 'view') + '</td>'+
+                '<td class="tb-content status-user col-md-1">' + iconStatus(result.rp_add, 'add') + '</td>'+
+                '<td class="tb-content status-user col-md-1">' + iconStatus(result.rp_edit, 'edit') + '</td>'+
+                '<td class="tb-content status-user col-md-1">' + iconStatus(result.rp_delete, 'delete') + '</td>'+
+                '<td class="tb-content status-user col-md-1"><a data-toggle="tooltip" data-html="true" title=" Edit Role Previledge " id=\'btneditRP\' class="btn"><i class="glyphicon glyphicon-edit" style="color: blue; font-size: 150%;"></i></a></td>'+
                 '</tr>';
 
                 $(table).append(row);
-
-                $('#btneditRP').click(function (event) {
-                    // clickPreviledge(this);
-                    clickPreviledgeEdit(this);
+                edit = {"rp_id": result.rp_id};
+                $('#btneditRP').click(function () {
+                    $("#mod-footer").show();
                 });
                 $("#PreviledgeModal").modal('show');
             } else {
@@ -107,13 +121,37 @@ function clickPreviledge(obj) {
             $("#spinner").hide();
         }
     });
-}
+}  
 
-var edit;
-function clickPreviledgeEdit(obj) {
-    notif({msg: "<b>"+ obj.attributes.data_id.value +"</b>", type: "success", position: "center"});
-}
-
-function UpdateRolePreviledge(obj) {
-    
+function UpdateRolePreviledge() {
+    var Data = {
+        "rp_id": edit.rp_id,
+        "rp_view": statusCheck("#view"),
+        "rp_add": statusCheck("#add"),
+        "rp_edit": statusCheck("#edit"),
+        "rp_delete": statusCheck("#delete")
+    };
+    console.log(Data);
+    $.ajax({
+        type: "PUT",
+        url: "/Role/UpdatePreviledge",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(Data),
+        success: function (data) {
+            if(data.code === 1) {
+                pesanAlert(data);
+                setTimeout(() => { window.location.reload() }, 3000);
+            }
+            else {
+                pesanAlert(data);
+            }
+        },
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        },
+        complete: function () {
+            $("#PreviledgeModal").modal('hide');
+        }
+    });
 }

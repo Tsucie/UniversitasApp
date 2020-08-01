@@ -74,10 +74,9 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(rp.rp_id.Equals(null) || rp.rp_r_id.Equals(null) || rp.rp_view.Equals(null) || rp.rp_add.Equals(null) || rp.rp_edit.Equals(null) || rp.rp_delete.Equals(null)) throw new Exception("", new Exception("Can't Update data, Incomplete Data!"));
+                if(rp.rp_id.Equals(null) || rp.rp_view.Equals(null) || rp.rp_add.Equals(null) || rp.rp_edit.Equals(null) || rp.rp_delete.Equals(null)) throw new Exception("", new Exception("Can't Update data, Incomplete Data!"));
 
                 rp.rp_id = rp.rp_id;
-                rp.rp_r_id = rp.rp_r_id;
                 rp.rp_view = rp.rp_view;
                 rp.rp_add = rp.rp_add;
                 rp.rp_edit = rp.rp_edit;

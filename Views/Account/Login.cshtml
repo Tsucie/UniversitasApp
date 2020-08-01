@@ -41,7 +41,7 @@
             </span>
           </div>
           <div class="container-login100-form-btn p-t-10">
-            <input type="button" value="Login" class="login100-form-btn" onclick="Validate()">
+            <a type="button" value="Login" class="login100-form-btn" id="btn-login" style="color: white;">Login</a>
           </div>
           <div class="text-center w-full p-t-25 p-b-80">
             <a href="#" class="txt1">
@@ -58,40 +58,6 @@
   <script src="~/vendor/select2/select2.min.js"></script>
   <script src="~/Assets/notifIt/js/notifIt.js"></script>
   <script src="~/js/main.js"></script>
-  <script>
-  function Validate() {
-    if($('#username').val().trim() == "" || $('#password').val().trim() == "") {
-      notif({msg: "<b>" + "Username & Password is required!" + "</b>", type: "warning", position: "right"});
-      return false;
-    }
-    var Data = {
-        "username": $('#username').val(),
-        "password": $('#password').val()
-    }
-    $.ajax({
-      type: "POST",
-      url: '@Url.Action("Validate","Account")',
-      data: Data,
-      success: function (result) {
-        if((result.code === -1) || (result.code === 0)) {
-          notif({msg: "<b>" + "Gagal Login! Username atau Password salah!" + "</b>", type: "warning", position: "right"});
-        }
-        else
-        {
-          if (result.status === true) {
-            setTimeout(() => window.location.href = '@Url.Action("Index", "Home")', 3000);
-            notif({msg: "<b>" + result.message + "</b>", type: "success", position: "right"});
-          }
-          else {
-            notif({msg: "<b>" + result.message + "</b>", type: "warning", position: "right"});
-          }
-        }
-      },
-      error: function () {
-        notif({msg: "<b>" + "Connection Error!" + "</b>", type: "error", position: "right"});
-      }
-    });
-  }
-</script>
+  <script src="~/Scripts/Login.js"></script>
 </body>
 </html>

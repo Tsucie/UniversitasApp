@@ -43,7 +43,7 @@ namespace UniversitasApp.CRUD
 
             string sqlStr = "UPDATE `db_kampus`.`role_previledge` "+
             "SET `rp_view` = '"+rp.rp_view+"', `rp_add` = '"+rp.rp_add+"', `rp_edit` = '"+rp.rp_edit+"', `rp_delete` = '"+rp.rp_delete+"', `rp_rec_updator` = '"+rp.rp_rec_updator+"', `rp_rec_updated` = '"+rp.rp_rec_updated+"' "+
-            "WHERE (`rp_id` = '"+rp.rp_id+"') and (`rp_r_id` = '"+rp.rp_r_id+"');";
+            "WHERE (`rp_id` = '"+rp.rp_id+"');";
 
             using var _command = new MySqlCommand(sqlStr, _conn);
             affectedRow = _command.ExecuteNonQuery();
