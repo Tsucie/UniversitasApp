@@ -1,0 +1,166 @@
+@{
+    ViewBag.Title = "Update Mahasiswa";
+    ViewBag.Logo = "Mahasiswa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Contet Header -->
+<section class="content-header">
+    <h1>
+    Mahasiswa
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User</li>
+        <li class="active">Update Mahasiswa</li>
+    </ol>
+</section>
+<!-- Main Content -->
+<section class="content container-fluid">
+    <!-- Horizontal Form -->
+    <div class="box box-info card-custom">
+        <div class="box-header with-border">
+            <h3 class="box-title">Update Mahasiswa</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form id="form-edit_mhs" class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="edit_u_username" class="col-sm-2 control-label">UserName</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control form-inputs" name="UserName" placeholder="UserName" id="edit_u_username">
+                        <div hidden id="username-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Username tidak boleh kosong!
+                        </div>
+                    </div>
+                </div>
+                @* <div class="form-group">
+                    <label for="edit_u_password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control form-inputs" name="Password" placeholder="Password" id="edit_u_password">
+                        <div hidden id="password-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Password Tidak boleh kosong!
+                        </div>
+                    </div>
+                </div> *@
+            </div>
+            <!-- /.box-body -->
+            <div class="box-header with-border">
+                <h3 class="box-title">Details</h3>
+            </div>
+            <div class="box-body" id="form-section">
+                @* <div class="form-group">
+                    <label for="edit_select-fakultas" class="col-sm-2 control-label">Fakultas</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="edit_select-fakultas"></select>
+                    </div>
+                </div> *@
+                <div class="form-group">
+                    <label for="edit_mhs_fullname" class="col-sm-2 control-label">Nama Lengkap</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_fullname" placeholder="Nama Lengkap" id="edit_mhs_fullname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_nim" class="col-sm-2 control-label">Nomor Induk Mahasiswa</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_nim" placeholder="NIM" id="edit_mhs_nim">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_kelas" class="col-sm-2 control-label">Kelas</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_kelas" placeholder="Kelas" id="edit_mhs_kelas">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_address" class="col-sm-2 control-label">Alamat</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_address" placeholder="Alamat" id="edit_mhs_address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_province" class="col-sm-2 control-label">Provinsi</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_province" placeholder="Provinsi" id="edit_mhs_province">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_city" class="col-sm-2 control-label">Kota</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_city" placeholder="Kota" id="edit_mhs_city">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_birthplace" class="col-sm-2 control-label">Tempat Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_birthplace" placeholder="Tempat Lahir" id="edit_mhs_birthplace">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_birthdate" class="col-sm-2 control-label">Tanggal Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_birthdate" placeholder="Tanggal Lahir" id="edit_mhs_birthdate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_gender" class="col-sm-2 control-label">Jenis Kelamin</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="edit_mhs_gender">
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_religion" class="col-sm-2 control-label">Agama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_religion" placeholder="Agama" id="edit_mhs_religion">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_state" class="col-sm-2 control-label">Kewarganegaraan</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_state" placeholder="Kewarganegaraan" id="edit_mhs_state">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_email" placeholder="Email" id="edit_mhs_email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_stat" class="col-sm-2 control-label">Status Mahasiswa</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="edit_mhs_stat">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_mhs_telp" class="col-sm-2 control-label">Nomor Telpon</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="edit_mhs_telp" placeholder="Nomor Telpon" id="edit_mhs_telp">
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer card-custom">
+                <a class="btn btn-default" href="../Mahasiswa" role="button">Cancel</a>
+                <a><button type="button" class="btn btn-success pull-right" id="btn-edit-mhs">Edit</button></a>
+            </div>
+            <!-- /.box-footer -->
+        </form>
+        <!-- /form end -->
+    </div>
+    <!-- /.box -->
+</section>
+
+@section scripts {
+    <script src="~/Scripts/Mahasiswa.js" type="text/javascript"></script>
+}

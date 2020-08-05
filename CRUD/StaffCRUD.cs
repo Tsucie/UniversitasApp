@@ -223,7 +223,7 @@ namespace UniversitasApp.CRUD
             int affectedRow = 0;
 
             string sqlFks = null;
-            if(!stf.stf_fks_id.Equals(null)) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"'";
+            if(!stf.stf_fks_id.Equals(null)) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"', ";
             string sqlPs = null;
             if(!stf.stf_ps_id.Equals(null)) sqlPs = "`stf_ps_id` = '"+stf.stf_ps_id+"', ";
             string sqlMk = null;

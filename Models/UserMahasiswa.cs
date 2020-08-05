@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace UniversitasApp.Models
 {
     public sealed class UserMahasiswa
@@ -7,6 +5,8 @@ namespace UniversitasApp.Models
         public int? mhs_id { get; set; }
         public int? mhs_u_id { get; set; }
         public int? mhs_fks_id { get; set; }
+        public int? mhs_ps_id { get; set; }
+        public int? mhs_mk_id { get; set; }
         public string mhs_fullname { get; set; }
         public string mhs_nim { get; set; }
         public string mhs_kelas { get; set; }
@@ -25,17 +25,10 @@ namespace UniversitasApp.Models
         //Users
         public int? u_id { get; set; }
         public int? u_ut_id { get; set; }
-        public int? u_r_id { get; set; }
         public string u_username { get; set; }
         public string u_password { get; set; }
-        public string u_login_time { get; set; }
-        public string u_logout_time { get; set; }
-        public short? u_login_status { get; set; }
 
-        [JsonIgnore]
-        public string u_rec_creator { get; set; }
-
-        [JsonIgnore]
-        public string u_rec_created { get; set; }
+        //fakultas
+        public string fks_name { get; set; }
     }
 }

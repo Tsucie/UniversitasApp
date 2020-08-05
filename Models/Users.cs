@@ -5,12 +5,19 @@ namespace UniversitasApp.Models
     public sealed class Users
     {
         public int? u_id { get; set; }
+
         public int? u_ut_id { get; set; }
+
         public int? u_r_id { get; set; }
+
         public string u_username { get; set; }
+
         public string u_password { get; set; }
+
         public string u_login_time { get; set; }
+
         public string u_logout_time { get; set; }
+
         public short? u_login_status { get; set; }
 
         [JsonIgnore]
@@ -43,8 +50,11 @@ namespace UniversitasApp.Models
     public sealed class UserPhoto
     {
         public int? up_id { get; set; }
+
         public int? up_u_id { get; set; }
+
         public byte[] up_photo { get; set; }
+
         public string up_filename { get; set; }
         
         [JsonIgnore]

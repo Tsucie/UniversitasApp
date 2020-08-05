@@ -182,7 +182,7 @@ namespace UniversitasApp.Controllers
             Random rand = new Random();
             try
             {
-                if(string.IsNullOrEmpty(stf.u_username) || string.IsNullOrEmpty(stf.u_password) || stf.u_ut_id.Equals(null) || stf.stf_sc_id.Equals(null)  || string.IsNullOrEmpty(stf.stf_fullname) || string.IsNullOrEmpty(stf.stf_nik) || string.IsNullOrEmpty(stf.stf_address) || string.IsNullOrEmpty(stf.stf_province) || string.IsNullOrEmpty(stf.stf_city) || string.IsNullOrEmpty(stf.stf_birthplace) || string.IsNullOrEmpty(stf.stf_birthdate) || string.IsNullOrEmpty(stf.stf_gender) || string.IsNullOrEmpty(stf.stf_religion) || string.IsNullOrEmpty(stf.stf_state) || string.IsNullOrEmpty(stf.stf_email) || stf.stf_stat.Equals(null) || string.IsNullOrEmpty(stf.stf_contact)) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
+                if(string.IsNullOrEmpty(stf.u_username) || string.IsNullOrEmpty(stf.u_password) || stf.stf_sc_id.Equals(null)  || string.IsNullOrEmpty(stf.stf_fullname) || string.IsNullOrEmpty(stf.stf_nik) || string.IsNullOrEmpty(stf.stf_address) || string.IsNullOrEmpty(stf.stf_province) || string.IsNullOrEmpty(stf.stf_city) || string.IsNullOrEmpty(stf.stf_birthplace) || string.IsNullOrEmpty(stf.stf_birthdate) || string.IsNullOrEmpty(stf.stf_gender) || string.IsNullOrEmpty(stf.stf_religion) || string.IsNullOrEmpty(stf.stf_state) || string.IsNullOrEmpty(stf.stf_email) || stf.stf_stat.Equals(null) || string.IsNullOrEmpty(stf.stf_contact)) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
 
                 stf.stf_id = rand.Next();
                 stf.stf_sc_id = stf.stf_sc_id;
@@ -206,16 +206,13 @@ namespace UniversitasApp.Controllers
                 Users u = new Users();
                 u.u_id = rand.Next();
                 stf.stf_u_id = u.u_id;
-                u.u_ut_id = stf.u_ut_id;
+                u.u_ut_id = 3;
                 u.u_username = stf.u_username;
                 u.u_password = Crypto.Hash(stf.u_password);
-                // u.u_password = stf.u_password;
                 u.u_login_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_logout_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                // u_login_stat is default 0 (false)
                 u.u_login_status = Convert.ToInt16(false);
                 u.u_rec_status = Convert.ToInt16(true);
-                // u_rec_creator is default to System or get User Principal info;
                 u.u_rec_creator = HttpContext.Session.GetString("u_username");
                 u.u_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -234,7 +231,7 @@ namespace UniversitasApp.Controllers
             });
         }
 
-        [HttpGet("UpdateStaff/{stf_u_id}")]
+        [HttpGet("UpdateStaff/GetById/{stf_u_id}")]
         public JsonResult GetOneStf([FromRoute] int stf_u_id)
         {
             ReturnMessage ress = new ReturnMessage();
@@ -288,7 +285,6 @@ namespace UniversitasApp.Controllers
                 u.u_username = stf.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if(!stf.u_r_id.Equals(null)) u.u_r_id = stf.u_r_id;
                 if(!stf.u_password.Equals(null)) u.u_password = Crypto.Hash(stf.u_password);
 
                 if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, stf, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));

@@ -131,7 +131,6 @@ function UpdateRolePreviledge() {
         "rp_edit": statusCheck("#edit"),
         "rp_delete": statusCheck("#delete")
     };
-    console.log(Data);
     $.ajax({
         type: "PUT",
         url: "/Role/UpdatePreviledge",

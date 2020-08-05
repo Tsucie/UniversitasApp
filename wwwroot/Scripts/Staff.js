@@ -42,6 +42,7 @@ function StaffDetailDataTable() {
                     $(table).append(rowHTML);
 
                     $('#btnstfedit' + i).click(function (event) {
+                        window.location.assign('../StaffCategory/UpdateStaff');
                         clickStaffEdit(this);
                     });
 
@@ -106,7 +107,6 @@ function addStaff() {
         //users
         "u_username": $("#u_username").val(),
         "u_password": $("#u_password").val(),
-        "u_ut_id": 3,
         //stf_detail
         "stf_sc_id": parseInt($("#select-stfcategory").val()),
         // "stf_fks_id": parseInt($("#select-fakultas").val()),
@@ -135,7 +135,7 @@ function addStaff() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.href = "../StaffCategory"; }, 1000);
+                setTimeout(() => { window.location.href = "../StaffCategory"; }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -143,6 +143,10 @@ function addStaff() {
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        },
+        complete: function () {
+            $("#username-alrt").hide();
+            $("#password-alrt").hide();
         }
     });
 }
@@ -156,16 +160,13 @@ function clickStaffEdit(obj) {
     };
     $.ajax({
         type: "GET",
-        url: "/StaffCategory/UpdateStaff/" + obj_id.stf_u_id,
+        url: "/StaffCategory/UpdateStaff/GetById/" + obj_id.stf_u_id,
         contentType: "application/json",
         dataType: "json",
         data: obj_id.stf_u_id,
         success: function (data) {
             if(data != null) {
-                window.location.href = '../StaffCategory/UpdateStaff'; // Valuenya ga keisi
                 obj_id.stf_id = data.stf_id;
-                console.log(data);
-                console.log(obj_id);
                 $("#u_username").val(data.u_username);
                 $("#select-stfcategory").val(data.stf_sc_id);
                 $("#stf_fullname").val(data.stf_fullname);
@@ -188,9 +189,11 @@ function clickStaffEdit(obj) {
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        },
+        complete: function () {
+            edit = obj_id;
         }
     });
-    edit = obj_id;
 }
 
 function updateStaff() {
@@ -226,7 +229,7 @@ function updateStaff() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.href = "../StaffCategory"; }, 1000);
+                setTimeout(() => { window.location.href = "../StaffCategory"; }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -241,7 +244,7 @@ function updateStaff() {
 function clickStaffDelete(obj) {
     let obj_id = {"stf_u_id": parseInt(obj.attributes.data_id.value)};
 
-    var konfirmasi = confirm("Yakin inigin Delete Staff?");
+    var konfirmasi = confirm("Yakin ingin Delete Staff?");
     if(konfirmasi) {
         $.ajax({
             type: "DELETE",
@@ -252,7 +255,7 @@ function clickStaffDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(function () { window.location.reload() }, 2000);
+                    setTimeout(() => { window.location.reload() }, 2000);
                 }
                 else {
                     pesanAlert(data);
