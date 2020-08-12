@@ -147,7 +147,7 @@ namespace UniversitasApp.CRUD
         {
             int affectedRow = 0;
 
-            string sqlStr = "UPDATE `db_kampus`.`site` SET"+
+            string sqlStr = "UPDATE `db_kampus`.`site` SET "+
                             "`s_fullname` = '"+s.s_fullname+"',`s_nik` = '"+s.s_nik+"',`s_address` = '"+s.s_address+"',`s_province` = '"+s.s_province+"',`s_city` = '"+s.s_city+"',`s_birthplace` = '"+s.s_birthplace+"',`s_birthdate` = '"+s.s_birthdate+"',`s_gender` = '"+s.s_gender+"',`s_state` = '"+s.s_state+"',`s_email` = '"+s.s_email+"',`s_stat` = "+s.s_stat+",`s_contact` = '"+s.s_contact+"' "+
                             "WHERE (`s_id` = '"+s_id+"' AND `s_u_id` = '"+s_u_id+"');";
 

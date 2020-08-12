@@ -14,13 +14,34 @@ namespace UniversitasApp.Controllers
     [ApiController]
     public class MahasiswaController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [Route("AddMhs")]
-        public IActionResult AddMhs() => View();
+        public IActionResult AddMhs()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [Route("UpdateMhs")]
-        public IActionResult UpdateMhs() => View();
+        public IActionResult UpdateMhs()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [HttpGet("GetMhsList")]
         public JsonResult GetAllData()

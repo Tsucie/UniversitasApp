@@ -1,0 +1,110 @@
+@using System;
+@using Microsoft.AspNetCore.Http;
+@using UniversitasApp.General;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "User Profile";
+    ViewBag.Logo = "User Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userini = HttpContextAccessor.HttpContext.Session.GetInt32("u_id");
+    var username = HttpContextAccessor.HttpContext.Session.GetString("u_username");
+    var usertype = HttpContextAccessor.HttpContext.Session.GetString("ut_name");
+}
+<!-- Contet Header -->
+<section class="content-header">
+    <h1 class="card-text">
+    User Profile
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User Profile</li>
+    </ol>
+</section>
+<!-- Main Content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box card-custom">
+                <div class="box-header  with-border">
+                    <h2 class="box-title"><b>Profile @username</b></h2>
+                </div>
+                <form class="form-inline" id="form-userProfile">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <img class="form-image" src="~/images/avatar-Tsucie.jpg" alt="User Photo">
+                        </div>
+                        <div class="form-group">
+                            <label for="u_username" class="form-label control-label">UserName</label>
+                            <br>
+                            <div class="col-sm-10 input-group">
+                                <span class="input-group-addon form-addon" id="username-addon">@@</span>
+                                <input type="text" class="form-control form-inputs with-addon" name="UserName" placeholder="UserName" id="u_username" aria-describedby="username-addon" value='@username'>
+                                <div hidden id="username-alrt" class="alert alert-danger" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>
+                                    Username tidak boleh kosong!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default card-btn" id="Details-btn">Details</button>
+                        <button type="button" class="btn btn-default card-btn" id="ChangePassword-btn">Change Password</button>
+                    </div>
+                </form>
+                <form hidden class="form-inline" id="Details-Form">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Details</h3>
+                    </div>
+                    <div class="box-body"></div>
+                    <div class="box-footer"></div>
+                </form>
+                <form hidden class="form-inline" id="ChangePassword-Form">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Change Password</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group"> <!-- Margin Problem -->
+                            <label for="u_password" class="form-label control-label">Password Lama</label>
+                            <br>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control form-inputs" name="Password" placeholder="Password" id="u_password">
+                                @* <span>
+                                    <button class="btn btn-default card-btn" id="OldPass-visibility"><i class="glyphicon glyphicon-eye-open"></i></button>
+                                </span> *@
+                                <div hidden id="password-alrt" class="alert alert-danger" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>
+                                    Password lama tidak boleh kosong!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password" class="form-label control-label">Password Baru</label>
+                            <br>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control form-inputs" name="Password" placeholder="Password" id="new_password">
+                                @* <span>
+                                    <button class="btn btn-default card-btn" id="NewPass-visibility"><i class="glyphicon glyphicon-eye-open"></i></button>
+                                </span> *@
+                                <div hidden id="password-alrt" class="alert alert-danger" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>
+                                    Password baru tidak boleh kosong!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button class="pull-right btn btn-success card-btn" id="btn-save-password">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/Scripts/User.js" type="text/javascript"></script>
+}

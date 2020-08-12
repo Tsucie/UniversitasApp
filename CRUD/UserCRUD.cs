@@ -57,7 +57,7 @@ namespace UniversitasApp.CRUD
             {
                 u.u_id = _datareader.GetInt32(0);
                 u.ut_name = _datareader.GetString(1);
-                u.u_username = _datareader.GetString(2);
+                u.u_username = _datareader.GetString(2).Replace("@", "");
                 u.u_password = _datareader.GetString(3);
                 u.u_login_time = _datareader.GetDateTime(4).ToString("dd/MM/yyyy HH:mm:ss");
                 u.u_logout_time = _datareader.GetDateTime(5).ToString("dd/MM/yyyy HH:mm:ss");

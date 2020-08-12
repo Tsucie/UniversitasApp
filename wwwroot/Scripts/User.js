@@ -1,10 +1,15 @@
 $(document).ready(function () {
     UserdataTable();
+    $('#Details-btn').click(function () {
+        ShowDetails(this);
+    });
+    $('#ChangePassword-btn').click(function () {
+        ShowPassForm(this);
+    });
 });
 
 function UserdataTable() {
     var table = $("#tblUser");
-
     $("#spinner").show();
     $.ajax({
         type: "GET",
@@ -40,4 +45,14 @@ function UserdataTable() {
             $("#spinner").hide();
         }
     });
-};
+}
+
+function ShowDetails() {
+    $('#ChangePassword-Form').hide();
+    $('#Details-Form').show();
+}
+
+function ShowPassForm() {
+    $('#Details-Form').hide();
+    $('#ChangePassword-Form').show();
+}

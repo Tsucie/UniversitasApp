@@ -12,11 +12,10 @@ namespace UniversitasApp.Controllers
     {
         public IActionResult Index()
         {
-            if(HttpContext.Session.GetString("u_username") == null)
+            if(HttpContext.Session.GetInt32("u_id") == null)
             {
                 return RedirectToAction("Login","Account");
             }
-
             return View();
         }
 

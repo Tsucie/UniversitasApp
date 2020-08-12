@@ -89,12 +89,12 @@ function ProdiComboBox() {
     let obj_id = { "ps_fks_id": parseInt($("#select-fakultas").val()) };
     $.ajax({
         type: "GET",
-        url: "/ProgramStudi/GetListById/" + obj_id.ps_fks_id,
+        url: "/Fakultas/GetListById/" + obj_id.ps_fks_id,
         contentType: "application/json",
         dataType: "json",
         data: obj_id.ps_fks_id,
         success: function (data) {
-            if(data.code === 1 || data.code === -1) {
+            if(data.code === 0 || data.code === -1) {
                 pesanAlert(data);
             }
             else {
@@ -122,14 +122,14 @@ function validasiAddStaff() {
         $("#password-alrt").show();
         isValid = false;
     }
-    if($("#select-fakultas").val() == "") {
-        $("fakultas-alrt").show();
-        isValid = false;
-    }
-    if($("#select-prodi").val() == "") {
-        $("#prodi-alrt").show();
-        isValid = false;
-    }
+    // if($("#select-fakultas").val() == "") {
+    //     $("fakultas-alrt").show();
+    //     isValid = false;
+    // }
+    // if($("#select-prodi").val() == "") {
+    //     $("#prodi-alrt").show();
+    //     isValid = false;
+    // }
     return isValid;
 }
 
@@ -241,7 +241,6 @@ function UpdateMhs() {
         "mhs_id": edit.mhs_id,
         "mhs_u_id": edit.mhs_u_id,
         "u_username": $("#edit_u_username").val(),
-        // "mhs_fks_id": $("#edit_select-mhscategory").val(),
         "mhs_fullname": $("#edit_mhs_fullname").val(),
         "mhs_nim": $("#edit_mhs_nim").val(),
         "mhs_kelas": $("#edit_mhs_kelas").val(),

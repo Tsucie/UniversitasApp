@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using UniversitasApp.Models;
 using UniversitasApp.General;
 using UniversitasApp.CRUD;
@@ -14,7 +15,24 @@ namespace UniversitasApp.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
+
+        [Route("Profile")]
+        public IActionResult Profile()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [HttpGet("GetList")]
         public JsonResult ReadAllList()
@@ -45,30 +63,10 @@ namespace UniversitasApp.Controllers
             });
         }
 
-        // [HttpGet("GetCategoryList")]
-        // public JsonResult CategoryList()
+        // [HttpGet("Profile/GetUserDetail")]
+        // public JsonResult GetUserProfile([FromBody] int u_id)
         // {
-        //     ReturnMessage ress = new ReturnMessage();
-        //     try
-        //     {
-        //         var category = UserCRUD.ReadList(Startup.db_kampus_ConnStr);
-        //         if(category.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
-        //         Object[] data = {
-        //             new{Nilai = category.Select(c => c.ut_id).ToArray()},
-        //             new{Tampil = category.Select(c => c.ut_name).ToArray()},
-        //             new{Judul = category.Select(c => c.ut_desc).ToArray()}
-        //         };
-        //         return Json(data);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         ress.Error(ex);
-        //     }
-        //     return Json(new {
-        //         Code = ress.Code,
-        //         Pesan = ress.Message
-        //     });
         // }
     }
 }

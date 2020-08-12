@@ -31,13 +31,11 @@
     <div class="wrapper" id="app">
         <!-- Main Header -->
         <header class="main-header">
-
             <!-- Logo -->
             <a href="#" class="logo">
-                <span class="logo-mini"><b>C</b>MS</span>
-                <span class="logo-lg"><b>MyCampus</b> | @ViewData["Logo"]</span>
+                <span class="logo-mini card-text"><i class="fa fa-university"></i></span>
+                <span class="logo-lg card-text"><i class="fa fa-university"></i> | @ViewData["Logo"]</span>
             </a>
-            
             <!-- Header Navbar -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button -->
@@ -54,7 +52,7 @@
                                 <!-- User image in the navbar -->
                                 <img src="~/images/avatar-Tsucie.jpg" class="user-image" alt="User Image">
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">@username</span>
+                                <span class="hidden-xs card-text">@username</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- Photo Profile dan keterangan -->
@@ -67,7 +65,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- Info User -->
-                                            <a href="#">Account: @username [@usertype]</a>
+                                            <a href="#">Account: @username [ @usertype ]</a>
                                         </div>
                                     </div>
                                     <!-- /.row -->
@@ -75,10 +73,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat" id="btn-profile"><i class="glyphicon glyphicon-user"></i> Profile</a>
+                                        <a href='@Url.Action("Profile","User")' class="btn btn-default btn-flat card-btn" id="btn-profile"><i class="glyphicon glyphicon-user"></i> Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href='@Url.Action("Logout","Account")' class="btn btn-default btn-flat">Sign out <i class="glyphicon glyphicon-log-out"></i></a>
+                                        <a href='@Url.Action("Logout","Account")' class="btn btn-default btn-flat card-btn">Sign out <i class="glyphicon glyphicon-log-out"></i></a>
                                     </div>
                                 </li>
                             </ul>
@@ -110,7 +108,7 @@
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Cari.....">
+                        <input type="text" id="quick-search" class="form-control" placeholder="Cari.....">
                         <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat">
                                 <i class="fa fa-search"></i>

@@ -14,7 +14,14 @@ namespace UniversitasApp.Controllers
     [ApiController]
     public class RoleController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
         
         [HttpGet("GetAll")]
         public JsonResult GetAllData()

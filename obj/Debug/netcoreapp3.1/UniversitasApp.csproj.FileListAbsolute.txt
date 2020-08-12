@@ -276,3 +276,5 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Site\Index.
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Role\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Mahasiswa\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Mahasiswa\UpdateMhs.cshtml.g.cs
+D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Fakultas\Index.cshtml.g.cs
+D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\User\Profile.cshtml.g.cs

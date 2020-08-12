@@ -51,14 +51,14 @@ function iconStatus(id, element_id) {
             // icon = '<i class="glyphicon glyphicon-ok-circle" style="color: green; font-size: 150%;"></i>';
             icon = '<label class="switch">'+
                         '<input id="'+element_id+'" type="checkbox" checked>'+
-                        '<span class="slider round" title="'+id+'"></span>'+
+                        '<span class="slider round" title="Enable"></span>'+
                     '</label>';
             break;
         case 0:
             // icon = '<i class="glyphicon glyphicon-remove-circle" style="color: red; font-size: 150%;"></i>';
             icon = '<label class="switch">'+
                         '<input id="'+element_id+'" type="checkbox">'+
-                        '<span class="slider round" title="'+id+'"></span>'+
+                        '<span class="slider round" title="Disable"></span>'+
                     '</label>';
             break;
         case -1:

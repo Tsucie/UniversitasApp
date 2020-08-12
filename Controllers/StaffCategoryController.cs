@@ -15,13 +15,34 @@ namespace UniversitasApp.Controllers
     [ApiController]
     public class StaffCategoryController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [Route("AddStaff")]
-        public IActionResult AddStaff() => View();
+        public IActionResult AddStaff()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [Route("UpdateStaff")]
-        public IActionResult UpdateStaff() => View();
+        public IActionResult UpdateStaff()
+        {
+            if(HttpContext.Session.GetInt32("u_id") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
+        }
 
         [HttpGet("GetCategoryList")]
         public JsonResult GetDataList()

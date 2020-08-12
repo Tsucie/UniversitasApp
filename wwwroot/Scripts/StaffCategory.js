@@ -13,7 +13,7 @@ $(document).ready(function () {
     });
 });
 // JQuery Validate
-function validasi(txtbox) {
+function validasi() {
     var isValid = true;
     if($('#sc_name').val().trim() == "") {
         $('#sc_name').css('border-color', 'Red');

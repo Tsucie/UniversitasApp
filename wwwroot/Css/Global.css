@@ -4,8 +4,21 @@
     border-radius: 10px 6px 10px 6px;
 }
 
+.card-text {
+    font-family: monospace !important;
+    font-weight: bold !important;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.card-btn {
+    border: none !important;
+    border-radius: 24px !important;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
 .card-logo {
     position: relative;
+    text-align: center;
     width: 100%;
     padding: 10px;
     overflow: hidden;
@@ -20,7 +33,7 @@
 }
 .card-logo > .logo > img {
     width: 100%;
-    max-width: 210px;
+    max-width: 160px;
     height: auto;
 }
 
@@ -58,9 +71,32 @@
     border-radius: 0px 20px 0px 20px;
 }
 
-.form-inputs{
-    border-radius: 6px 6px 6px 6px;
+.form-image {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    margin: 10px;
+}
+
+.form-label {
+    text-align: center;
+    padding: 10px 0px 10px 0px;
     font-family: sans-serif;
+}
+
+.form-inputs{
+    border-radius: 6px 6px 6px 6px !important;
+    font-family: sans-serif;
+}
+
+.form-addon {
+    background-color: lightgray;
+    border-radius: 6px 0 0 6px !important;
+}
+
+.form-inputs.with-addon {
+    border-radius: 0 6px 6px 0 !important;
 }
 
 /* Switch Button */

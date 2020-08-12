@@ -28,8 +28,8 @@ namespace UniversitasApp.Controllers
 
                 if(u_data.u_password.Equals(password) || Crypto.Verify(password, u_data.u_password))
                 {
-                    HttpContext.Session.SetString("u_username", u_data.u_username);
                     HttpContext.Session.SetInt32("u_id", (int)u_data.u_id);
+                    HttpContext.Session.SetString("u_username", u_data.u_username);
                     HttpContext.Session.SetString("ut_name", u_data.ut_name);
                     if(!u_data.u_r_id.Equals(null)) HttpContext.Session.SetInt32("u_r_id", (int)u_data.u_r_id);
 
