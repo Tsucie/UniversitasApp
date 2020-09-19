@@ -25,7 +25,7 @@ function SiteDataTable() {
                 '<td class="tb-content">' + obj[2].fullname[i] + '</td>' +
                 '<td class="tb-content">' + obj[3].nik[i] + '</td>' +
                 status +
-                '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + obj[0].nomor[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + obj[0].nomor[i] + '\'><i class="fa fa-remove"></i></a></td>' +
+                '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + obj[0].nomor[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + obj[0].nomor[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
                 '</tr>';
 
                 $(table).append(rowHTML);

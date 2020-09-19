@@ -255,7 +255,6 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.RazorCor
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Account\Login.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Client\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
-D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Mahasiswa\AddMhs.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_MainMenu.cshtml.g.cs
@@ -275,6 +274,5 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\UniversitasApp.pdb
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Site\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Role\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Mahasiswa\Index.cshtml.g.cs
-D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Mahasiswa\UpdateMhs.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Fakultas\Index.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\User\Profile.cshtml.g.cs

@@ -18,8 +18,8 @@ function pesanAlert(obj) {
             position = "center";
             break;
         case -1:
-            color = "danger";
-            msg = obj.pesan;
+            color = "error";
+            msg = "Internal Server Error!";
             position = "center";
             break;
         default:

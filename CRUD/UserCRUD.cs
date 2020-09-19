@@ -133,7 +133,7 @@ namespace UniversitasApp.CRUD
             _connection.Open();
             
             string sqlRoleCol = string.Empty, sqlRoleVal = string.Empty;
-            if(!u.u_r_id.Equals(null))
+            if(u.u_r_id != null)
             {
                 sqlRoleCol = "`u_r_id`,";
                 sqlRoleVal = "'"+u.u_r_id+"',";
@@ -154,7 +154,7 @@ namespace UniversitasApp.CRUD
         {
             int affectedRow = 0;
             string sqlRoleCol = string.Empty, sqlRoleVal = string.Empty;
-            if(!u.u_r_id.Equals(null))
+            if(u.u_r_id != null)
             {
                 sqlRoleCol = "`u_r_id`,";
                 sqlRoleVal = "'"+u.u_r_id+"',";
@@ -172,6 +172,97 @@ namespace UniversitasApp.CRUD
 
             return affectedRow;
         }
+
+        public static int ReadUsername(string connStr, string username)
+        {
+            int rowReturned = 0;
+            if(Read(connStr, username).u_id != null) rowReturned = 1;
+            return rowReturned;
+        }
+
+        public static int ReadPhoto(string connStr, int up_u_id)
+        {
+            int rowReturned = 0;
+            using var _conn = new MySqlConnection(connStr);
+            _conn.Open();
+
+            string sqlStr = "SELECT * FROM db_kampus.user_photo WHERE up_u_id = '"+up_u_id+"'";
+
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            using MySqlDataReader _data = _cmd.ExecuteReader();
+
+            if(_data.HasRows) rowReturned = 1;
+
+            _conn.Close();
+            return rowReturned;
+        }
+
+        public static int CreatePhoto(string connStr, UserPhoto up)
+        {
+            int affectedRow = 0;
+            Random rand = new Random();
+            using var _conn = new MySqlConnection(connStr);
+            _conn.Open();
+
+            string sqlStr =
+                "INSERT INTO `db_kampus`.`user_photo` (`up_id`,`up_u_id`,`up_photo`,`up_filename`,`up_rec_status`) "+
+                "VALUES ('"+rand.Next(int.MinValue, int.MaxValue)+"','"+up.up_u_id+"','@photo','"+up.up_filename+"','"+up.up_rec_status+"')";
+            
+            using var _cmd = new MySqlCommand();
+            _cmd.Connection = _conn;
+            _cmd.Parameters.Add("@photo", MySqlDbType.Blob, up.up_photo.Length).Value = up.up_photo;
+            _cmd.CommandText = sqlStr;
+
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            _conn.Close();
+            return affectedRow;
+        }
+
+        public static int CreatePhotoAlive(MySqlConnection _conn, UserPhoto up)
+        {
+            int affectedRow = 0;
+            string sqlStr = 
+                "INSERT INTO `db_kampus`.`user_photo` "+
+                "(`up_id`,`up_u_id`,`up_photo`,`up_filename`,`up_rec_status`) "+
+                "VALUES ('"+up.up_id+"','"+up.up_u_id+"','"+up.up_photo+"','"+up.up_filename+"','"+up.up_rec_status+"')";
+
+            using var _cmd = new MySqlCommand(sqlStr);
+            _cmd.Connection = _conn;
+
+            if(_conn.State == ConnectionState.Closed) _conn.Open();
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            if(affectedRow == 1) affectedRow = UpdatePhotoAlive(_conn, (int)up.up_u_id, up);
+            return affectedRow;
+        }
+
+        public static int UpdatePhotoAlive(MySqlConnection _conn, int u_id, UserPhoto up)
+        {
+            int affectedRow = 0;
+            string sqlStr =
+                "UPDATE `db_kampus`.`user_photo` SET "+
+                "`up_photo` = '"+up.up_photo+"', `up_filename` = '"+up.up_filename+"' "+
+                "WHERE up_u_id = '"+u_id+"'";
+            
+            using var _cmd = new MySqlCommand();
+            _cmd.Connection = _conn;
+
+            if(_conn.State == ConnectionState.Closed) _conn.Open();
+            _cmd.CommandText = sqlStr;
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            if(affectedRow == 1)
+            {
+                sqlStr = "UPDATE `db_kampus`.`user_photo` SET `up_photo` = @photo" +
+                            " WHERE up_u_id = "+ u_id.ToString();
+                _cmd.Parameters.Add("@photo", MySqlDbType.Blob, up.up_photo.Length).Value = up.up_photo;
+                _cmd.CommandText = sqlStr;
+                affectedRow = _cmd.ExecuteNonQuery();
+                _cmd.Parameters.Clear();
+            }
+            return affectedRow;
+        }
         // Update users table
         public static int Update(string connStr, int u_id, Users u)
         {
@@ -180,10 +271,10 @@ namespace UniversitasApp.CRUD
             _conn.Open();
             
             string sqlPass = "", sqlRole = "";
-            if(!u.u_r_id.Equals(null)) sqlRole = "`u_r_id` = '"+u.u_r_id+"', ";
-            if(!u.u_password.Equals(null)) sqlPass = ", `u_password` = '"+u.u_password+"'";
+            if(u.u_r_id != null) sqlRole = "`u_r_id` = '"+u.u_r_id+"', ";
+            if(u.u_password != null) sqlPass = ", `u_password` = '"+u.u_password+"'";
 
-            string sqlStr = "UPDATE `db_kampus`.`users` SET "+sqlRole+"`u_username` = '"+u.u_username+"'"+sqlPass+", `u_rec_updator` = '"+u.u_rec_updator+"', `u_rec_updated` = '"+u.u_rec_updated+"' WHERE (`u_id` = '"+u_id+"');";
+            string sqlStr = "UPDATE `db_kampus`.`users` SET "+sqlRole+"`u_username` = '@"+u.u_username+"'"+sqlPass+", `u_rec_updator` = '"+u.u_rec_updator+"', `u_rec_updated` = '"+u.u_rec_updated+"' WHERE (`u_id` = '"+u_id+"');";
             
             using var _command = new MySqlCommand(sqlStr, _conn);
             affectedRow = _command.ExecuteNonQuery();
@@ -196,10 +287,10 @@ namespace UniversitasApp.CRUD
             int affectedRow = 0;
             
             string sqlPass = "", sqlRole = "";
-            if(!u.u_r_id.Equals(null)) sqlRole = "`u_r_id` = '"+u.u_r_id+"', ";
-            if(!u.u_password.Equals(null)) sqlPass = ", `u_password` = '"+u.u_password+"'";
+            if(u.u_r_id != null) sqlRole = "`u_r_id` = '"+u.u_r_id+"', ";
+            if(u.u_password != null) sqlPass = ", `u_password` = '"+u.u_password+"'";
 
-            string sqlStr = "UPDATE `db_kampus`.`users` SET "+sqlRole+"`u_username` = '"+u.u_username+"'"+sqlPass+", `u_rec_updator` = '"+u.u_rec_updator+"', `u_rec_updated` = '"+u.u_rec_updated+"' WHERE (`u_id` = '"+u_id+"');";
+            string sqlStr = "UPDATE `db_kampus`.`users` SET "+sqlRole+"`u_username` = '@"+u.u_username+"'"+sqlPass+", `u_rec_updator` = '"+u.u_rec_updator+"', `u_rec_updated` = '"+u.u_rec_updated+"' WHERE (`u_id` = '"+u_id+"');";
             
             using var _command = new MySqlCommand(sqlStr);
             _command.Connection = _conn;

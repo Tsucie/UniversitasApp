@@ -1,13 +1,38 @@
 $(document).ready(function () {
+    $("#active-link").text('Kategori Staff & Staff');
     StaffDetailDataTable();
     addStaffPage();
+    $("#add-staff-btn").click(function () {
+        $("#active-link").text('Add Staff');
+        $("#form-title").text('Add Staff');
+        $("#password-field").show();
+        $("#btn-edit-stf").hide();
+        $("#btn-create-stf").show();
+        ShowForm();
+    });
+    $("#btn-cancel-stf").click(function () {
+        ShowTables();
+    });
     $("#btn-edit-stf").click(function () {
-        updateStaff();
+        updateStaff(this);
     });
     $("#btn-create-stf").click(function() {
         addStaff(this);
     });
 });
+
+function ShowForm() {
+    $("#category-table").hide();
+    $("#staff-table").hide();
+    $("#form-content").show();
+}
+
+function ShowTables() {
+    $("#active-link").text('Kategori Staff & Staff');
+    $("#form-content").hide();
+    $("#category-table").show();
+    $("#staff-table").show();
+}
 
 function StaffDetailDataTable() {
     var table = $("#tblStaff-detail");
@@ -36,17 +61,16 @@ function StaffDetailDataTable() {
                     '<td class="tb-content">' + obj[3].dataEmail[i] + '</td>' +
                     '<td class="tb-content">' + obj[4].dataTelp[i] + '</td>' +
                     status +
-                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnstfedit' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnstfdelete' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-remove"></i></a></td>' +
+                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnstfedit' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnstfdelete' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
                     '</tr>';
 
                     $(table).append(rowHTML);
 
-                    $('#btnstfedit' + i).click(function (event) {
-                        window.location.assign('../StaffCategory/UpdateStaff');
+                    $('#btnstfedit' + i).click(function () {
                         clickStaffEdit(this);
                     });
 
-                    $('#btnstfdelete' + i).click(function (event) {
+                    $('#btnstfdelete' + i).click(function () {
                         clickStaffDelete(this);
                     });
                 }
@@ -135,7 +159,8 @@ function addStaff() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(() => { window.location.href = "../StaffCategory"; }, 1000);
+                StaffDetailDataTable();
+                setTimeout(() => { ShowTables(); }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -154,6 +179,11 @@ function addStaff() {
 var edit;
 
 function clickStaffEdit(obj) {
+    $("#active-link").text('Edit Staff');
+    $("#form-title").text('Edit Staff');
+    $("#password-field").hide();
+    $("#btn-create-stf").hide();
+    $("#btn-edit-stf").show();
     let obj_id = {
         "stf_id": 0,
         "stf_u_id": parseInt(obj.attributes.data_id.value)
@@ -165,10 +195,13 @@ function clickStaffEdit(obj) {
         dataType: "json",
         data: obj_id.stf_u_id,
         success: function (data) {
-            if(data != null) {
+            if(data.code === 0 || data.code === -1) {
+                pesanAlert(data);
+            }
+            else {
                 obj_id.stf_id = data.stf_id;
                 $("#u_username").val(data.u_username);
-                $("#select-stfcategory").val(data.stf_sc_id);
+                $("#select-stfcategory").val(''+data.stf_sc_id);
                 $("#stf_fullname").val(data.stf_fullname);
                 $("#stf_nik").val(data.stf_nik);
                 $("#stf_address").val(data.stf_address);
@@ -180,11 +213,9 @@ function clickStaffEdit(obj) {
                 $("#stf_religion").val(data.stf_religion);
                 $("#stf_state").val(data.stf_state);
                 $("#stf_email").val(data.stf_email);
-                $("#select-status").val(data.stf_stat);
+                $("#select-status").val(''+data.stf_stat);
                 $("#stf_contact").val(data.stf_contact);
-            }
-            else {
-                pesanAlert(data);
+                ShowForm();
             }
         },
         error: function () {
@@ -205,7 +236,7 @@ function updateStaff() {
         "stf_id": edit.stf_id,
         "stf_u_id": edit.stf_u_id,
         "u_username": $("#u_username").val(),
-        "stf_sc_id": $("#select-stfcategory").val(),
+        "stf_sc_id": parseInt($("#select-stfcategory").val()),
         "stf_fullname": $("#stf_fullname").val(),
         "stf_nik": $("#stf_nik").val(),
         "stf_address": $("#stf_address").val(),
@@ -217,7 +248,7 @@ function updateStaff() {
         "stf_religion": $("#stf_religion").val(),
         "stf_state": $("#stf_state").val(),
         "stf_email": $("#stf_email").val(),
-        "stf_stat": $("#select-status").val(),
+        "stf_stat": parseInt($("#select-status").val()),
         "stf_contact": $("#stf_contact").val()
     };
     $.ajax({
@@ -229,7 +260,8 @@ function updateStaff() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(() => { window.location.href = "../StaffCategory"; }, 1000);
+                StaffDetailDataTable();
+                setTimeout(() => { ShowTables(); }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -255,7 +287,7 @@ function clickStaffDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(() => { window.location.reload() }, 2000);
+                    setTimeout(() => { StaffDetailDataTable(); }, 2000);
                 }
                 else {
                     pesanAlert(data);

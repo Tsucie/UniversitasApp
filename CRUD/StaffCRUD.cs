@@ -64,7 +64,7 @@ namespace UniversitasApp.CRUD
                 stf.stf_province = _data.GetString(6);
                 stf.stf_city = _data.GetString(7);
                 stf.stf_birthplace = _data.GetString(8);
-                stf.stf_birthdate = _data.GetString(9);
+                stf.stf_birthdate = _data.GetDateTime(9).ToString("yyyy-MM-dd");
                 stf.stf_gender = _data.GetString(10);
                 stf.stf_religion = _data.GetString(11);
                 stf.stf_state = _data.GetString(12);
@@ -73,7 +73,7 @@ namespace UniversitasApp.CRUD
                 stf.stf_contact = _data.GetString(15);
                 stf.u_id = _data.GetInt32(16);
                 stf.u_ut_id = _data.GetInt32(17);
-                stf.u_username = _data.GetString(18);
+                stf.u_username = _data.GetString(18).Replace("@","");
                 // stf.stf_fks_id = (_data.GetInt32(19).Equals(null)) ? (int?)null : _data.GetInt32(19);
                 // stf.stf_ps_id = (_data.GetInt32(20).Equals(null)) ? (int?)null : _data.GetInt32(20);
                 // stf.stf_mk_id = (_data.GetInt32(21).Equals(null)) ? (int?)null : _data.GetInt32(21);
@@ -90,17 +90,17 @@ namespace UniversitasApp.CRUD
             _connection.Open();
             
             string sqlFksCol = "", sqlFksVal = "", sqlPsCol = "", sqlPsVal = "", sqlMkCol = "", sqlMkVal = "";
-            if(!stf.stf_fks_id.Equals(null))
+            if(stf.stf_fks_id != null)
             {
                 sqlFksCol = "`stf_fks_id`, ";
                 sqlFksVal = "'"+stf.stf_fks_id+"',";
             }
-            if(!stf.stf_ps_id.Equals(null))
+            if(stf.stf_ps_id != null)
             {
                 sqlPsCol = "`stf_ps_id`, ";
                 sqlPsVal = "'"+stf.stf_ps_id+"', ";
             }
-            if(!stf.stf_mk_id.Equals(null))
+            if(stf.stf_mk_id != null)
             {
                 sqlMkCol = "`stf_mk_id`,  ";
                 sqlMkVal = "'"+stf.stf_mk_id+"', ";
@@ -120,17 +120,17 @@ namespace UniversitasApp.CRUD
         {
             int affectedRow = 0;
             string sqlFksCol = "", sqlFksVal = "", sqlPsCol = "", sqlPsVal = "", sqlMkCol = "", sqlMkVal = "";
-            if(!stf.stf_fks_id.Equals(null))
+            if(stf.stf_fks_id != null)
             {
                 sqlFksCol = "`stf_fks_id`, ";
                 sqlFksVal = "'"+stf.stf_fks_id+"',";
             }
-            if(!stf.stf_ps_id.Equals(null))
+            if(stf.stf_ps_id != null)
             {
                 sqlPsCol = "`stf_ps_id`, ";
                 sqlPsVal = "'"+stf.stf_ps_id+"', ";
             }
-            if(!stf.stf_mk_id.Equals(null))
+            if(stf.stf_mk_id != null)
             {
                 sqlMkCol = "`stf_mk_id`,  ";
                 sqlMkVal = "'"+stf.stf_mk_id+"', ";
@@ -202,13 +202,13 @@ namespace UniversitasApp.CRUD
             _conn.Open();
 
             string sqlFks = null;
-            if(!stf.stf_fks_id.Equals(null)) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"'";
+            if(stf.stf_fks_id != null) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"',";
             string sqlPs = null;
-            if(!stf.stf_ps_id.Equals(null)) sqlPs = "`stf_ps_id` = '"+stf.stf_ps_id+"', ";
+            if(stf.stf_ps_id != null) sqlPs = "`stf_ps_id` = '"+stf.stf_ps_id+"', ";
             string sqlMk = null;
-            if(!stf.stf_mk_id.Equals(null)) sqlMk = "`stf_mk_id` = '"+stf.stf_mk_id+"', ";
+            if(stf.stf_mk_id != null) sqlMk = "`stf_mk_id` = '"+stf.stf_mk_id+"', ";
 
-            string sqlStr = "UPDATE db_kampus.staff SET "+sqlFks+sqlPs+sqlMk+
+            string sqlStr = "UPDATE db_kampus.staff SET "+sqlFks+sqlPs+sqlMk+"`stf_sc_id` = '"+stf.stf_sc_id+"',"+
             "`stf_fullname` = '"+stf.stf_fullname+"',`stf_nik` = '"+stf.stf_nik+"',`stf_address` = '"+stf.stf_address+"',`stf_province` = '"+stf.stf_province+"',`stf_city` = '"+stf.stf_city+"',`stf_birthplace` = '"+stf.stf_birthplace+"',`stf_birthdate` = '"+stf.stf_birthdate+"',`stf_gender` = '"+stf.stf_gender+"',`stf_state` = '"+stf.stf_state+"',`stf_email` = '"+stf.stf_email+"',`stf_stat` = "+stf.stf_stat+",`stf_contact` = '"+stf.stf_contact+"' "+
             "WHERE (`stf_id` = '"+stf_id+"' AND `stf_u_id` = '"+stf_u_id+"');";
             
@@ -222,14 +222,12 @@ namespace UniversitasApp.CRUD
         {
             int affectedRow = 0;
 
-            string sqlFks = null;
-            if(!stf.stf_fks_id.Equals(null)) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"', ";
-            string sqlPs = null;
-            if(!stf.stf_ps_id.Equals(null)) sqlPs = "`stf_ps_id` = '"+stf.stf_ps_id+"', ";
-            string sqlMk = null;
-            if(!stf.stf_mk_id.Equals(null)) sqlMk = "`stf_mk_id` = '"+stf.stf_mk_id+"', ";
+            string sqlFks = string.Empty, sqlPs = string.Empty, sqlMk = string.Empty;
+            if(stf.stf_fks_id != null) sqlFks = "`stf_fks_id` = '"+stf.stf_fks_id+"',";
+            if(stf.stf_ps_id != null) sqlPs = "`stf_ps_id` = '"+stf.stf_ps_id+"', ";
+            if(stf.stf_mk_id != null) sqlMk = "`stf_mk_id` = '"+stf.stf_mk_id+"', ";
 
-            string sqlStr = "UPDATE db_kampus.staff SET "+sqlFks+sqlPs+sqlMk+
+            string sqlStr = "UPDATE db_kampus.staff SET "+sqlFks+sqlPs+sqlMk+"`stf_sc_id` = '"+stf.stf_sc_id+"',"+
             "`stf_fullname` = '"+stf.stf_fullname+"',`stf_nik` = '"+stf.stf_nik+"',`stf_address` = '"+stf.stf_address+"',`stf_province` = '"+stf.stf_province+"',`stf_city` = '"+stf.stf_city+"',`stf_birthplace` = '"+stf.stf_birthplace+"',`stf_birthdate` = '"+stf.stf_birthdate+"',`stf_gender` = '"+stf.stf_gender+"',`stf_state` = '"+stf.stf_state+"',`stf_email` = '"+stf.stf_email+"',`stf_stat` = "+stf.stf_stat+",`stf_contact` = '"+stf.stf_contact+"' "+
             "WHERE (`stf_id` = '"+stf_id+"' AND `stf_u_id` = '"+stf_u_id+"');";
             

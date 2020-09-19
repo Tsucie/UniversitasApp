@@ -9,8 +9,14 @@ $(document).ready(function () {
     $("#btn-add-fks").click(function () {
         AddFakultas(this);
     });
+    $("#btn-edit-fks").click(function() {
+        UpdateFakultas(this);
+    });
     $("#btn-add-prodi").click(function () {
         AddProdi(this);
+    });
+    $("#btn-edit-prodi").click(function () {
+        UpdateProdi(this);
     });
 });
 
@@ -228,7 +234,7 @@ function clickActionDelete(obj) {
             dataType: "json",
             data: JSON.stringify(obj_id),
             success: function (data) {
-                if(data.code === 1) {
+                if(data.code === 1 || data.code === -1) {
                     pesanAlert(data);
                     FakultasDataTable();
                 }
@@ -244,10 +250,14 @@ function clickActionDelete(obj) {
 }
 
 function clickActionGet(obj) {
-    var table = $("#tblProdi");
     let obj_id = {
         "ps_fks_id": parseInt(obj.attributes.data_id.value)
     };
+    ProdiDataTable(obj_id);
+}
+
+function ProdiDataTable(obj_id) {
+    var table = $("#tblProdi");
     $.ajax({
         type: "GET",
         url: "/Fakultas/GetListById/" + obj_id.ps_fks_id,
@@ -265,11 +275,11 @@ function clickActionGet(obj) {
                     let number = i+1;
                     rowData = '<tr>'+
                       '<td class="tb-content status-user col-md-1">' + number + '</td>' +
-                      '<td class="tb-content">' + data[1].prodi[i] + '</td>' +
-                      '<td class="tb-content">' + data[2].deskripsi[i] + '</td>' +
+                      '<td class="tb-content">' + data[2].prodi[i] + '</td>' +
+                      '<td class="tb-content">' + data[3].deskripsi[i] + '</td>' +
                       '<td class="tb-content">'+
-                        '<a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnEditProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' data_item="Program Studi"><i class="fa fa-edit" style="color: blue;"></i></a>'+
-                        '<a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnDeleteProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a>'+
+                        '<a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnEditProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].pnumber[i] + '\' data_item="Program Studi"><i class="fa fa-edit" style="color: blue;"></i></a>'+
+                        '<a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnDeleteProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].pnumber[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a>'+
                       '</td>' +
                     '</tr>';
 
@@ -309,6 +319,7 @@ function AddProdi() {
         data: JSON.stringify(Data),
         success: function (data) {
             pesanAlert(data);
+            ProdiDataTable(Data);
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
@@ -321,7 +332,10 @@ function AddProdi() {
 }
 
 function prodiEdit(obj) {
-    let obj_id = {"ps_id": parseInt(obj.attributes.dataId.value)};
+    let obj_id = {
+        "ps_id": parseInt(obj.attributes.dataId.value),
+        "ps_fks_id": parseInt(obj.attributes.dataParentId.value)
+    };
     ShowModal(obj, "Edit Program Studi", "#btn-edit-prodi");
     $.ajax({
         type: "GET",
@@ -349,9 +363,10 @@ function prodiEdit(obj) {
 
 function UpdateProdi() {
     var Data = {
+        "ps_id": edit.id,
         "ps_fks_id": parseInt($('#select-fks').val()),
-        "ps_name": $('#name'),
-        "ps_desc": $('#desc')
+        "ps_name": $('#name').val(),
+        "ps_desc": $('#desc').val()
     };
     console.log(Data);
     $.ajax({
@@ -362,6 +377,7 @@ function UpdateProdi() {
         data: JSON.stringify(Data),
         success: function (data) {
             pesanAlert(data);
+            ProdiDataTable(Data);
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
@@ -376,7 +392,10 @@ function UpdateProdi() {
 }
 
 function prodiDelete(obj) {
-    let obj_id = {"ps_id": parseInt(obj.attributes.dataId.value)};
+    let obj_id = {
+        "ps_id": parseInt(obj.attributes.dataId.value),
+        "ps_fks_id": parseInt(obj.attributes.dataParentId.value)
+    };
     var konfirmasi = confirm("Yakin ingin delete Program Studi?");
     if(konfirmasi) {
         $.ajax({
@@ -387,6 +406,7 @@ function prodiDelete(obj) {
             data: JSON.stringify(obj_id),
             success: function (data) {
                 pesanAlert(data);
+                ProdiDataTable(obj_id);
             },
             error: function () {
                 notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});

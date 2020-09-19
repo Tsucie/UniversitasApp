@@ -1,9 +1,17 @@
 $(document).ready(function () {
+    $("#active-link").text('Mahasiswa');
     MhsDataTable();
     FksComboBox();
     $("#btn-addmhspage").click(function () {
-        window.location.assign('/Mahasiswa/AddMhs');
-        // FksComboBox(this);
+        $("#active-link").text('Add Mahasiswa');
+        $("#active-title").text('Add Mahasiswa');
+        $("#password-field").show();
+        $("#btn-edit-mhs").hide();
+        $("#btn-create-mhs").show();
+        ShowForm();
+    });
+    $("#btn-cancel-mhs").click(function () {
+        ShowTable();
     });
     $("#select-fakultas").change(function () {
         ProdiComboBox(this);
@@ -15,6 +23,17 @@ $(document).ready(function () {
         UpdateMhs(this);
     });
 });
+
+function ShowTable() {
+    $("#active-link").text('Mahasiswa');
+    $("#mhs-table-content").show();
+    $("#mhs-form-content").hide();
+}
+
+function ShowForm() {
+    $("#mhs-table-content").hide();
+    $("#mhs-form-content").show();
+}
 
 function MhsDataTable() {
     var table = $("#tblMahasiswa");
@@ -38,7 +57,7 @@ function MhsDataTable() {
                     '<td class="tb-content">' + data[3].kelas[i] + '</td>' +
                     '<td class="tb-content">' + data[4].email[i] + '</td>' +
                     status +
-                    '<td class="tb-content"><a href="/Mahasiswa/UpdateMhs" data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnmhsedit' + i + '\' class="btn" data_id=\'' + data[6].number[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnmhsdelete' + i + '\' class="btn" data_id=\'' + data[6].number[i] + '\'><i class="fa fa-remove"></i></a></td>' +
+                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnmhsedit' + i + '\' class="btn" data_id=\'' + data[6].number[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnmhsdelete' + i + '\' class="btn" data_id=\'' + data[6].number[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
                     '</tr>';
 
                     $(table).append(rowHTML);
@@ -101,7 +120,7 @@ function ProdiComboBox() {
                 $(comboBox).empty(); // Set to empty every Fakultas ComboBox Change event
                 var opsi = '';
                 for (let i = 0; i < data[0].nomor.length; i++) {
-                    opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[2].deskripsi[i]+'">'+data[1].prodi[i]+'</option>';
+                    opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[3].deskripsi[i]+'">'+data[2].prodi[i]+'</option>';
                     $(comboBox).append(opsi);
                 }
             }
@@ -171,7 +190,10 @@ function addMhs() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(() => { window.location.href = "../Mahasiswa"; }, 1000);
+                MhsDataTable()
+                setTimeout(() => {
+                    ShowTable();
+                }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -187,9 +209,14 @@ function addMhs() {
     });
 }
 
-var edit;
+var edit = {};
 
 function clickMhsEdit(obj) {
+    $("#active-link").text('Edit Mahasiswa');
+    $("#active-title").text('Edit Mahasiswa');
+    $("#password-field").hide();
+    $("#btn-create-mhs").hide();
+    $("#btn-edit-mhs").show();
     let obj_id = {
         "mhs_id": 0,
         "mhs_u_id": parseInt(obj.attributes.data_id.value)
@@ -201,26 +228,30 @@ function clickMhsEdit(obj) {
         dataType: "json",
         data: obj_id.mhs_u_id,
         success: function (data) {
-            if(data.code === 1 || data.code === -1) {
+            if(data.code === 0 || data.code === -1) {
                 pesanAlert(data);
             }
             else {
                 obj_id.mhs_id = data.mhs_id;
-                $("#edit_u_username").val(data.u_username);
-                $("#edit_mhs_fullname").val(data.mhs_fullname);
-                $("#edit_mhs_nim").val(data.mhs_nim);
-                $("#edit_mhs_kelas").val(data.mhs_kelas);
-                $("#edit_mhs_address").val(data.mhs_address);
-                $("#edit_mhs_province").val(data.mhs_province);
-                $("#edit_mhs_city").val(data.mhs_city);
-                $("#edit_mhs_birthplace").val(data.mhs_birthplace);
-                $("#edit_mhs_birthdate").val(data.mhs_birthdate);
-                $("#edit_mhs_gender").val(data.mhs_gender);
-                $("#edit_mhs_religion").val(data.mhs_religion);
-                $("#edit_mhs_state").val(data.mhs_state);
-                $("#edit_mhs_email").val(data.mhs_email);
-                $("#edit_mhs_stat").val(data.mhs_stat);
-                $("#edit_mhs_contact").val(data.mhs_contact);
+                $("#u_username").val(data.u_username);
+                $("#select-fakultas").val(''+data.mhs_fks_id);
+                ProdiComboBox();
+                $("#select-prodi").val(''+data.mhs_ps_id);
+                $("#mhs_fullname").val(data.mhs_fullname);
+                $("#mhs_nim").val(data.mhs_nim);
+                $("#mhs_kelas").val(data.mhs_kelas);
+                $("#mhs_address").val(data.mhs_address);
+                $("#mhs_province").val(data.mhs_province);
+                $("#mhs_city").val(data.mhs_city);
+                $("#mhs_birthplace").val(data.mhs_birthplace);
+                $("#mhs_birthdate").val(data.mhs_birthdate);
+                $("#mhs_gender").val(data.mhs_gender);
+                $("#mhs_religion").val(data.mhs_religion);
+                $("#mhs_state").val(data.mhs_state);
+                $("#mhs_email").val(data.mhs_email);
+                $("#mhs_stat").val(''+data.mhs_stat);
+                $("#mhs_contact").val(data.mhs_contact);
+                ShowForm();
             }
         },
         error: function () {
@@ -233,28 +264,30 @@ function clickMhsEdit(obj) {
 }
 
 function UpdateMhs() {
-    if($("#edit_u_username").val().trim() == "") {
+    if($("#u_username").val().trim() == "") {
         $("#username-alrt").show();
         return false;
     }
     var Data = {
         "mhs_id": edit.mhs_id,
         "mhs_u_id": edit.mhs_u_id,
-        "u_username": $("#edit_u_username").val(),
-        "mhs_fullname": $("#edit_mhs_fullname").val(),
-        "mhs_nim": $("#edit_mhs_nim").val(),
-        "mhs_kelas": $("#edit_mhs_kelas").val(),
-        "mhs_address": $("#edit_mhs_address").val(),
-        "mhs_province": $("#edit_mhs_province").val(),
-        "mhs_city": $("#edit_mhs_city").val(),
-        "mhs_birthplace": $("#edit_mhs_birthplace").val(),
-        "mhs_birthdate": $("#edit_mhs_birthdate").val(),
-        "mhs_gender": $("#edit_select-gender").val(),
-        "mhs_religion": $("#edit_mhs_religion").val(),
-        "mhs_state": $("#edit_mhs_state").val(),
-        "mhs_email": $("#edit_mhs_email").val(),
-        "mhs_stat": $("#edit_select-status").val(),
-        "mhs_contact": $("#edit_mhs_contact").val()
+        "u_username": $("#u_username").val(),
+        "mhs_fks_id": parseInt($("#select-fakultas").val()),
+        "mhs_ps_id": parseInt($("#select-prodi").val()),
+        "mhs_fullname": $("#mhs_fullname").val(),
+        "mhs_nim": $("#mhs_nim").val(),
+        "mhs_kelas": $("#mhs_kelas").val(),
+        "mhs_address": $("#mhs_address").val(),
+        "mhs_province": $("#mhs_province").val(),
+        "mhs_city": $("#mhs_city").val(),
+        "mhs_birthplace": $("#mhs_birthplace").val(),
+        "mhs_birthdate": $("#mhs_birthdate").val(),
+        "mhs_gender": $("#select-gender").val(),
+        "mhs_religion": $("#mhs_religion").val(),
+        "mhs_state": $("#mhs_state").val(),
+        "mhs_email": $("#mhs_email").val(),
+        "mhs_stat": parseInt($("#select-status").val()),
+        "mhs_contact": $("#mhs_contact").val()
     };
     $.ajax({
         type: "PUT",
@@ -265,7 +298,8 @@ function UpdateMhs() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(() => { window.location.href = "../Mahasiswa"; }, 1000);
+                MhsDataTable();
+                setTimeout(() => { ShowTable(); }, 1000);
             }
             else {
                 pesanAlert(data);
@@ -279,7 +313,6 @@ function UpdateMhs() {
 
 function clickMhsDelete(obj) {
     let obj_id = {"mhs_u_id": parseInt(obj.attributes.data_id.value)};
-
     var konfirmasi = confirm("Yakin ingin Delete Mahasiswa?");
     if(konfirmasi) {
         $.ajax({
@@ -291,7 +324,7 @@ function clickMhsDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(() => { window.location.reload() }, 2000);
+                    setTimeout(() => { MhsDataTable(); }, 2000);
                 }
                 else {
                     pesanAlert(data);

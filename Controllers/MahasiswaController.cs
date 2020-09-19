@@ -23,25 +23,25 @@ namespace UniversitasApp.Controllers
             return View();
         }
 
-        [Route("AddMhs")]
-        public IActionResult AddMhs()
-        {
-            if(HttpContext.Session.GetInt32("u_id") == null)
-            {
-                return RedirectToAction("Login","Account");
-            }
-            return View();
-        }
+        // [Route("AddMhs")]
+        // public IActionResult AddMhs()
+        // {
+        //     if(HttpContext.Session.GetInt32("u_id") == null)
+        //     {
+        //         return RedirectToAction("Login","Account");
+        //     }
+        //     return View();
+        // }
 
-        [Route("UpdateMhs")]
-        public IActionResult UpdateMhs()
-        {
-            if(HttpContext.Session.GetInt32("u_id") == null)
-            {
-                return RedirectToAction("Login","Account");
-            }
-            return View();
-        }
+        // [Route("UpdateMhs")]
+        // public IActionResult UpdateMhs()
+        // {
+        //     if(HttpContext.Session.GetInt32("u_id") == null)
+        //     {
+        //         return RedirectToAction("Login","Account");
+        //     }
+        //     return View();
+        // }
 
         [HttpGet("GetMhsList")]
         public JsonResult GetAllData()
@@ -160,13 +160,15 @@ namespace UniversitasApp.Controllers
                 if(mhs.mhs_id.Equals(null) || mhs.mhs_u_id.Equals(null) || string.IsNullOrEmpty(mhs.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
 
                 mhs.mhs_fks_id = mhs.mhs_fks_id;
+                mhs.mhs_ps_id = mhs.mhs_ps_id;
                 mhs.mhs_fullname = mhs.mhs_fullname;
+                mhs.mhs_nim = mhs.mhs_nim;
                 mhs.mhs_kelas = mhs.mhs_kelas;
                 mhs.mhs_address = mhs.mhs_address;
                 mhs.mhs_province = mhs.mhs_province;
                 mhs.mhs_city = mhs.mhs_city;
                 mhs.mhs_birthplace = mhs.mhs_birthplace;
-                mhs.mhs_birthdate = mhs.mhs_birthdate;
+                mhs.mhs_birthdate = Convert.ToDateTime(mhs.mhs_birthdate).ToString("yyyy-MM-dd");
                 mhs.mhs_gender = mhs.mhs_gender;
                 mhs.mhs_religion = mhs.mhs_religion;
                 mhs.mhs_state = mhs.mhs_state;
@@ -179,7 +181,7 @@ namespace UniversitasApp.Controllers
                 u.u_username = mhs.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if(!mhs.u_password.Equals(null)) u.u_password = Crypto.Hash(mhs.u_password);
+                if(mhs.u_password != null) u.u_password = Crypto.Hash(mhs.u_password);
 
                 if(!MahasiswaCRUD.UpdateMhsAndUser(Startup.db_kampus_ConnStr, mhs, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));
 

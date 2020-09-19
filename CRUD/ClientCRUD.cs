@@ -75,14 +75,16 @@ namespace UniversitasApp.CRUD
             return affectedRow;
         }
 
-        public static bool CreateClientAndUser(string connStr, Client c, Users u)
+        public static bool CreateClientAndUser(string connStr, Client c, Users u, UserPhoto up = null)
         {
             bool result = false;
             MySqlConnection _conn = null;
             MySqlCommand _cmd = null;
             MySqlTransaction sqlTrans = null;
+            Random rand = null;
             try
             {
+                rand = new Random();
                 _cmd = new MySqlCommand();
                 _conn = new MySqlConnection(connStr);
                 _conn.Open();
@@ -90,10 +92,19 @@ namespace UniversitasApp.CRUD
                 _cmd.Transaction = sqlTrans;
 
                 int affectedRow = 0;
+                u.u_id = rand.Next(int.MinValue, int.MaxValue);
                 affectedRow += UserCRUD.CreateAlive(_conn, u);
+                if (up != null)
+                {
+                    up.up_id = rand.Next(int.MinValue, int.MaxValue);
+                    up.up_u_id = u.u_id;
+                    affectedRow += UserCRUD.CreatePhotoAlive(_conn, up);
+                }
+                c.c_id = rand.Next(int.MinValue, int.MaxValue);
+                c.c_u_id = u.u_id;
                 affectedRow += CreateAlive(_conn, c);
 
-                if(affectedRow != 2) throw new Exception();
+                if(affectedRow != 3-(up == null ? 1 : 0)) throw new Exception();
 
                 sqlTrans.Commit();
                 result = true;
@@ -136,7 +147,7 @@ namespace UniversitasApp.CRUD
             return affectedRow;
         }
 
-        public static bool UpdateClientAndUser(string connStr, Client c, Users u)
+        public static bool UpdateClientAndUser(string connStr, Client c, Users u, UserPhoto up = null)
         {
             bool result = false;
             MySqlConnection _conn = null;
@@ -151,10 +162,11 @@ namespace UniversitasApp.CRUD
                 _cmd.Transaction = sqlTrans;
 
                 int affectedRow = 0;
+                if(up != null) affectedRow += UserCRUD.UpdatePhotoAlive(_conn, (int)u.u_id, up);
                 affectedRow += UserCRUD.UpdateAlive(_conn, (int)u.u_id, u);
                 affectedRow += UpdateAlive(_conn, c);
 
-                if(affectedRow != 2) throw new Exception();
+                if(affectedRow != 3-(up == null ? 1 : 0)) throw new Exception();
 
                 sqlTrans.Commit();
                 result = true;

@@ -47,11 +47,11 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Staff</li>
+        <li class="active" id="active-link"></li>
     </ol>
 </section>
-<!-- Main Content -->
-<section class="content">
+<!-- Kategori Staff Table Content -->
+<section class="content" id="category-table">
     <div class="row">
         <div class="col-xs-12">
             <div class="box card-custom">
@@ -87,7 +87,8 @@
         </div>
     </div>
 </section>
-<section class="content">
+<!-- Staff Table Content -->
+<section class="content" id="staff-table">
     <div class="row">
         <div class="col-xs-12">
             <div class="box card-custom">
@@ -97,7 +98,7 @@
                 <div class="box-body">
                     <div>
                         <label>
-                            <a href="@Url.Action("AddStaff","StaffCategory")" class="btn btn-sm btn-success card-btn"><strong>Add Staff</strong></a>
+                            <button class="btn btn-sm btn-success card-btn" id="add-staff-btn"><strong>Add Staff</strong></button>
                         </label>
                     </div>
                     <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
@@ -125,6 +126,147 @@
             </div>
         </div>
     </div>
+</section>
+<!-- Form Content -->
+<section hidden class="content container-fluid" id="form-content">
+    <!-- Horizontal Form -->
+    <div class="box box-info card-custom">
+        <div class="box-header with-border">
+            <h3 class="box-title" id="form-title"></h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form id="form-stf" class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="u_username" class="col-sm-2 control-label">UserName</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control form-inputs" name="UserName" placeholder="UserName" id="u_username">
+                        <div hidden id="username-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Username tidak boleh kosong!
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="password-field">
+                    <label for="u_password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control form-inputs" name="Password" placeholder="Password" id="u_password">
+                        <div hidden id="password-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Password Tidak boleh kosong!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-header with-border">
+                <h3 class="box-title">Details</h3>
+            </div>
+            <div class="box-body" id="form-section">
+                <div class="form-group">
+                    <label for="stf_sc_id" class="col-sm-2 control-label">Kategori Staff</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="select-stfcategory"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_fullname" class="col-sm-2 control-label">Nama Lengkap</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_fullname" placeholder="Nama Lengkap" id="stf_fullname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_nik" class="col-sm-2 control-label">Nomor Induk Karyawan</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_nik" placeholder="NIK" id="stf_nik">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_address" class="col-sm-2 control-label">Alamat</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_address" placeholder="Alamat" id="stf_address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_province" class="col-sm-2 control-label">Provinsi</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_province" placeholder="Provinsi" id="stf_province">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_city" class="col-sm-2 control-label">Kota</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_city" placeholder="Kota" id="stf_city">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_birthplace" class="col-sm-2 control-label">Tempat Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_birthplace" placeholder="Tempat Lahir" id="stf_birthplace">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_birthdate" class="col-sm-2 control-label">Tanggal Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control form-inputs" name="stf_birthdate" placeholder="Tanggal Lahir" id="stf_birthdate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_gender" class="col-sm-2 control-label">Jenis Kelamin</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="select-gender">
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_religion" class="col-sm-2 control-label">Agama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_religion" placeholder="Agama" id="stf_religion">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_state" class="col-sm-2 control-label">Kewarganegaraan</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_state" placeholder="Kewarganegaraan" id="stf_state">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_email" placeholder="Email" id="stf_email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_stat" class="col-sm-2 control-label">Status Karyawan</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="select-status">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stf_contact" class="col-sm-2 control-label">Nomor Telpon</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="stf_contact" placeholder="Nomor Telpon" id="stf_contact">
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer card-custom">
+                <button class="btn btn-default" role="button" id="btn-cancel-stf">Cancel</button>
+                <a><button type="button" class="btn btn-success pull-right" id="btn-create-stf">Create</button></a>
+                <a><button type="button" class="btn btn-success pull-right" id="btn-edit-stf">Edit</button></a>
+            </div>
+            <!-- /.box-footer -->
+        </form>
+        <!-- /form end -->
+    </div>
+    <!-- /.box -->
 </section>
 
 @section scripts {

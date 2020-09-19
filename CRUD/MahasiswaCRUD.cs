@@ -42,7 +42,7 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT mhs_id, mhs_u_id, mhs_fks_id, mhs_fullname, mhs_kelas, mhs_address, mhs_province, mhs_city, mhs_birthplace, mhs_birthdate, mhs_gender, mhs_religion, mhs_state, mhs_email, mhs_stat, mhs_contact, u_id, u_ut_id, u_username "+
+            string sqlStr = "SELECT mhs_id, mhs_u_id, mhs_fks_id, mhs_fullname, mhs_kelas, mhs_address, mhs_province, mhs_city, mhs_birthplace, mhs_birthdate, mhs_gender, mhs_religion, mhs_state, mhs_email, mhs_stat, mhs_contact, u_id, u_ut_id, u_username, mhs_nim, mhs_ps_id "+
             "FROM db_kampus.mahasiswa INNER JOIN db_kampus.users ON u_id = mhs_u_id "+
             "WHERE mhs_u_id = '"+mhs_u_id+"';";
 
@@ -60,7 +60,7 @@ namespace UniversitasApp.CRUD
                 um.mhs_province = _data.GetString(6);
                 um.mhs_city = _data.GetString(7);
                 um.mhs_birthplace = _data.GetString(8);
-                um.mhs_birthdate = _data.GetString(9);
+                um.mhs_birthdate = _data.GetDateTime(9).ToString("yyyy-MM-dd");
                 um.mhs_gender = _data.GetString(10);
                 um.mhs_religion = _data.GetString(11);
                 um.mhs_state = _data.GetString(12);
@@ -69,7 +69,9 @@ namespace UniversitasApp.CRUD
                 um.mhs_contact = _data.GetString(15);
                 um.u_id = _data.GetInt32(16);
                 um.u_ut_id = _data.GetInt32(17);
-                um.u_username = _data.GetString(18);
+                um.u_username = _data.GetString(18).Replace("@", "");
+                um.mhs_nim = _data.GetString(19);
+                um.mhs_ps_id = _data.GetInt32(20);
             }
             _conn.Close();
             return um;
@@ -159,11 +161,25 @@ namespace UniversitasApp.CRUD
         {
             int affectedRow = 0;
 
-            string sqlFks = null;
-            if(!mhs.mhs_fks_id.Equals(null)) sqlFks = "`mhs_fks_id` = '"+mhs.mhs_fks_id+"',";
+            string sqlFks = null, sqlPs = null;
+            if(mhs.mhs_fks_id != null) sqlFks = "`mhs_fks_id` = '"+mhs.mhs_fks_id+"',";
+            if(mhs.mhs_ps_id != null) sqlPs = "`mhs_ps_id` = '"+mhs.mhs_ps_id+"',";
 
-            string sqlStr = "UPDATE db_kampus.mahasiswa SET "+ sqlFks +
-            "`mhs_fullname` = '"+mhs.mhs_fullname+"',`mhs_kelas` = '"+mhs.mhs_kelas+"',`mhs_address` = '"+mhs.mhs_address+"',`mhs_province` = '"+mhs.mhs_province+"',`mhs_city` = '"+mhs.mhs_city+"',`mhs_birthplace` = '"+mhs.mhs_birthplace+"',`mhs_birthdate` = '"+mhs.mhs_birthdate+"',`mhs_gender` = '"+mhs.mhs_gender+"',`mhs_state` = '"+mhs.mhs_state+"',`mhs_email` = '"+mhs.mhs_email+"',`mhs_stat` = "+mhs.mhs_stat+",`mhs_contact` = '"+mhs.mhs_contact+"' "+
+            string sqlStr = "UPDATE db_kampus.mahasiswa SET "+ sqlFks + sqlPs +
+            "`mhs_fullname` = '"+mhs.mhs_fullname+
+            "',`mhs_nim`='"+mhs.mhs_nim+
+            "',`mhs_kelas` = '"+mhs.mhs_kelas+
+            "',`mhs_address` = '"+mhs.mhs_address+
+            "',`mhs_province` = '"+mhs.mhs_province+
+            "',`mhs_city` = '"+mhs.mhs_city+
+            "',`mhs_birthplace` = '"+mhs.mhs_birthplace+
+            "',`mhs_birthdate` = '"+mhs.mhs_birthdate+
+            "',`mhs_gender` = '"+mhs.mhs_gender+
+            "',`mhs_religion` = '"+mhs.mhs_religion+
+            "',`mhs_state` = '"+mhs.mhs_state+
+            "',`mhs_email` = '"+mhs.mhs_email+
+            "',`mhs_stat` = "+mhs.mhs_stat+
+            ",`mhs_contact` = '"+mhs.mhs_contact+"' "+
             "WHERE (`mhs_id` = '"+mhs_id+"' AND `mhs_u_id` = '"+mhs_u_id+"');";
 
             using var _command = new MySqlCommand(sqlStr);

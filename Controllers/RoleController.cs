@@ -52,6 +52,8 @@ namespace UniversitasApp.Controllers
             });
         }
 
+        // [HttpGet("GetAll/bySite/{s_id}")]
+
         [HttpGet("GetPreviledge/{r_id}")]
         public JsonResult GetPrevData([FromRoute] int r_id)
         {

@@ -33,7 +33,7 @@ function ClientDataTable() {
                     '<td class="tb-content">' + data[2].dataUsername[i] + '</td>'+
                     '<td class="tb-content">' + data[3].dataName[i] + '</td>'+
                     '<td class="tb-content">' + data[4].dataRemark[i] + '</td>' +
-                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-edit"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-remove"></i></a></td>' +
+                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnedit' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btndelete' + i + '\' class="btn" data_id=\'' + data[0].dataId[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
                     '</tr>';
 
                     $(table).append(rowHTML);

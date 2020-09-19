@@ -22,6 +22,7 @@ namespace UniversitasApp.CRUD
             {
                 ps.Add(new ProgramStudi {
                     ps_id = _data.GetInt32(0),
+                    ps_fks_id = _data.GetInt32(1),
                     ps_name = _data.GetString(2),
                     ps_desc = _data.GetString(3)
                 });

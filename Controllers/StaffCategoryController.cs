@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using UniversitasApp.Models;
 using UniversitasApp.General;
 using UniversitasApp.CRUD;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UniversitasApp.Controllers
 {
@@ -24,25 +24,25 @@ namespace UniversitasApp.Controllers
             return View();
         }
 
-        [Route("AddStaff")]
-        public IActionResult AddStaff()
-        {
-            if(HttpContext.Session.GetInt32("u_id") == null)
-            {
-                return RedirectToAction("Login","Account");
-            }
-            return View();
-        }
+        // [Route("AddStaff")]
+        // public IActionResult AddStaff()
+        // {
+        //     if(HttpContext.Session.GetInt32("u_id") == null)
+        //     {
+        //         return RedirectToAction("Login","Account");
+        //     }
+        //     return View();
+        // }
 
-        [Route("UpdateStaff")]
-        public IActionResult UpdateStaff()
-        {
-            if(HttpContext.Session.GetInt32("u_id") == null)
-            {
-                return RedirectToAction("Login","Account");
-            }
-            return View();
-        }
+        // [Route("UpdateStaff")]
+        // public IActionResult UpdateStaff()
+        // {
+        //     if(HttpContext.Session.GetInt32("u_id") == null)
+        //     {
+        //         return RedirectToAction("Login","Account");
+        //     }
+        //     return View();
+        // }
 
         [HttpGet("GetCategoryList")]
         public JsonResult GetDataList()
@@ -216,7 +216,7 @@ namespace UniversitasApp.Controllers
                 stf.stf_province = stf.stf_province;
                 stf.stf_city = stf.stf_city;
                 stf.stf_birthplace = stf.stf_birthplace;
-                stf.stf_birthdate = stf.stf_birthdate;
+                stf.stf_birthdate = Convert.ToDateTime(stf.stf_birthdate).ToString("yyyy-MM-dd");
                 stf.stf_gender = stf.stf_gender;
                 stf.stf_religion = stf.stf_religion;
                 stf.stf_state = stf.stf_state;
@@ -293,7 +293,7 @@ namespace UniversitasApp.Controllers
                 stf.stf_province = stf.stf_province;
                 stf.stf_city = stf.stf_city;
                 stf.stf_birthplace = stf.stf_birthplace;
-                stf.stf_birthdate = stf.stf_birthdate;
+                stf.stf_birthdate = Convert.ToDateTime(stf.stf_birthdate).ToString("yyyy-MM-dd");
                 stf.stf_gender = stf.stf_gender;
                 stf.stf_religion = stf.stf_religion;
                 stf.stf_state = stf.stf_state;
@@ -306,7 +306,7 @@ namespace UniversitasApp.Controllers
                 u.u_username = stf.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if(!stf.u_password.Equals(null)) u.u_password = Crypto.Hash(stf.u_password);
+                if(stf.u_password != null) u.u_password = Crypto.Hash(stf.u_password);
 
                 if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, stf, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));
 

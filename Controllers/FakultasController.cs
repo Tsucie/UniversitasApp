@@ -62,6 +62,7 @@ namespace UniversitasApp.Controllers
 
                 Object[] data = {
                     new {Nomor = ps.Select(s => s.ps_id).ToArray()},
+                    new {pnumber = ps.Select(s => s.ps_fks_id).ToArray()},
                     new {Prodi = ps.Select(s => s.ps_name).ToArray()},
                     new {Deskripsi = ps.Select(s => s.ps_desc).ToArray()}
                 };
@@ -232,14 +233,14 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpDelete("Delete")]
-        public JsonResult DeleteFks([FromBody] int fks_id)
+        public JsonResult DeleteFks([FromBody] Fakultas fks)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(fks_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
+                if(fks.fks_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
 
-                if(FakultasCRUD.Delete(Startup.db_kampus_ConnStr, fks_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
+                if(FakultasCRUD.Delete(Startup.db_kampus_ConnStr, (int)fks.fks_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data berhasil dihapus!";
@@ -255,14 +256,14 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpDelete("Prodi/Delete")]
-        public JsonResult DeleteProdi([FromBody] int ps_id)
+        public JsonResult DeleteProdi([FromBody] ProgramStudi ps)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(ps_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
+                if(ps.ps_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
 
-                if(ProgramStudiCRUD.Delete(Startup.db_kampus_ConnStr, ps_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
+                if(ProgramStudiCRUD.Delete(Startup.db_kampus_ConnStr, (int)ps.ps_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data berhasil dihapus!";
