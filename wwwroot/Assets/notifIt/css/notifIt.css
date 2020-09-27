@@ -54,8 +54,8 @@
     color: white !important;
 }
 #ui_notifIt.default{
-    background-color: #EEE;
-    color: #444 !important;
+    background-color: transparent;
+    color: white !important;
 }
 
 /* notifit confirm */

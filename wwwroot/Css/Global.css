@@ -159,3 +159,11 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.my-login-background::before {
+    background: green;
+    background: -webkit-linear-gradient(bottom, #1b8800ab, black) !important;
+    background: -o-linear-gradient(bottom, #1b8800ab, black) !important;
+    background: -moz-linear-gradient(bottom, #1b8800ab, black) !important;
+    background: linear-gradient(bottom, #1b8800ab, black) !important;
+}

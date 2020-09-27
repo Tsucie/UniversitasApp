@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
 using UniversitasApp.Controllers;
@@ -12,27 +13,28 @@ namespace UniversitasApp.CRUD
     public sealed class StaffCRUD
     {
         // Read All staff Table
-        public static List<UserStaff> ReadAll(string connStr)
+        public static async Task<List<UserStaff>> ReadAllAsync(string connStr)
         {
             List<UserStaff> us = new List<UserStaff>();
-            string contact = "";
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
-            string sqlStr = "SELECT stf.stf_u_id, stf.stf_fullname, sc.sc_name, stf.stf_nik, stf.stf_email, stf.stf_contact, stf.stf_stat"+
-                            " FROM db_kampus.staff stf INNER JOIN db_kampus.staff_category sc ON stf.stf_sc_id = sc.sc_id;";
+
+            string sqlStr = 
+                    "SELECT * FROM db_kampus.staff stf "+
+                        "INNER JOIN db_kampus.staff_category sc ON stf.stf_sc_id = sc.sc_id;";
+
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _cmd.ExecuteReader();
-            while (_data.Read())
+            using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
+            while (_data.ReadAsync().Result)
             {
-                contact = (_data.GetString(5).Equals(null)) ? null : _data.GetString(5);
                 us.Add(new UserStaff {
-                    stf_u_id = _data.GetInt32(0),
-                    stf_fullname = _data.GetString(1),
-                    sc_name = _data.GetString(2),
-                    stf_nik = _data.GetString(3),
-                    stf_email = _data.GetString(4),
-                    stf_contact = contact,
-                    stf_stat = _data.GetInt16(6)
+                    stf_u_id = _data.GetInt32("stf_u_id"),
+                    stf_fullname = _data.GetString("stf_fullname"),
+                    sc_name = _data.GetString("sc_name"),
+                    stf_nik = _data.GetString("stf_nik"),
+                    stf_email = _data.GetString("stf_email"),
+                    stf_contact = (_data.GetString("stf_contact") == null) ? null : _data.GetString("stf_contact"),
+                    stf_stat = _data.GetInt16("stf_stat")
                 });
             }
             _conn.Close();

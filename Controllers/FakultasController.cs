@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -24,12 +25,12 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetList")]
-        public JsonResult FakultasList()
+        public async Task<JsonResult> FakultasList()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var fks = FakultasCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                List<Fakultas> fks = await Task.Run(() => FakultasCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
                 if(fks.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] data = {
@@ -50,14 +51,14 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetListById/{ps_fks_id}")]
-        public JsonResult GetListById([FromRoute] int ps_fks_id)
+        public async Task<JsonResult> GetListById([FromRoute] int ps_fks_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
                 if(ps_fks_id.Equals(null)) throw new Exception("", new Exception("Fail to render Program Studi Data, no data parameter!"));
 
-                var ps = ProgramStudiCRUD.ReadListByFks(Startup.db_kampus_ConnStr, ps_fks_id);
+                List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFksAsync(Startup.db_kampus_ConnStr, ps_fks_id));
                 if(ps.Equals(null)) throw new Exception("", new Exception("Data not Found!"));
 
                 Object[] data = {

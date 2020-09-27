@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
@@ -10,15 +11,18 @@ namespace UniversitasApp.CRUD
 {
     public sealed class ProgramStudiCRUD
     {
-        public static List<ProgramStudi> ReadListByFks(string connStr, int ps_fks_id)
+        public static async Task<List<ProgramStudi>> ReadListByFksAsync(string connStr, int ps_fks_id)
         {
             List<ProgramStudi> ps = new List<ProgramStudi>();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
+
             string sqlStr = "SELECT * FROM `db_kampus`.`program_studi` WHERE (ps_fks_id = '"+ps_fks_id+"');";
+
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _cmd.ExecuteReader();
-            while (_data.Read())
+            using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
+            
+            while (_data.ReadAsync().Result)
             {
                 ps.Add(new ProgramStudi {
                     ps_id = _data.GetInt32(0),

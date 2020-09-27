@@ -74,7 +74,7 @@ namespace UniversitasApp.General
             // check hash
             if(!IsHashSupported(hashedPassword))
             {
-                throw new NotSupportedException("Password Salah!");
+                throw new NotSupportedException("Unsupported Hashtype!");
             }
 
             // extract iterations and Base64 string

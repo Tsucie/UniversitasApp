@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
 using UniversitasApp.Controllers;
@@ -11,7 +12,7 @@ namespace UniversitasApp.CRUD
 {
     public sealed class StaffCategoryCRUD
     {
-        public static List<StaffCategory> ReadAll(string connStr)
+        public static async Task<List<StaffCategory>> ReadAllAsync(string connStr)
         {
             List<StaffCategory> sc = new List<StaffCategory>();
             using var _conn = new MySqlConnection(connStr);
@@ -19,8 +20,8 @@ namespace UniversitasApp.CRUD
             string sqlStr = "SELECT * FROM db_kampus.staff_category;";
 
             using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _dtrdr = _command.ExecuteReader();
-            while (_dtrdr.Read())
+            using MySqlDataReader _dtrdr = await Task.Run(() => _command.ExecuteReader());
+            while (_dtrdr.ReadAsync().Result)
             {
                 sc.Add(new StaffCategory {
                     sc_id = _dtrdr.GetInt32(0),

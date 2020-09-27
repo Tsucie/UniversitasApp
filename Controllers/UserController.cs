@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -35,12 +36,12 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetList")]
-        public JsonResult ReadAllList()
+        public async Task<JsonResult> ReadAllList()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var users = UserCRUD.ReadAllActivity(Startup.db_kampus_ConnStr);
+                var users = await Task.Run(() => UserCRUD.ReadAllActivityAsync(Startup.db_kampus_ConnStr));
                 if(users.Equals(null)) throw new Exception("", new Exception("Data tidak ditemukan!"));
 
                 Object[] data = {

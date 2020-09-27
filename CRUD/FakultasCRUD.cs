@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
 using UniversitasApp.Controllers;
@@ -11,15 +12,18 @@ namespace UniversitasApp.CRUD
 {
     public sealed class FakultasCRUD
     {
-        public static List<Fakultas> ReadAll(string connStr)
+        public static async Task<List<Fakultas>> ReadAllAsync(string connStr)
         {
             List<Fakultas> fks = new List<Fakultas>();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
+
             string sqlStr = "SELECT * FROM db_kampus.fakultas;";
+
             using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _dtrdr = _command.ExecuteReader();
-            while(_dtrdr.Read())
+            using MySqlDataReader _dtrdr = await Task.Run(() => _command.ExecuteReader());
+
+            while(_dtrdr.ReadAsync().Result)
             {
                 fks.Add(new Fakultas {
                     fks_id = _dtrdr.GetInt32(0),

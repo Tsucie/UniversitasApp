@@ -24,33 +24,13 @@ namespace UniversitasApp.Controllers
             return View();
         }
 
-        // [Route("AddStaff")]
-        // public IActionResult AddStaff()
-        // {
-        //     if(HttpContext.Session.GetInt32("u_id") == null)
-        //     {
-        //         return RedirectToAction("Login","Account");
-        //     }
-        //     return View();
-        // }
-
-        // [Route("UpdateStaff")]
-        // public IActionResult UpdateStaff()
-        // {
-        //     if(HttpContext.Session.GetInt32("u_id") == null)
-        //     {
-        //         return RedirectToAction("Login","Account");
-        //     }
-        //     return View();
-        // }
-
         [HttpGet("GetCategoryList")]
-        public JsonResult GetDataList()
+        public async Task<JsonResult> GetDataList()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var list = StaffCategoryCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                var list = await Task.Run(() => StaffCategoryCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
                 if(list.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] data = {
@@ -167,12 +147,12 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetStaffList")]
-        public JsonResult GetAll()
+        public async Task<JsonResult> GetAll()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var staff = StaffCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                var staff = await Task.Run(() => StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
                 if(staff.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] obj = {

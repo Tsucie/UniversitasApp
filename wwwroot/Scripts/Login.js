@@ -18,18 +18,20 @@ function Validate() {
         url: '/Account/Validate',
         data: Data,
         success: function (result) {
-            if((result.code === -1) || (result.code === 0)) {
-            notif({msg: "<b>" + "Gagal Login! Username atau Password salah!" + "</b>", type: "warning", position: "right"});
-            }
-            else
-            {
-            if (result.status === true) {
-                setTimeout(() => window.location.href = '/Home/Index', 3000);
-                notif({msg: "<b>" + result.message + "</b>", type: "success", position: "right"});
-            }
-            else {
-                notif({msg: "<b>" + result.message + "</b>", type: "warning", position: "right"});
-            }
+            switch (result.code) {
+                case 1:
+                    setTimeout(() => window.location.href = '/Home/Index', 2000);
+                    notif({msg: "<b>" + result.message + "</b>", type: "success", position: "right"});
+                    break;
+                case 0:
+                    notif({msg: "<b>" + result.message + "</b>", type: "warning", position: "right"});
+                    break;
+                case -1:
+                    notif({msg: "<b>" + result.message + "</b>", type: "warning", position: "right"});
+                    break;
+            
+                default:
+                    break;
             }
         },
         error: function () {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
 using UniversitasApp.Controllers;
@@ -11,25 +12,29 @@ namespace UniversitasApp.CRUD
 {
     public sealed class MahasiswaCRUD
     {
-        public static List<UserMahasiswa> ReadAll(string connStr)
+        public static async Task<List<UserMahasiswa>> ReadAllAsync(string connStr)
         {
             List<UserMahasiswa> um = new List<UserMahasiswa>();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
-            string sqlStr = "SELECT mhs_fullname, fks_name, mhs_nim, mhs_kelas, mhs_email, mhs_stat, mhs_u_id"+
-            " FROM db_kampus.mahasiswa INNER JOIN db_kampus.fakultas ON fks_id = mhs_fks_id;";
+
+            string sqlStr =
+                "SELECT * FROM db_kampus.mahasiswa"+
+                    " INNER JOIN db_kampus.fakultas ON fks_id = mhs_fks_id;";
+
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _cmd.ExecuteReader();
-            while (_data.Read())
+            using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
+
+            while (_data.ReadAsync().Result)
             {
                 um.Add(new UserMahasiswa {
-                    mhs_fullname = _data.GetString(0),
-                    fks_name = _data.GetString(1),
-                    mhs_nim = _data.GetString(2),
-                    mhs_kelas = _data.GetString(3),
-                    mhs_email = _data.GetString(4),
-                    mhs_stat = _data.GetInt16(5),
-                    mhs_u_id = _data.GetInt32(6)
+                    mhs_fullname = _data.GetString("mhs_fullname"),
+                    fks_name = _data.GetString("fks_name"),
+                    mhs_nim = _data.GetString("mhs_nim"),
+                    mhs_kelas = _data.GetString("mhs_kelas"),
+                    mhs_email = _data.GetString("mhs_email"),
+                    mhs_stat = _data.GetInt16("mhs_stat"),
+                    mhs_u_id = _data.GetInt32("mhs_u_id")
                 });
             }
             _conn.Close();

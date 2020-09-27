@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Data;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
@@ -12,25 +13,25 @@ namespace UniversitasApp.CRUD
     public sealed class UserCRUD
     {
         //Activity Table
-        public static List<Users> ReadAllActivity(string connStr)
+        public static async Task<List<Users>> ReadAllActivityAsync(string connStr)
         {
             List<Users> u = new List<Users>();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
-            string sqlStr = "SELECT u.u_id, u.u_username, u.u_login_time, u.u_logout_time, u.u_login_status, ut.ut_name FROM db_kampus.users u " +
+            string sqlStr = "SELECT * FROM db_kampus.users u " +
                             "INNER JOIN db_kampus.user_type ut ON u.u_ut_id = ut.ut_id;";
             using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _dtrdr = _command.ExecuteReader();
+            using MySqlDataReader _dtrdr = await Task.Run(() => _command.ExecuteReader());
             while(_dtrdr.Read())
             {
                 u.Add(new Users {
-                    u_id = _dtrdr.GetInt32(0),
-                    u_username = _dtrdr.GetString(1),
-                    u_login_time = _dtrdr.GetDateTime(2).ToString("dd/MM/yyyy HH:mm:ss"),
-                    u_logout_time = _dtrdr.GetDateTime(3).ToString("dd/MM/yyyy HH:mm:ss"),
-                    u_login_status = _dtrdr.GetInt16(4),
+                    u_id = _dtrdr.GetInt32("u_id"),
+                    u_username = _dtrdr.GetString("u_username"),
+                    u_login_time = _dtrdr.GetDateTime("u_login_time").ToString("dd/MM/yyyy HH:mm:ss"),
+                    u_logout_time = _dtrdr.GetDateTime("u_logout_time").ToString("dd/MM/yyyy HH:mm:ss"),
+                    u_login_status = _dtrdr.GetInt16("u_login_status"),
                     //user_type
-                    ut_name = _dtrdr.GetString(5)
+                    ut_name = _dtrdr.GetString("ut_name")
                 });
             }
             _conn.Close();
@@ -42,31 +43,35 @@ namespace UniversitasApp.CRUD
         ///<summary>
         /// Login Page Read
         ///</summary>
-        public static Users Read(string connStr, string u_username)
+        public static async Task<Users> ReadAsync(string connStr, string u_username)
         {
             Users u = new Users();
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
-            string sqlStr = "SELECT u_id, ut_name, u_username, u_password, u_login_time, u_logout_time, u_login_status, u_r_id FROM db_kampus.users "+
+
+            string sqlStr = "SELECT * FROM db_kampus.users "+
             "INNER JOIN user_type ON user_type.ut_id = u_ut_id "+
             "WHERE (u_username = '@"+u_username+"')";
 
             using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _datareader = _command.ExecuteReader();
-            if(_datareader.Read().Equals(true))
+            using MySqlDataReader _datareader = await Task.Run(() => _command.ExecuteReader());
+            if (!_datareader.HasRows) throw new Exception("Username Tidak ada!");
+
+            if (_datareader.ReadAsync().Result == true)
             {
-                u.u_id = _datareader.GetInt32(0);
-                u.ut_name = _datareader.GetString(1);
-                u.u_username = _datareader.GetString(2).Replace("@", "");
-                u.u_password = _datareader.GetString(3);
-                u.u_login_time = _datareader.GetDateTime(4).ToString("dd/MM/yyyy HH:mm:ss");
-                u.u_logout_time = _datareader.GetDateTime(5).ToString("dd/MM/yyyy HH:mm:ss");
-                u.u_login_status = _datareader.GetInt16(6);
-                u.u_r_id = _datareader.IsDBNull(7) ? (int?)null :_datareader.GetInt32(7);
+                u.u_id = _datareader.GetInt32("u_id");
+                u.ut_name = _datareader.GetString("ut_name");
+                u.u_username = _datareader.GetString("u_username").Replace("@", "");
+                u.u_password = _datareader.GetString("u_password");
+                u.u_login_time = _datareader.GetDateTime("u_login_time").ToString("dd/MM/yyyy HH:mm:ss");
+                u.u_logout_time = _datareader.GetDateTime("u_logout_time").ToString("dd/MM/yyyy HH:mm:ss");
+                u.u_login_status = _datareader.GetInt16("u_login_status");
+                u.u_r_id = _datareader.IsDBNull("u_r_id") ? (int?)null :_datareader.GetInt32("u_r_id");
             }
             _conn.Close();
             return u;
         }
+
         ///<summary>
         /// User Login
         ///</summary>
@@ -77,8 +82,7 @@ namespace UniversitasApp.CRUD
             _conn.Open();
             string sqlStr = "UPDATE `db_kampus`.`users` SET `u_login_time` = '"+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+"', `u_login_status` = '1' WHERE (`u_id` = '"+u_id+"');";
 
-            using var _cmd = new MySqlCommand(sqlStr);
-            _cmd.Connection = _conn;
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
             edited = _cmd.ExecuteNonQuery();
 
             _conn.Close();
@@ -176,7 +180,7 @@ namespace UniversitasApp.CRUD
         public static int ReadUsername(string connStr, string username)
         {
             int rowReturned = 0;
-            if(Read(connStr, username).u_id != null) rowReturned = 1;
+            if(ReadAsync(connStr, username).Result.u_id != null) rowReturned = 1;
             return rowReturned;
         }
 

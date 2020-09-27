@@ -1,8 +1,8 @@
 $(document).ready(function () {
     $("#active-link").text('Kategori Staff & Staff');
     StaffDetailDataTable();
-    addStaffPage();
     $("#add-staff-btn").click(function () {
+        addStaffPage();
         $("#active-link").text('Add Staff');
         $("#form-title").text('Add Staff');
         $("#password-field").show();
@@ -179,6 +179,7 @@ function addStaff() {
 var edit;
 
 function clickStaffEdit(obj) {
+    addStaffPage();
     $("#active-link").text('Edit Staff');
     $("#form-title").text('Edit Staff');
     $("#password-field").hide();
@@ -287,7 +288,7 @@ function clickStaffDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(() => { StaffDetailDataTable(); }, 2000);
+                    StaffDetailDataTable();
                 }
                 else {
                     pesanAlert(data);

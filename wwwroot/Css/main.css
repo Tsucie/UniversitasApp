@@ -249,7 +249,7 @@ iframe {
 
   display: block;
   width: 100%;
-  background: #fff;
+  background: linear-gradient(45deg, #FFF, transparent);
   height: 50px;
   border-radius: 25px;
   padding: 0 30px 0 53px;

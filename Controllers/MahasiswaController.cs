@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -23,33 +24,13 @@ namespace UniversitasApp.Controllers
             return View();
         }
 
-        // [Route("AddMhs")]
-        // public IActionResult AddMhs()
-        // {
-        //     if(HttpContext.Session.GetInt32("u_id") == null)
-        //     {
-        //         return RedirectToAction("Login","Account");
-        //     }
-        //     return View();
-        // }
-
-        // [Route("UpdateMhs")]
-        // public IActionResult UpdateMhs()
-        // {
-        //     if(HttpContext.Session.GetInt32("u_id") == null)
-        //     {
-        //         return RedirectToAction("Login","Account");
-        //     }
-        //     return View();
-        // }
-
         [HttpGet("GetMhsList")]
-        public JsonResult GetAllData()
+        public async Task<JsonResult> GetAllData()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var mhs = MahasiswaCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                List<UserMahasiswa> mhs = await Task.Run(() => MahasiswaCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
                 if(mhs.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] data = {

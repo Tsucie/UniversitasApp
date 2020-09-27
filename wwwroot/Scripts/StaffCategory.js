@@ -99,7 +99,7 @@ function addStfCategory() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.reload() }, 2000);
+                StaffCategoryDataTable();
             }
             else {
                 pesanAlert(data);
@@ -173,7 +173,7 @@ function UpdateCategory() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.reload() }, 2000);
+                StaffCategoryDataTable();
             }
             else {
                 pesanAlert(data);
@@ -204,7 +204,7 @@ function clickCategoryDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(function () { window.location.reload() }, 2000);
+                    StaffCategoryDataTable();
                 }
                 else {
                     pesanAlert(data);
