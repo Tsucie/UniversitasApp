@@ -50,6 +50,19 @@ namespace UniversitasApp
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
+            try
+            {
+                string redis_instance_name = Configuration.GetSection("redis")["name"];
+                string redis_config = Configuration.GetSection("redis")["config"];
+
+                services.AddDistributedRedisCache(options =>
+                {
+                    options.InstanceName = redis_instance_name;
+                    options.Configuration = redis_config;
+                });
+            }
+            catch { }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

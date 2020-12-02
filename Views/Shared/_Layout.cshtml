@@ -1,6 +1,9 @@
 
-@using Microsoft.AspNetCore.Mvc;
-@using Microsoft.AspNetCore.Http;
+@* @using System.Text.Json *@
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Http
+@* @using Microsoft.Extensions.Caching.Distributed *@
+@* @inject IDistributedCache sessionCache *@
 @inject IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
@@ -25,6 +28,7 @@
 <body class="hold-transition skin-green sidebar-mini">
     @{
         var userini = HttpContextAccessor.HttpContext.Session.GetInt32("u_id");
+        @* string userSession = sessionCache.GetString(userini.ToString()); *@
         var username = HttpContextAccessor.HttpContext.Session.GetString("u_username");
         var usertype = HttpContextAccessor.HttpContext.Session.GetString("ut_name");
     }
@@ -52,20 +56,20 @@
                                 <!-- User image in the navbar -->
                                 <img src="~/images/avatar-Tsucie.jpg" class="user-image" alt="User Image">
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs card-text">@username</span>
+                                <span class="hidden-xs card-text" id="username">@username</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- Photo Profile dan keterangan -->
                                 @* <li class="user-header">
                                     <img src="~/images/avatar-Tsucie.jpg" class="img-circle" alt="User Image">
-                                    <br><b>@username</b>
+                                    <br><b></b>
                                 </li> *@
                                 <!-- Menu Body -->
                                 <li class="user-body">
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- Info User -->
-                                            <a href="#">Account: @username [ @usertype ]</a>
+                                            <a href="#" id="userprofile">Account: @username [ @usertype ]</a>
                                         </div>
                                     </div>
                                     <!-- /.row -->
@@ -142,6 +146,11 @@
             <strong>Copyright &copy; 2020 <a href="#">Tech Industry University</a>.</strong> All rights reserved.
         </footer>
     </div>
+    <!--
+    <script type="text/javascript">
+        $("#username").val()
+    </script>
+    -->
     <script src="~/Assets/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="~/Assets/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/Assets/AdminLTE/dist/js/adminlte.js"></script>
