@@ -35,5 +35,8 @@ namespace UniversitasApp.Models
         public int rt_id { get; set; }
         public string rt_name { get; set; }
         public string rt_desc { get; set; }
+
+        //users
+        public string u_username { get; set; }
     }
 }

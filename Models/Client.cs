@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace UniversitasApp.Models
 {
     public sealed class Client
@@ -16,5 +14,7 @@ namespace UniversitasApp.Models
         public int? u_r_id { get; set; }
         public string u_username { get; set; }
         public string u_password { get; set; }
+        public string up_filename { get; set; }
+        public byte[] up_photo { get; set; }
     }
 }

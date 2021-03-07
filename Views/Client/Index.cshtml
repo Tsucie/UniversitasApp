@@ -15,6 +15,16 @@
         <form class="form-horizontal">
             <div class="box-body">
                 <div class="form-group">
+                    @* <label for="u_file" class="col-sm-2 control-label">Photo Profile</label> *@
+                    <div class="col-sm-5">
+                        <img id="profile-img" src="~/images/DefaultPPimg.jpg" width="100" height="100"/>
+                        <span>
+                            <label for="u_file" class="control-label">Photo Profile</label>
+                            <input type="file" class="form-control-file" id="u_file" accept="image/*">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="u_username" class="col-sm-2 control-label">Username</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control form-inputs" placeholder="Username" id="u_username">
@@ -87,12 +97,13 @@
                         </label>
                     </div>
                     <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
-                        <div id="spinner"></div>
+                        <div id="tbl-loading" class=""></div>
                         <div class="row">
                             <div class="col-sm-12 table-responsive">
                                 <table id="tblClient" class="table table-bordered table-striped table-hover">
                                     <thead class="bg-me">
                                         <tr>
+                                            <th>Photo</th>
                                             <th>Code<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Username<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Nama Lengkap<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>

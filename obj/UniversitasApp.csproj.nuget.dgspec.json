@@ -48,10 +48,6 @@
               "target": "Package",
               "version": "[8.0.19, )"
             },
-            "StackExchange.Redis": {
-              "target": "Package",
-              "version": "[2.1.58, )"
-            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.1, )"

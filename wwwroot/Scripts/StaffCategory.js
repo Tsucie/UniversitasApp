@@ -28,7 +28,7 @@ function validasi() {
 function StaffCategoryDataTable() {
     var table = $("#tblStaff");
 
-    $("#spinner-1").show();
+    $("#tbl-loading-1").show();
     $.ajax({
         type: "GET",
         url: "/StaffCategory/GetCategoryList",
@@ -64,7 +64,7 @@ function StaffCategoryDataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner-1").hide();
+            $("#tbl-loading-1").hide();
         }
     });
 }

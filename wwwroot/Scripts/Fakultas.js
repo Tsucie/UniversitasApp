@@ -79,7 +79,7 @@ function FakultasComboBox(comboBox) {
 
 function FakultasDataTable() {
     var table = $("#tblFks");
-    $("#spinner").show();
+    $("#tbl-loading").show();
     $.ajax({
         type: "GET",
         url: "/Fakultas/GetList",
@@ -123,7 +123,7 @@ function FakultasDataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner").hide();
+            $("#tbl-loading").hide();
         }
     });
 }

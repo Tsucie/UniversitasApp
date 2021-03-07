@@ -36,8 +36,7 @@ function ShowTables() {
 
 function StaffDetailDataTable() {
     var table = $("#tblStaff-detail");
-
-    $("#spinner-2").show();
+    $("#tbl-loading-2").show();
     $.ajax({
         type: "GET",
         url: "/StaffCategory/GetStaffList",
@@ -81,7 +80,7 @@ function StaffDetailDataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner-2").hide();
+            $("#tbl-loading-2").hide();
         }
     });
 }

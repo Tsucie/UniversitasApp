@@ -37,7 +37,7 @@ function ShowForm() {
 
 function MhsDataTable() {
     var table = $("#tblMahasiswa");
-    $('#spinner').show();
+    $('#tbl-loading').show();
     $.ajax({
         type: "GET",
         url: "/Mahasiswa/GetMhsList",
@@ -77,7 +77,7 @@ function MhsDataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $('#spinner').hide();
+            $('#tbl-loading').hide();
         }
     });
 }

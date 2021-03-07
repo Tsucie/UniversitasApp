@@ -1,8 +1,10 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using UniversitasApp.Models;
@@ -30,14 +32,15 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var list = await Task.Run(() => StaffCategoryCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(list.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
+                List<StaffCategory> list = await Task.Run(() => StaffCategoryCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
+                if(list == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = list.Select(c => c.sc_id).ToArray()},
                     new{Kategori = list.Select(c => c.sc_name).ToArray()},
                     new{Deskripsi = list.Select(c => c.sc_desc).ToArray()}
                 };
+
                 return Json(data);
             }
             catch (Exception ex)
@@ -51,15 +54,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetCategory/{sc_id}")]
-        public JsonResult GetData([FromRoute] int sc_id)
+        public JsonResult GetData([FromRoute] int? sc_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(sc_id.Equals(null)) throw new Exception("", new Exception("Data Not Found, Incomplete data"));
+                if(sc_id == null) throw new Exception("", new Exception("Data Not Found, Incomplete data"));
 
-                var data = StaffCategoryCRUD.Read(Startup.db_kampus_ConnStr, sc_id);
-                if(data.Equals(null)) throw new Exception("", new Exception("Data not found in Database!"));
+                StaffCategory data = StaffCategoryCRUD.Read(Startup.db_kampus_ConnStr, (int)sc_id);
+                if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
 
                 return Json(data);
             }
@@ -90,6 +93,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data berhasil di tambahkan!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Add Data, Duplicate Category name!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -106,12 +122,25 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(sc.sc_id.Equals(null) || string.IsNullOrEmpty(sc.sc_name)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
+                if(sc.sc_id == null || string.IsNullOrEmpty(sc.sc_name)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
 
                 if(StaffCategoryCRUD.Update(Startup.db_kampus_ConnStr, (int)sc.sc_id, sc) != 1) throw new Exception("", new Exception("Data gagal di update di Database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Edit Data, Duplicate Category name!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
             }
             catch (Exception ex)
             {
@@ -129,7 +158,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(sc.sc_id.Equals(null)) throw new Exception("", new Exception("Data is not Deleted, Incomplete Data!"));
+                if(sc.sc_id == null) throw new Exception("", new Exception("Data is not Deleted, Incomplete Data!"));
 
                 if(StaffCategoryCRUD.Delete(Startup.db_kampus_ConnStr, (int)sc.sc_id) != 1) throw new Exception("", new Exception("Data is not Deleted in Database!"));
 
@@ -152,8 +181,8 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var staff = await Task.Run(() => StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(staff.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
+                List<UserStaff> staff = await Task.Run(() => StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
+                if(staff == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] obj = {
                     new {DataNama = staff.Select(s => s.stf_fullname).ToArray()},
@@ -164,6 +193,7 @@ namespace UniversitasApp.Controllers
                     new {DataStat = staff.Select(s => s.stf_stat).ToArray()},
                     new {DataU_id = staff.Select(s => s.stf_u_id).ToArray()}
                 };
+
                 return Json(obj);
             }
             catch (Exception ex)
@@ -183,7 +213,7 @@ namespace UniversitasApp.Controllers
             Random rand = new Random();
             try
             {
-                if(string.IsNullOrEmpty(stf.u_username) || string.IsNullOrEmpty(stf.u_password) || stf.stf_sc_id.Equals(null)  || string.IsNullOrEmpty(stf.stf_fullname) || string.IsNullOrEmpty(stf.stf_nik) || string.IsNullOrEmpty(stf.stf_address) || string.IsNullOrEmpty(stf.stf_province) || string.IsNullOrEmpty(stf.stf_city) || string.IsNullOrEmpty(stf.stf_birthplace) || string.IsNullOrEmpty(stf.stf_birthdate) || string.IsNullOrEmpty(stf.stf_gender) || string.IsNullOrEmpty(stf.stf_religion) || string.IsNullOrEmpty(stf.stf_state) || string.IsNullOrEmpty(stf.stf_email) || stf.stf_stat.Equals(null) || string.IsNullOrEmpty(stf.stf_contact)) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
+                if(string.IsNullOrEmpty(stf.u_username) || string.IsNullOrEmpty(stf.u_password) || stf.stf_sc_id == null  || string.IsNullOrEmpty(stf.stf_fullname) || string.IsNullOrEmpty(stf.stf_nik) || string.IsNullOrEmpty(stf.stf_address) || string.IsNullOrEmpty(stf.stf_province) || string.IsNullOrEmpty(stf.stf_city) || string.IsNullOrEmpty(stf.stf_birthplace) || string.IsNullOrEmpty(stf.stf_birthdate) || string.IsNullOrEmpty(stf.stf_gender) || string.IsNullOrEmpty(stf.stf_religion) || string.IsNullOrEmpty(stf.stf_state) || string.IsNullOrEmpty(stf.stf_email) || stf.stf_stat == null || string.IsNullOrEmpty(stf.stf_contact)) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
 
                 stf.stf_id = rand.Next();
                 stf.stf_sc_id = stf.stf_sc_id;
@@ -222,6 +252,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil ditambahkan!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Add Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -233,15 +276,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("UpdateStaff/GetById/{stf_u_id}")]
-        public JsonResult GetOneStf([FromRoute] int stf_u_id)
+        public JsonResult GetOneStf([FromRoute] int? stf_u_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(stf_u_id.Equals(null)) throw new Exception("", new Exception("Cant Read data, incomplete Data!"));
+                if(stf_u_id == null) throw new Exception("", new Exception("Cant Read data, incomplete Data!"));
 
-                var data = StaffCRUD.Read(Startup.db_kampus_ConnStr, stf_u_id);
-                if(data.Equals(null)) throw new Exception("", new Exception("Failed read data from Database!"));
+                UserStaff data = StaffCRUD.Read(Startup.db_kampus_ConnStr, (int)stf_u_id);
+                if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
 
                 return Json(data);
             }
@@ -261,7 +304,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(stf.stf_id.Equals(null) || stf.stf_u_id.Equals(null) || string.IsNullOrEmpty(stf.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
+                if(stf.stf_id == null || stf.stf_u_id == null || string.IsNullOrEmpty(stf.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
 
                 stf.stf_sc_id = stf.stf_sc_id;
                 stf.stf_fks_id = stf.stf_fks_id;
@@ -293,6 +336,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Edit Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -309,11 +365,9 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(us.stf_u_id.Equals(null)) throw new Exception("", new Exception("Data won't be Deleted, Incomplete Data!"));
+                if(us.stf_u_id == null) throw new Exception("", new Exception("Data won't be Deleted, Incomplete Data!"));
 
-                Users u = new Users();
-                u.u_id = us.stf_u_id;
-                if(!StaffCRUD.DeleteStaffandUser(Startup.db_kampus_ConnStr, us, (int)u.u_id)) throw new Exception("", new Exception("Data isn't Deleted in Database!"));
+                if(!StaffCRUD.DeleteStaffandUser(Startup.db_kampus_ConnStr, us, (int)us.stf_u_id)) throw new Exception("", new Exception("Data isn't Deleted in Database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil dihapus!";

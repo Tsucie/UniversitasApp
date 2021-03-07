@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 function RoleDataTable() {
     var table = $("#tblRole");
-    $("#spinner").show();
+    $("#tbl-loading").show();
     $.ajax({
         type: "GET",
         url: "/Role/GetAll",
@@ -17,12 +17,13 @@ function RoleDataTable() {
         success: function (data) {
             $(table).children('tbody').empty();
             var rowHTML = '';
-                for (let i = 0; i < data[1].roleTypeName.length; i++) {
+                for (let i = 0; i < data[1].roleUsername.length; i++) {
                     let number = i+1;
                     rowHTML = '<tr>' +
                     '<td class="tb-content status-user col-md-1">' + number + '</td>' +
-                    '<td class="tb-content">' + data[1].roleTypeName[i] + '</td>'+
-                    '<td class="tb-content">' + data[2].roleName[i] + '</td>'+
+                    '<td class="tb-content">' + data[1].roleUsername[i] + '</td>'+
+                    '<td class="tb-content">' + data[2].roleTypeName[i] + '</td>'+
+                    '<td class="tb-content">' + data[3].roleName[i] + '</td>'+
                     '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Role Previledge" id=\'btndetail' + i + '\' class="btn" data_id=\'' + data[0].roleId[i] + '\'><i class="glyphicon glyphicon-wrench" style="color: rgba(0, 0, 0, 0.6); font-size: 150%;"></i></a></td>'+
                     '</tr>';
 
@@ -39,7 +40,7 @@ function RoleDataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner").hide();
+            $("#tbl-loading").hide();
         }
     });
 }
@@ -82,7 +83,7 @@ var edit = {};
 function clickPreviledge(obj) {
     let DataId = {"r_id": parseInt(obj.attributes.data_id.value)};
     var table = $("#tblRP");
-    $("#spinner").show();
+    $("#tbl-loading").show();
     $("#mod-footer").hide();
     $.ajax({
         type: "GET",

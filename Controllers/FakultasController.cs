@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniversitasApp.Models;
@@ -31,13 +32,14 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<Fakultas> fks = await Task.Run(() => FakultasCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(fks.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
+                if(fks == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = fks.Select(c => c.fks_id).ToArray()},
                     new{Fakultas = fks.Select(c => c.fks_name).ToArray()},
                     new{Deskripsi = fks.Select(c => c.fks_desc).ToArray()}
                 };
+
                 return Json(data);
             }
             catch (Exception ex)
@@ -51,15 +53,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetListById/{ps_fks_id}")]
-        public async Task<JsonResult> GetListById([FromRoute] int ps_fks_id)
+        public async Task<JsonResult> GetListById([FromRoute] int? ps_fks_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(ps_fks_id.Equals(null)) throw new Exception("", new Exception("Fail to render Program Studi Data, no data parameter!"));
+                if(ps_fks_id == null) throw new Exception("", new Exception("Fail to render Program Studi Data, no data parameter!"));
 
-                List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFksAsync(Startup.db_kampus_ConnStr, ps_fks_id));
-                if(ps.Equals(null)) throw new Exception("", new Exception("Data not Found!"));
+                List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFksAsync(Startup.db_kampus_ConnStr, (int)ps_fks_id));
+                if(ps == null) throw new Exception("", new Exception("Data not Found!"));
 
                 Object[] data = {
                     new {Nomor = ps.Select(s => s.ps_id).ToArray()},
@@ -81,15 +83,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetFksById/{fks_id}")]
-        public JsonResult GetFks([FromRoute] int fks_id)
+        public JsonResult GetFks([FromRoute] int? fks_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(fks_id.Equals(null)) throw new Exception("", new Exception("Failed Read data, incomplete Data!"));
+                if(fks_id == null) throw new Exception("", new Exception("Failed Read data, incomplete Data!"));
 
-                var data = FakultasCRUD.Read(Startup.db_kampus_ConnStr, fks_id);
-                if(data.Equals(null)) throw new Exception("", new Exception("Failed Read data from database!"));
+                Fakultas data = FakultasCRUD.Read(Startup.db_kampus_ConnStr, (int)fks_id);
+                if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
 
                 return Json(data);
             }
@@ -104,15 +106,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetProdiById/{ps_id}")]
-        public JsonResult GetProdi([FromRoute] int ps_id)
+        public JsonResult GetProdi([FromRoute] int? ps_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(ps_id.Equals(null)) throw new Exception("", new Exception("Failed Read data, incomplete Data!"));
+                if(ps_id == null) throw new Exception("", new Exception("Failed Read data, incomplete Data!"));
 
-                var data = ProgramStudiCRUD.Read(Startup.db_kampus_ConnStr, ps_id);
-                if(data.Equals(null)) throw new Exception("", new Exception("Failed Read data from database!"));
+                ProgramStudi data = ProgramStudiCRUD.Read(Startup.db_kampus_ConnStr, (int)ps_id);
+                if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
 
                 return Json(data);
             }
@@ -159,7 +161,7 @@ namespace UniversitasApp.Controllers
             Random rand = new Random();
             try
             {
-                if(ps.ps_fks_id.Equals(null) || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not added, incomplete Data!"));
+                if(ps.ps_fks_id == null || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not added, incomplete Data!"));
 
                 ps.ps_id = rand.Next();
                 ps.ps_fks_id = ps.ps_fks_id;
@@ -187,7 +189,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(fks.fks_id.Equals(null) || string.IsNullOrEmpty(fks.fks_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
+                if(fks.fks_id == null || string.IsNullOrEmpty(fks.fks_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
 
                 fks.fks_name = fks.fks_name;
                 fks.fks_desc = fks.fks_desc;
@@ -213,7 +215,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(ps.ps_id.Equals(null) || ps.ps_fks_id.Equals(null) || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
+                if(ps.ps_id == null || ps.ps_fks_id == null || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
 
                 ps.ps_name = ps.ps_name;
                 ps.ps_desc = ps.ps_desc;
@@ -239,7 +241,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(fks.fks_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
+                if(fks.fks_id == null) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
 
                 if(FakultasCRUD.Delete(Startup.db_kampus_ConnStr, (int)fks.fks_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
 
@@ -262,7 +264,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(ps.ps_id.Equals(null)) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
+                if(ps.ps_id == null) throw new Exception("", new Exception("Data Not deleted, incomplete Data!"));
 
                 if(ProgramStudiCRUD.Delete(Startup.db_kampus_ConnStr, (int)ps.ps_id) != 1) throw new Exception("", new Exception("Data is not deleted in database!"));
 

@@ -37,9 +37,62 @@ namespace UniversitasApp.CRUD
             _conn.Close();
             return u;
         }
+
+        public static Users ReadRole(string connStr, int u_id)
+        {
+            Users u = null;
+            using var _conn = new MySqlConnection(connStr);
+            _conn.Open();
+
+            string sqlStr = "SELECT * FROM db_kampus.users WHERE (`u_id`='"+u_id+"')";
+
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            using MySqlDataReader _data = _cmd.ExecuteReader();
+
+            if (_data.Read() && !_data.IsDBNull("u_r_id"))
+            {
+                u = new Users();
+                u.u_id = _data.GetInt32("u_id");
+                u.u_r_id = _data.GetInt32("u_r_id");
+            }
+
+            _conn.Close();
+            return u;
+        }
+
+        public static Object ReadTotalUser(string connStr)
+        {
+            Object users = null;
+            using var _conn = new MySqlConnection(connStr);
+            _conn.Open();
+
+            string sqlStr = "SELECT COUNT(*) AS total_users, " +
+                            "(SELECT COUNT(*) FROM db_kampus.users WHERE u_ut_id = 2) AS total_rektor, " +
+                            "(SELECT COUNT(*) FROM db_kampus.users WHERE u_ut_id = 3) AS total_staff, " +
+                            "(SELECT COUNT(*) FROM db_kampus.users WHERE u_ut_id = 4) AS total_mhs " +
+                            "FROM db_kampus.users WHERE u_ut_id < 5;";
+            
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            using MySqlDataReader _data = _cmd.ExecuteReader();
+
+            if (_data.Read())
+            {
+                users = new {
+                    total_users = _data.GetInt32("total_users"),
+                    total_rektor = _data.GetInt32("total_rektor"),
+                    total_staff = _data.GetInt32("total_staff"),
+                    total_mhs = _data.GetInt32("total_mhs")
+                };
+            }
+
+            _conn.Close();
+            return users;
+        }
+
         // ===============================================================================================
         // Login CRUD
         // ===============================================================================================
+        #region Login
         ///<summary>
         /// Login Page Read
         ///</summary>
@@ -105,29 +158,30 @@ namespace UniversitasApp.CRUD
             _conn.Close();
             return edited;
         }
+        #endregion
         // ===============================================================================================
 
         // Add user_type Combo Box
-        public static List<Users> ReadList(string connStr)
-        {
-            List<Users> u = new List<Users>();
-            using var _conn = new MySqlConnection(connStr);
-            _conn.Open();
-            string sqlStr = "SELECT * FROM db_kampus.user_type;";
+        // public static List<Users> ReadList(string connStr)
+        // {
+        //     List<Users> u = new List<Users>();
+        //     using var _conn = new MySqlConnection(connStr);
+        //     _conn.Open();
+        //     string sqlStr = "SELECT * FROM db_kampus.user_type;";
 
-            using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _command.ExecuteReader();
-            while (_data.Read())
-            {
-                u.Add(new Users {
-                    ut_id = _data.GetInt32(0),
-                    ut_name = _data.GetString(1),
-                    ut_desc = _data.GetString(2)
-                });
-            }
-            _conn.Close();
-            return u;
-        }
+        //     using var _command = new MySqlCommand(sqlStr, _conn);
+        //     using MySqlDataReader _data = _command.ExecuteReader();
+        //     while (_data.Read())
+        //     {
+        //         u.Add(new Users {
+        //             ut_id = _data.GetInt32(0),
+        //             ut_name = _data.GetString(1),
+        //             ut_desc = _data.GetString(2)
+        //         });
+        //     }
+        //     _conn.Close();
+        //     return u;
+        // }
 
         // Create users
         public static int Create(string connStr, Users u)
@@ -167,6 +221,7 @@ namespace UniversitasApp.CRUD
             string sqlStr = "INSERT INTO `db_kampus`.`users`"+
             " (`u_id`, `u_ut_id`,"+sqlRoleCol+" `u_username`, `u_password`, `u_login_time`, `u_logout_time`, `u_login_status`, `u_rec_status`, `u_rec_creator`, `u_rec_created`)"+
             " VALUES ('"+u.u_id+"', '"+u.u_ut_id+"',"+sqlRoleVal+" '@"+u.u_username+"', '"+u.u_password+"', '"+u.u_login_time+"', '"+u.u_logout_time+"', '"+u.u_login_status+"', '"+u.u_rec_status+"', '"+u.u_rec_creator+"', '"+u.u_rec_created+"');";
+            // Console.WriteLine("\n User Create : {0}", sqlStr);
             
             using var _cmd = new MySqlCommand(sqlStr);
             _cmd.Connection = _conn;
@@ -180,25 +235,34 @@ namespace UniversitasApp.CRUD
         public static int ReadUsername(string connStr, string username)
         {
             int rowReturned = 0;
-            if(ReadAsync(connStr, username).Result.u_id != null) rowReturned = 1;
-            return rowReturned;
-        }
-
-        public static int ReadPhoto(string connStr, int up_u_id)
-        {
-            int rowReturned = 0;
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT * FROM db_kampus.user_photo WHERE up_u_id = '"+up_u_id+"'";
+            string sqlStr = "SELECT u_username FROM db_kampus.users WHERE u_username = '@"+username+"';";
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            using MySqlDataReader _data = _cmd.ExecuteReader();
+
+            if (_data.HasRows) rowReturned = 1;
+
+            _conn.Close();
+            return rowReturned;
+        }
+
+        public static int? ReadPhoto(string connStr, int up_u_id)
+        {
+            int? photoId = null;
+            using var _conn = new MySqlConnection(connStr);
+            _conn.Open();
+
+            string sqlStr = "SELECT up_id FROM db_kampus.user_photo WHERE up_u_id = '"+up_u_id+"'";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
             using MySqlDataReader _data = _cmd.ExecuteReader();
 
-            if(_data.HasRows) rowReturned = 1;
+            if(_data.Read()) photoId = _data.GetInt32("up_id");
 
             _conn.Close();
-            return rowReturned;
+            return photoId;
         }
 
         public static int CreatePhoto(string connStr, UserPhoto up)
@@ -267,6 +331,7 @@ namespace UniversitasApp.CRUD
             }
             return affectedRow;
         }
+
         // Update users table
         public static int Update(string connStr, int u_id, Users u)
         {
@@ -286,6 +351,7 @@ namespace UniversitasApp.CRUD
             _conn.Close();
             return affectedRow;
         }
+
         public static int UpdateAlive(MySqlConnection _conn, int u_id, Users u)
         {
             int affectedRow = 0;

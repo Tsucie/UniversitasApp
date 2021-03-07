@@ -7,7 +7,7 @@ function SiteDataTable() {
     $('#spinner').show();
     $.ajax({
         type: "GET",
-        url: "/Site/GetSiteList",
+        url: "/Site/GetAll",
         contentType: "application/json",
         dataType: "json",
         data: null,

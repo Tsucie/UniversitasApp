@@ -34,11 +34,14 @@ namespace UniversitasApp.Controllers
 
                 Object[] data = {
                     new {RoleId = roles.Select(s => s.r_id).ToArray()},
+                    new {RoleUsername = roles.Select(s => s.u_username).ToArray()},
                     new {RoleTypeName = roles.Select(s => s.rt_name).ToArray()},
                     new {RoleName = roles.Select(s => s.r_name).ToArray()}
                 };
-                if(!roles.Select(s => s.r_c_id).Equals(null)) data.Append(new {c_id = roles.Select(s => s.r_c_id).ToArray()});
-                if(!roles.Select(s => s.r_s_id).Equals(null)) data.Append(new {s_id = roles.Select(s => s.r_s_id).ToArray()});
+                
+                // if(!roles.Select(s => s.r_c_id).Equals(null)) data.Append(new {c_id = roles.Select(s => s.r_c_id).ToArray()});
+
+                // if(!roles.Select(s => s.r_s_id).Equals(null)) data.Append(new {s_id = roles.Select(s => s.r_s_id).ToArray()});
 
                 return Json(data);
             }

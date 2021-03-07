@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data;
@@ -53,6 +54,31 @@ namespace UniversitasApp.Controllers
                     new {DataId = users.Select(u => u.u_id).ToArray()}
                 };
                 return Json(data);
+            }
+            catch (Exception ex)
+            {
+                ress.Error(ex);
+            }
+            return Json(new {
+                Code = ress.Code,
+                Pesan = ress.Message
+            });
+        }
+
+        [HttpGet("GetUser")]
+        public async Task<JsonResult> GetTotalUser()
+        {
+            ReturnMessage ress = new ReturnMessage();
+
+            try
+            {
+                var users = await Task.Run(() => UserCRUD.ReadTotalUser(Startup.db_kampus_ConnStr));
+                if (users == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+
+                return Json(new {
+                    Code = 1,
+                    Pesan = users
+                });
             }
             catch (Exception ex)
             {

@@ -2,6 +2,11 @@ $(document).ready(function () {
     $("#btn-login").click(function () {
         Validate(this);
     });
+    $(".validate-form").on('keypress', function (e) {
+        if (e.which === 13) {
+            Validate(this);
+        }
+    });
 });
 
 function Validate() {
@@ -13,6 +18,8 @@ function Validate() {
         "username": $('#username').val(),
         "password": $('#password').val()
     }
+    // $('#btn-login').hide();
+    // $('#loading-animated').show();
     $.ajax({
         type: "POST",
         url: '/Account/Validate',
@@ -37,5 +44,9 @@ function Validate() {
         error: function () {
             notif({msg: "<b>" + "Connection Error!" + "</b>", type: "error", position: "right"});
         }
+        // complete: function () {
+        //     $('#btn-login').show();
+        //     $('#loading-animated').hide();
+        // }
     });
 }

@@ -18,14 +18,14 @@ namespace UniversitasApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IConfiguration setting;
-        private readonly IDistributedCache sessionCache; // Save as Hashes in RedisServer
+        // private readonly IConfiguration setting;
+        // private readonly IDistributedCache sessionCache; // Save as Hashes in RedisServer
 
-        public AccountController(IConfiguration config, IDistributedCache redisCache)
-        {
-            setting = config;
-            this.sessionCache = redisCache;
-        }
+        // public AccountController(IConfiguration config, IDistributedCache redisCache)
+        // {
+        //     setting = config;
+        //     this.sessionCache = redisCache;
+        // }
 
         public IActionResult Login() => View();
 
@@ -47,28 +47,29 @@ namespace UniversitasApp.Controllers
                 HttpContext.Session.SetInt32("u_id", (int)u_data.u_id);
                 HttpContext.Session.SetString("u_username", u_data.u_username);
                 HttpContext.Session.SetString("ut_name", u_data.ut_name);
-                // if(u_data.u_r_id != null) HttpContext.Session.SetInt32("u_r_id", (int)u_data.u_r_id);
+                if(u_data.u_r_id != null) HttpContext.Session.SetInt32("u_r_id", (int)u_data.u_r_id);
 
                 // Saving to redis
-                string uid = u_data.u_id.ToString();
-                Object userData = new
-                {
-                    u_id = u_data.u_id,
-                    u_username = u_data.u_username,
-                    ut_name = u_data.ut_name,
-                    u_r_id = (u_data.u_r_id == null) ? null : u_data.u_r_id
-                };
-                string user = JsonSerializer.Serialize(userData);
-                Console.WriteLine("\n user: {0}", user);
-                sessionCache.SetString(uid, user); // Save as Hashes in RedisServer with key: RedisKey+uid (See appsetting.json section: "redis:name") + "uid"
+                // string uid = u_data.u_id.ToString();
+                // Object userData = new
+                // {
+                //     u_id = u_data.u_id,
+                //     u_username = u_data.u_username,
+                //     ut_name = u_data.ut_name,
+                //     u_r_id = (u_data.u_r_id == null) ? null : u_data.u_r_id
+                // };
+                // string user = JsonSerializer.Serialize(userData);
+                // Console.WriteLine("\n user: {0}", user);
+                // sessionCache.SetString(uid, user);
+                // Save as Hashes in RedisServer with key: RedisKey+uid (See appsetting.json section: "redis:name") + "uid"
 
                 // Check value in redis
-                string sessionData = sessionCache.GetString(uid); // Get with command HGET key field
-                if (!string.IsNullOrEmpty(sessionData))
-                {
-                    Console.WriteLine("\n Successfully store session to redis!\n");
-                    Console.WriteLine("{0} : {1} \n", uid, sessionData);
-                }
+                // string sessionData = sessionCache.GetString(uid); // Get with command HGET key field
+                // if (!string.IsNullOrEmpty(sessionData))
+                // {
+                //     Console.WriteLine("\n Successfully store session to redis!\n");
+                //     Console.WriteLine("{0} : {1} \n", uid, sessionData);
+                // }
 
                 // Update login status
                 if(await Task.Run(() => UserCRUD.LoginUpdate(Startup.db_kampus_ConnStr, (int)u_data.u_id)) != 1)
@@ -96,9 +97,9 @@ namespace UniversitasApp.Controllers
                 if(UserCRUD.LogoutUpdate(Startup.db_kampus_ConnStr, u_id) != 1) throw new Exception("", new Exception("An Error Accoured, Cant Logout!"));
 
                 HttpContext.Session.Clear();
-                string uid = u_id.ToString();
-                sessionCache.Remove(uid);
-                if (string.IsNullOrEmpty(sessionCache.GetString(uid))) Console.WriteLine("\n Successfully delete session cache from redis!");
+                // string uid = u_id.ToString();
+                // sessionCache.Remove(uid);
+                // if (string.IsNullOrEmpty(sessionCache.GetString(uid))) Console.WriteLine("\n Successfully delete session cache from redis!");
 
                 return RedirectToAction("Login","Account");
             }

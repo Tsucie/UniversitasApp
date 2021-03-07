@@ -35,6 +35,23 @@ namespace UniversitasApp.CRUD
             return rp;
         }
 
+        public static int CreateAlive(MySqlConnection _conn, RolePreviledge rp)
+        {
+            int affectedRow = 0;
+            string sqlStr = "INSERT INTO `db_kampus`.`role_previledge`"+
+            " (`rp_id`,`rp_r_id`,`rp_view`,`rp_add`,`rp_edit`,`rp_delete`,`rp_rec_status`,`rp_rec_creator`,`rp_rec_created`)"+
+            " VALUES ('"+rp.rp_id+"','"+rp.rp_r_id+"','"+rp.rp_view+"','"+rp.rp_add+"','"+rp.rp_edit+"','"+rp.rp_delete+"','"+rp.rp_rec_status+"','"+rp.rp_rec_creator+"','"+rp.rp_rec_created+"');";
+            Console.WriteLine("\n RolePreviledge Create : {0}", sqlStr);
+
+            using var _cmd = new MySqlCommand(sqlStr);
+            _cmd.Connection = _conn;
+
+            if (_conn.State == ConnectionState.Closed) _conn.Open();
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            return affectedRow;
+        }
+
         public static int Update(string connStr, RolePreviledge rp)
         {
             int affectedRow = 0;

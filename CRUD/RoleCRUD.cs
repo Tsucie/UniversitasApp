@@ -16,7 +16,7 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT r_id, rt_name, r_name, rt_desc, r_c_id, r_s_id "+
+            string sqlStr = "SELECT r_id, rt_name, r_name, rt_desc, r_c_id, r_s_id, (SELECT u_username FROM db_kampus.users WHERE u_r_id = r_id) AS u_username "+
                             "FROM `db_kampus`.`role` "+
                             "INNER JOIN db_kampus.role_type ON r_rt_id = rt_id;";
             
@@ -30,11 +30,56 @@ namespace UniversitasApp.CRUD
                     r_name = _data.GetString(2),
                     rt_desc = _data.GetString(3),
                     r_c_id = (_data.IsDBNull(4)) ? (int?)null : _data.GetInt32(4),
-                    r_s_id = (_data.IsDBNull(5)) ? (int?)null : _data.GetInt32(5)
+                    r_s_id = (_data.IsDBNull(5)) ? (int?)null : _data.GetInt32(5),
+                    u_username = _data.GetString(6)
                 });
             }
             _conn.Close();
             return roles;
+        }
+
+        public static int CreateAlive(MySqlConnection _conn, Role r)
+        {
+            int affectedRow = 0;
+            string sqlRcIdCol = "", sqlRcIdVal = "";
+            if(r.r_c_id != null)
+            {
+                sqlRcIdCol = "`r_c_id`,";
+                sqlRcIdVal = "'"+r.r_c_id+"',";
+            }
+            string sqlRsIdCol = "", sqlRsIdVal = "";
+            if(r.r_s_id != null)
+            {
+                sqlRsIdCol = "`r_s_id`,";
+                sqlRsIdVal = "'"+r.r_s_id+"',";
+            }
+
+            string sqlStr = "INSERT INTO `db_kampus`.`role`"+
+            " (`r_id`,`r_rt_id`,"+sqlRcIdCol+sqlRsIdCol+"`r_name`,`r_desc`,`r_rec_status`,`r_rec_creator`,`r_rec_created`)"+
+            " VALUES ('"+r.r_id+"','"+r.r_rt_id+"',"+sqlRcIdVal+sqlRsIdVal+"'"+r.r_name+"','"+r.r_desc+"','"+r.r_rec_status+"','"+r.r_rec_creator+"','"+r.r_rec_created+"');";
+            Console.WriteLine("\n Role Create : {0}", sqlStr);
+
+            using var _cmd = new MySqlCommand(sqlStr);
+            _cmd.Connection = _conn;
+
+            if (_conn.State == ConnectionState.Closed) _conn.Open();
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            return affectedRow;
+        }
+
+        public static int DeleteAlive(MySqlConnection _conn, int r_id)
+        {
+            int affectedRow = 0;
+            string sqlStr = "DELETE FROM `db_kampus`.`role` WHERE `r_id` = '"+r_id+"';";
+
+            using var _cmd = new MySqlCommand(sqlStr);
+            _cmd.Connection = _conn;
+
+            if (_conn.State ==  ConnectionState.Closed) _conn.Open();
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            return affectedRow;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
+using System.Net;
+using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniversitasApp.Models;
@@ -31,7 +33,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<UserMahasiswa> mhs = await Task.Run(() => MahasiswaCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(mhs.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
+                if(mhs == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new {Nama = mhs.Select(s => s.mhs_fullname).ToArray()},
@@ -55,15 +57,15 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetMhsById/{mhs_u_id}")]
-        public JsonResult GetData([FromRoute] int mhs_u_id)
+        public JsonResult GetData([FromRoute] int? mhs_u_id)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(mhs_u_id.Equals(null)) throw new Exception("", new Exception("Data Not Found, Incomplete Data!"));
+                if(mhs_u_id == null) throw new Exception("", new Exception("Data Not Found, Incomplete Data!"));
 
-                var data = MahasiswaCRUD.Read(Startup.db_kampus_ConnStr, mhs_u_id);
-                if(data.Equals(null)) throw new Exception("", new Exception("Data Not Found in Database!"));
+                UserMahasiswa data = MahasiswaCRUD.Read(Startup.db_kampus_ConnStr, (int)mhs_u_id);
+                if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
 
                 return Json(data);
             }
@@ -122,6 +124,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil ditambahkan!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Add Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -138,7 +153,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(mhs.mhs_id.Equals(null) || mhs.mhs_u_id.Equals(null) || string.IsNullOrEmpty(mhs.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
+                if(mhs.mhs_id == null || mhs.mhs_u_id == null || string.IsNullOrEmpty(mhs.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
 
                 mhs.mhs_fks_id = mhs.mhs_fks_id;
                 mhs.mhs_ps_id = mhs.mhs_ps_id;
@@ -169,6 +184,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Edit Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -185,11 +213,9 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(mhs.mhs_u_id.Equals(null)) throw new Exception("", new Exception("Gagal hapus data, Data tidak komplit!"));
+                if(mhs.mhs_u_id == null) throw new Exception("", new Exception("Gagal hapus data, Data tidak komplit!"));
 
-                Users u = new Users();
-                u.u_id = mhs.mhs_u_id;
-                if(!MahasiswaCRUD.DeleteMhsAndUser(Startup.db_kampus_ConnStr, mhs, (int)u.u_id)) throw new Exception("", new Exception("Data tidak terhapus di database!"));
+                if(!MahasiswaCRUD.DeleteMhsAndUser(Startup.db_kampus_ConnStr, mhs, (int)mhs.mhs_u_id)) throw new Exception("", new Exception("Data tidak terhapus di database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil dihapus!";

@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 function UserdataTable() {
     var table = $("#tblUser");
-    $("#spinner").show();
+    $("#tbl-loading").show();
     $.ajax({
         type: "GET",
         url: "/User/GetList",
@@ -42,7 +42,7 @@ function UserdataTable() {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
         },
         complete: function () {
-            $("#spinner").hide();
+            $("#tbl-loading").hide();
         }
     });
 }

@@ -17,6 +17,11 @@ namespace UniversitasApp.General
     {
         private static string[] allowedExtension = {".jpg",".jpeg",".png"};
 
+        // Image Width in pixel
+        private static int imgWidth = 100;
+        // Image Length in pixel
+        private static int imgHeight = 100;
+
         /// <summary>
         /// Mengecek ekstensi file
         /// </summary>
@@ -46,7 +51,7 @@ namespace UniversitasApp.General
                     FormFile file = (FormFile)u_file;
                     file.CopyTo(memorystream);
                     Image originalImage = Image.FromStream(memorystream);
-                    Image thumbnailImage = originalImage.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
+                    Image thumbnailImage = originalImage.GetThumbnailImage(imgWidth, imgHeight, () => false, IntPtr.Zero);
                     ImageConverter imageConverter = new ImageConverter();
                     up.up_photo = (byte[])imageConverter.ConvertTo(thumbnailImage, typeof(byte[]));
                     string fileExt = Path.GetExtension(file.FileName).ToLower();

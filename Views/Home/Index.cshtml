@@ -9,8 +9,82 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <h1 class="card-text">Menu Home</h1>
+@* <div>
+    <h1 class="card-text">Dashboard Home</h1>
     <h3><b>Welcome</b><em> @HttpContextAccessor.HttpContext.Session.GetString("u_username")</em></h3><br>
     <h4><b>Date & Time: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</b></h4><br>
-</div>
+</div> *@
+<!-- Contet Header -->
+<section class="content-header">
+    <h1 class="card-text">
+    Dashboard
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+<!-- Main Content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3 id="total-user">total</h3>
+                    <p>Users</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <a class="small-box-footer" href="@Url.Action("Index","User")">
+                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3 id="rektor">total</h3>
+                    <p>Rektor</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-user-secret"></i>
+                </div>
+                <a class="small-box-footer" href="@Url.Action("Index","Site")">
+                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+            <div class="small-box bg-orange">
+                <div class="inner">
+                    <h3 id="staff">total</h3>
+                    <p>Staff</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-user"></i>
+                </div>
+                <a class="small-box-footer" href="@Url.Action("Index","StaffCategory")">
+                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3 id="mahasiswa">total</h3>
+                    <p>Mahasiswa</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-user-plus"></i>
+                </div>
+                <a class="small-box-footer" href="@Url.Action("Index","Mahasiswa")">
+                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/Scripts/Home.js" type="text/javascript"></script>
+}

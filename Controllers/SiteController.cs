@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using UniversitasApp.Models;
@@ -23,13 +24,13 @@ namespace UniversitasApp.Controllers
             return View();
         }
 
-        [HttpGet("GetSiteList")]
+        [HttpGet("GetAll")]
         public JsonResult TakeAllSite()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var sites = SiteCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                List<Site> sites = SiteCRUD.ReadAll(Startup.db_kampus_ConnStr);
                 if(sites.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
 
                 Object[] data = {
@@ -74,7 +75,7 @@ namespace UniversitasApp.Controllers
             });
         }
 
-        [HttpPost("AddSite")]
+        [HttpPost("Create")]
         public JsonResult MakeData([FromForm] Site s, [FromForm] IFormFile u_file)
         {
             ReturnMessage ress = new ReturnMessage();
@@ -84,7 +85,7 @@ namespace UniversitasApp.Controllers
 
                 if(u_file != null) ImageProcessor.CheckExtention(u_file);
 
-                if(UserCRUD.ReadUsername(Startup.db_kampus_ConnStr, s.u_username) == 1) throw new Exception("", new Exception("Duplicate Username!"));
+                // if(UserCRUD.ReadUsername(Startup.db_kampus_ConnStr, s.u_username) == 1) throw new Exception("", new Exception("Duplicate Username!"));
 
                 s.s_fullname = s.s_fullname;
                 s.s_nik = s.s_nik;
@@ -123,6 +124,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil ditambahkan!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Add Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -133,7 +147,7 @@ namespace UniversitasApp.Controllers
             });
         }
 
-        [HttpPut("EditSite")]
+        [HttpPut("Update")]
         public JsonResult ChangeData([FromForm] Site s, [FromForm] IFormFile u_file)
         {
             ReturnMessage ress = new ReturnMessage();
@@ -183,6 +197,19 @@ namespace UniversitasApp.Controllers
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";
             }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    ress.Code = 0;
+                    ress.Message = "Cant Edit Data, Duplicate Username!";
+                }
+                else
+                {
+                    ress.Code = -1;
+                    ress.Message = ex.Message;
+                }
+            }
             catch (Exception ex)
             {
                 ress.Error(ex);
@@ -193,7 +220,7 @@ namespace UniversitasApp.Controllers
             });
         }
 
-        [HttpDelete("DeleteSite")]
+        [HttpDelete("Delete")]
         public JsonResult EraseData([FromBody] Site s)
         {
             ReturnMessage ress = new ReturnMessage();
