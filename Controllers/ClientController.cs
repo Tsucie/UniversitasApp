@@ -32,7 +32,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<Client> clients = ClientCRUD.ReadAll(Startup.db_kampus_ConnStr);
-                if(clients == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                if(clients.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] obj = {
                     new {DataId = clients.Select(s => s.c_u_id).ToArray()},
@@ -62,7 +62,7 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                if(c_u_id == null) throw new Exception("", new Exception("Data not found, incomplete data!"));
+                if(c_u_id == null) throw new Exception("", new Exception("incomplete data!"));
 
                 Client data = ClientCRUD.Read(Startup.db_kampus_ConnStr, (int)c_u_id);
                 if(data == null) throw new Exception("", new Exception(HttpStatusCode.NoContent.ToString()));
@@ -88,8 +88,6 @@ namespace UniversitasApp.Controllers
                 if(string.IsNullOrEmpty(c.c_name)) throw new Exception("", new Exception("Cant Add data, Incomplete Data!"));
 
                 if(u_file != null) ImageProcessor.CheckExtention(u_file);
-                
-                // if(UserCRUD.ReadUsername(Startup.db_kampus_ConnStr, c.u_username) == 1) throw new Exception("", new Exception("Cant add Data, Duplicate Username!"));
 
                 c.c_code = "C"+DateTime.Now.Ticks.GetHashCode().ToString();
                 c.c_name = c.c_name;
@@ -177,7 +175,7 @@ namespace UniversitasApp.Controllers
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_r_id = (c.u_r_id == null) ? null : c.u_r_id;
-                u.u_password = (c.u_password == null) ? null : Crypto.Hash(c.u_password);
+                u.u_password = (c.u_password == null) ? null : Crypto.Hash(c.u_password, UserEnum.Client_user.GetHashCode());
 
                 UserPhoto up = null;
                 if(u_file != null)

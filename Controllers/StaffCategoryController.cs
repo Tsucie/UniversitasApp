@@ -33,7 +33,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<StaffCategory> list = await Task.Run(() => StaffCategoryCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(list == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                if(list.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = list.Select(c => c.sc_id).ToArray()},
@@ -181,17 +181,20 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<UserStaff> staff = await Task.Run(() => StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(staff == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<UserStaff> staff = await StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr);
+                if(staff.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] obj = {
+                    new {Nomor = staff.Select(s => s.stf_u_id).ToArray()},
+                    new {Username = staff.Select(s => s.u_username).ToArray()},
                     new {DataNama = staff.Select(s => s.stf_fullname).ToArray()},
                     new {DataKategori = staff.Select(s => s.sc_name).ToArray()},
                     new {DataNIK = staff.Select(s => s.stf_nik).ToArray()},
-                    new {DataEmail = staff.Select(s => s.stf_email).ToArray()},
-                    new {DataTelp = staff.Select(s => s.stf_contact).ToArray()},
+                    // new {DataEmail = staff.Select(s => s.stf_email).ToArray()},
+                    // new {DataTelp = staff.Select(s => s.stf_contact).ToArray()},
                     new {DataStat = staff.Select(s => s.stf_stat).ToArray()},
-                    new {DataU_id = staff.Select(s => s.stf_u_id).ToArray()}
+                    new {PhotoFilename = staff.Select(s => s.up_filename).ToArray()},
+                    new {PhotoData = staff.Select(s => s.up_photo).ToArray()}
                 };
 
                 return Json(obj);

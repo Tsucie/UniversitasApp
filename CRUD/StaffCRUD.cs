@@ -1,12 +1,10 @@
 using System;
 using System.Linq;
 using System.Data;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
-using UniversitasApp.Controllers;
 
 namespace UniversitasApp.CRUD
 {
@@ -19,24 +17,48 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = 
-                    "SELECT * FROM db_kampus.staff stf "+
-                        "INNER JOIN db_kampus.staff_category sc ON stf.stf_sc_id = sc.sc_id;";
+            string sqlStr = "SELECT stf.stf_u_id, stf.stf_fullname, stf.stf_nik, stf.stf_stat, sc.sc_name,  "+
+                            "(SELECT up_photo FROM db_kampus.user_photo WHERE stf.stf_u_id = up_u_id) AS up_photo, "+
+                            "(SELECT up_filename FROM db_kampus.user_photo WHERE stf.stf_u_id = up_u_id) AS up_filename, "+
+                            "(SELECT u_username FROM db_kampus.users WHERE stf.stf_u_id = u_id) AS u_username "+
+                            "FROM db_kampus.staff stf "+
+                            "INNER JOIN db_kampus.staff_category sc ON stf.stf_sc_id = sc.sc_id;";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
-            while (_data.ReadAsync().Result)
+            // using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
+            // while (_data.ReadAsync().Result)
+            // {
+            //     us.Add(new UserStaff {
+            //         stf_u_id = _data.GetInt32("stf_u_id"),
+            //         stf_fullname = _data.GetString("stf_fullname"),
+            //         sc_name = _data.GetString("sc_name"),
+            //         stf_nik = _data.GetString("stf_nik"),
+            //         stf_email = _data.GetString("stf_email"),
+            //         stf_contact = (_data.GetString("stf_contact") == null) ? null : _data.GetString("stf_contact"),
+            //         stf_stat = _data.GetInt16("stf_stat")
+            //     });
+            // }
+            DataTable dt = new DataTable();
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            await dataAdapter.FillAsync(dt);
+
+            if (dt.Rows.Count > 0)
             {
-                us.Add(new UserStaff {
-                    stf_u_id = _data.GetInt32("stf_u_id"),
-                    stf_fullname = _data.GetString("stf_fullname"),
-                    sc_name = _data.GetString("sc_name"),
-                    stf_nik = _data.GetString("stf_nik"),
-                    stf_email = _data.GetString("stf_email"),
-                    stf_contact = (_data.GetString("stf_contact") == null) ? null : _data.GetString("stf_contact"),
-                    stf_stat = _data.GetInt16("stf_stat")
-                });
+                foreach (DataRow dr in dt.Rows)
+                {
+                    us.Add(new UserStaff {
+                        stf_u_id = (int?)dr["stf_u_id"],
+                        up_filename = (dr["up_filename"] == DBNull.Value) ? null : (string)dr["up_filename"],
+                        up_photo = (dr["up_photo"] == DBNull.Value) ? null : (byte[])dr["up_photo"],
+                        stf_fullname = (string)dr["stf_fullname"],
+                        u_username = (string)dr["u_username"],
+                        sc_name = (string)dr["sc_name"],
+                        stf_nik = (string)dr["stf_nik"],
+                        stf_stat = (short?)dr["stf_stat"]
+                    });
+                }
             }
+
             _conn.Close();
             return us;
         }

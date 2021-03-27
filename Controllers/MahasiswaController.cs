@@ -33,7 +33,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<UserMahasiswa> mhs = await Task.Run(() => MahasiswaCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(mhs == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                if(mhs.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new {Nama = mhs.Select(s => s.mhs_fullname).ToArray()},

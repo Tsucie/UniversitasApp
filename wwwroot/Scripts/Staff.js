@@ -43,24 +43,32 @@ function StaffDetailDataTable() {
         contentType: "application/json",
         dataType: "json",
         data: null,
-        success: function (obj) {
+        success: function (data) {
             $(table).children('tbody').empty();
             var rowHTML = '';
             let status = '';
-                for (let i = 0; i < obj[0].dataNama.length; i++) {
-                    if (obj[5].dataStat[i] == 1) {
-                        status = '<td class="tb-content status-user"><a class="btn btn-sm btn-success" title="User '+obj[0].dataNama[i]+' berstatus Aktif"><b>Aktif</b></a></td>';
+                for (let i = 0; i < data[0].nomor.length; i++) {
+                    // Photo Render
+                    let stringImg = '<img src="../images/DefaultPPimg.jpg" width="60" height="60" alt="Photo Profile">';
+                    if (data[7].photoData[i] !== null)
+                    {
+                        let fileExt = data[6].photoFilename[i].split('.').pop();
+                        stringImg = '<img src="data:image/'+fileExt+';base64,'+data[7].photoData[i]+'" width="60" height="60" alt="'+data[6].photoFilename[i]+'">';
+                    }
+                    // Status
+                    if (data[5].dataStat[i] == 1) {
+                        status = '<td class="tb-content status-user"><a class="btn btn-sm btn-success" title="User '+data[2].dataNama[i]+' berstatus Aktif"><b>Aktif</b></a></td>';
                     } else {
-                        status = '<td class="tb-content status-user"><a class="btn btn-sm btn-danger" title="User '+obj[0].dataNama[i]+' berstatus Tidak Aktif"><b>Tidak Aktif</b></a></td>';
+                        status = '<td class="tb-content status-user"><a class="btn btn-sm btn-danger" title="User '+data[2].dataNama[i]+' berstatus Tidak Aktif"><b>Tidak Aktif</b></a></td>';
                     }
                     rowHTML = '<tr>' +
-                    '<td class="tb-content">' + obj[0].dataNama[i] + '</td>' +
-                    '<td class="tb-content">' + obj[1].dataKategori[i] + '</td>' +
-                    '<td class="tb-content">' + obj[2].dataNIK[i] + '</td>' +
-                    '<td class="tb-content">' + obj[3].dataEmail[i] + '</td>' +
-                    '<td class="tb-content">' + obj[4].dataTelp[i] + '</td>' +
+                    '<td class="tb-content" style="text-align: center; padding: 10px 0 10px 0px !important;">' + stringImg + '</td>' +
+                    '<td class="tb-content">' + data[1].username[i] + '</td>' +
+                    '<td class="tb-content">' + data[2].dataNama[i] + '</td>' +
+                    '<td class="tb-content">' + data[3].dataKategori[i] + '</td>' +
+                    '<td class="tb-content">' + data[4].dataNIK[i] + '</td>' +
                     status +
-                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnstfedit' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnstfdelete' + i + '\' class="btn" data_id=\'' + obj[6].dataU_id[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
+                    '<td class="tb-content"><a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnstfedit' + i + '\' class="btn" data_id=\'' + data[0].nomor[i] + '\'><i class="fa fa-edit" style="color: blue;"></i></a><a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnstfdelete' + i + '\' class="btn" data_id=\'' + data[0].nomor[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a></td>' +
                     '</tr>';
 
                     $(table).append(rowHTML);

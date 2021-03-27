@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using UniversitasApp.Models;
@@ -29,8 +30,8 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                var roles = RoleCRUD.ReadAll(Startup.db_kampus_ConnStr);
-                if(roles.Equals(null)) throw new Exception("", new Exception("Data Not Found!"));
+                List<Role> roles = RoleCRUD.ReadAll(Startup.db_kampus_ConnStr);
+                if(roles.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new {RoleId = roles.Select(s => s.r_id).ToArray()},

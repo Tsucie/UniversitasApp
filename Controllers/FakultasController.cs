@@ -32,7 +32,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 List<Fakultas> fks = await Task.Run(() => FakultasCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(fks == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                if(fks.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = fks.Select(c => c.fks_id).ToArray()},
@@ -61,7 +61,7 @@ namespace UniversitasApp.Controllers
                 if(ps_fks_id == null) throw new Exception("", new Exception("Fail to render Program Studi Data, no data parameter!"));
 
                 List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFksAsync(Startup.db_kampus_ConnStr, (int)ps_fks_id));
-                if(ps == null) throw new Exception("", new Exception("Data not Found!"));
+                if(ps.Count == 0) throw new Exception("", new Exception("Data not Found!"));
 
                 Object[] data = {
                     new {Nomor = ps.Select(s => s.ps_id).ToArray()},

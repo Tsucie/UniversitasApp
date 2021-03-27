@@ -1,6 +1,5 @@
-@using System;
-@using Microsoft.AspNetCore.Http;
-@using UniversitasApp.General;
+
+@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
@@ -9,11 +8,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@* <div>
-    <h1 class="card-text">Dashboard Home</h1>
-    <h3><b>Welcome</b><em> @HttpContextAccessor.HttpContext.Session.GetString("u_username")</em></h3><br>
-    <h4><b>Date & Time: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</b></h4><br>
-</div> *@
 <!-- Contet Header -->
 <section class="content-header">
     <h1 class="card-text">
@@ -36,7 +30,7 @@
                     <i class="fa fa-users"></i>
                 </div>
                 <a class="small-box-footer" href="@Url.Action("Index","User")">
-                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -50,7 +44,7 @@
                     <i class="fa fa-user-secret"></i>
                 </div>
                 <a class="small-box-footer" href="@Url.Action("Index","Site")">
-                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -64,7 +58,7 @@
                     <i class="fa fa-user"></i>
                 </div>
                 <a class="small-box-footer" href="@Url.Action("Index","StaffCategory")">
-                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -78,7 +72,7 @@
                     <i class="fa fa-user-plus"></i>
                 </div>
                 <a class="small-box-footer" href="@Url.Action("Index","Mahasiswa")">
-                    Selengkapnya<i class="fa fa-arrow-circle-right"></i>
+                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>

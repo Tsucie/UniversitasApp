@@ -18,9 +18,9 @@ namespace UniversitasApp.CRUD
             _conn.Open();
 
             string sqlStr = "SELECT c.c_u_id, c.c_code, u.u_username, c.c_name, c.c_remark, "+
-            " (SELECT up_photo FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_photo, "+
-            " (SELECT up_filename FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_filename "+
-            " FROM `db_kampus`.`client` c INNER JOIN `db_kampus`.`users` u ON u.u_id = c.c_u_id;";
+                            " (SELECT up_photo FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_photo, "+
+                            " (SELECT up_filename FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_filename "+
+                            " FROM `db_kampus`.`client` c INNER JOIN `db_kampus`.`users` u ON u.u_id = c.c_u_id;";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
             DataTable dt = new DataTable();
@@ -58,21 +58,12 @@ namespace UniversitasApp.CRUD
             _conn.Open();
 
             string sqlStr = "SELECT c.c_id, c.c_u_id, u.u_username, c.c_name, c.c_remark, "+
-            " (SELECT up_photo FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_photo, "+
-            " (SELECT up_filename FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_filename "+
-            " FROM `db_kampus`.`client` c INNER JOIN `db_kampus`.`users` u ON u.u_id = c.c_u_id"+
-            " WHERE (`c_u_id` = '"+c_u_id+"');";
+                            " (SELECT up_photo FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_photo, "+
+                            " (SELECT up_filename FROM db_kampus.user_photo WHERE c.c_u_id = up_u_id) AS up_filename "+
+                            " FROM `db_kampus`.`client` c INNER JOIN `db_kampus`.`users` u ON u.u_id = c.c_u_id"+
+                            " WHERE (`c_u_id` = '"+c_u_id+"');";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            // using MySqlDataReader _data = _cmd.ExecuteReader();
-            // if(_data.Read().Equals(true))
-            // {
-            //     c.c_id = _data.GetInt32(0);
-            //     c.c_u_id = _data.GetInt32(1);
-            //     c.u_username = _data.GetString(2);
-            //     c.c_name = _data.GetString(3);
-            //     c.c_remark = _data.GetString(4);
-            // }
             DataTable dt = new DataTable();
 
             MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
@@ -139,22 +130,22 @@ namespace UniversitasApp.CRUD
                 rp.rp_id = rand.Next(int.MinValue, int.MaxValue);
                 rp.rp_r_id = r.r_id;
 
-                Console.WriteLine("\nCreating Data :");
+                // Console.WriteLine("\nCreating Data :");
                 affectedRows += RoleCRUD.CreateAlive(_conn, r);
-                Console.WriteLine("\n Role : {0}", affectedRows);
+                // Console.WriteLine("\n Role : {0}", affectedRows);
                 affectedRows += UserCRUD.CreateAlive(_conn, u);
-                Console.WriteLine("\n Users : {0}", affectedRows);
+                // Console.WriteLine("\n Users : {0}", affectedRows);
                 if (up != null)
                 {
                     up.up_id = rand.Next(int.MinValue, int.MaxValue);
                     up.up_u_id = u.u_id;
                     affectedRows += UserCRUD.CreatePhotoAlive(_conn, up);
-                    Console.WriteLine("\n Photo : {0}", affectedRows);
+                    // Console.WriteLine("\n Photo : {0}", affectedRows);
                 }
                 affectedRows += CreateAlive(_conn, c);
-                Console.WriteLine("\n Client : {0}", affectedRows);
+                // Console.WriteLine("\n Client : {0}", affectedRows);
                 affectedRows += RolePreviledgeCRUD.CreateAlive(_conn, rp);
-                Console.WriteLine("\n RolePreviledge : {0}", affectedRows);
+                // Console.WriteLine("\n RolePreviledge : {0}", affectedRows);
 
                 if(affectedRows != 5-(up == null ? 1 : 0)) throw new Exception();
 

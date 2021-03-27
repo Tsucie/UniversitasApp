@@ -38,7 +38,6 @@ function ClientDataTable() {
         dataType: "json",
         data: null,
         success: function (data) {
-            // console.log(data);
             $(table).children('tbody').empty();
             var rowHTML = '';
                 for (let i = 0; i < data[2].dataUsername.length; i++) {
@@ -96,6 +95,7 @@ function validasi() {
 // Modals for Add Data
 function ShowAddModals() {
     actionTitle = 'Add Client';
+    $('#profile-img').attr('src','images/DefaultPPimg.jpg');
     $('#u_username').val('');
     $('#u_password').val('');
     $('#c_name').val('');
@@ -125,7 +125,7 @@ function addClient() {
     var formData = new FormData();
     let imgFile = $('#u_file');
     if (imgFile[0].files[0] != null)
-        formData.append("u_file", $('#u_file')[0].files[0], $('#u_file').val());
+        formData.append("u_file", imgFile[0].files[0], imgFile.val());
     
     formData.append("u_username", $('#u_username').val());
     formData.append("u_password", $('#u_password').val());
@@ -143,7 +143,8 @@ function addClient() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.reload() }, 2000);
+                // setTimeout(function () { window.location.reload() }, 2000);
+                ClientDataTable();
             }
             else {
                 pesanAlert(data);
@@ -219,7 +220,7 @@ function UpdateClient() {
     var formData = new FormData();
     let imgFile = $('#u_file');
     if (imgFile[0].files[0] != null)
-        formData.append("u_file", $('#u_file')[0].files[0], $('#u_file').val());
+        formData.append("u_file", imgFile[0].files[0], imgFile.val());
     
     formData.append("c_id", edit.c_id);
     formData.append("c_u_id", edit.c_u_id);
@@ -240,7 +241,8 @@ function UpdateClient() {
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
-                setTimeout(function () { window.location.reload() }, 2000);
+                // setTimeout(function () { window.location.reload() }, 2000);
+                ClientDataTable();
             }
             else {
                 pesanAlert(data);
@@ -271,7 +273,8 @@ function ClientDelete(obj) {
             success: function (data) {
                 if(data.code === 1) {
                     pesanAlert(data);
-                    setTimeout(function () { window.location.reload() }, 2000);
+                    // setTimeout(function () { window.location.reload() }, 2000);
+                    ClientDataTable();
                 }
                 else {
                     pesanAlert(data);

@@ -3,14 +3,163 @@
     ViewBag.Logo = "Rektor & Wakil Rektor";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!-- .modal -->
+<div class="modal fade" id="AddEditModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <img id="profile-img" src="" width="100" height="100"/>
+                        <span>
+                            <label for="u_file" class="control-label">Photo Profile</label>
+                            <input type="file" class="form-control-file" id="u_file" accept="image/*">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="u_username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control form-inputs" placeholder="Username" id="u_username">
+                        <div hidden id="username-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Username tidak boleh kosong!
+                        </div>
+                    </div>
+                </div>
+                <div hidden class="form-group" id="pass-txtbox">
+                    <label for="u_password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-5">
+                        <input type="password" class="form-control form-inputs" placeholder="Password" id="u_password">
+                        <div hidden id="password-alrt" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Password Tidak boleh kosong!
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_fullname" class="col-sm-2 control-label">Nama Lengkap</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Nama Lengkap" id="s_fullname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Email" id="s_email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_contact" class="col-sm-2 control-label">Kontak</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control form-inputs" placeholder="Nomor Telepon" id="s_contact">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="r_desc" class="col-sm-2 control-label">Jabatan</label>
+                    <div class="col-sm-4">
+                        <select class="form-control form-inputs" id="r_desc">
+                            <option value="Rektor">Rektor</option>
+                            <option value="Wakil Rektor">Wakil rektor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_nik" class="col-sm-2 control-label">NIK</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control form-inputs" placeholder="Nomor Induk Kepegawaian" id="s_nik">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_address" class="col-sm-2 control-label">Alamat</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Alamat Jalan, Perumahan, kelurahan, dan kecamatan" id="s_address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_city" class="col-sm-2 control-label">Kota</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Kota tempat tinggal" id="s_city">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_province" class="col-sm-2 control-label">Provinsi</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Provinsi tempat tinggal" id="s_province">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_birthplace" class="col-sm-2 control-label">Tempat Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Kota Asal" id="s_birthplace">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_birthdate" class="col-sm-2 control-label">Tanggal Lahir</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control form-inputs" placeholder="Tanggal kelahiran" id="s_birthdate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_gender" class="col-sm-2 control-label">Jenis Kelamin</label>
+                    <div class="col-sm-4">
+                        <select class="form-control form-inputs" id="s_gender">
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_religion" class="col-sm-2 control-label">Agama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Agama" id="s_religion">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_state" class="col-sm-2 control-label">Negara</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" placeholder="Warga Negara" id="s_state">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="s_stat" class="col-sm-2 control-label">Status</label>
+                    <div class="col-sm-4">
+                        <select class="form-control form-inputs" id="s_stat">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Kembali</button>
+        <button type="button" class="btn btn-success" id="btn-add-site">Tambah</button>
+        <button type="button" class="btn btn-success" id="btn-edit-site">Edit</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <!-- Contet Header -->
 <section class="content-header">
     <h1 class="card-text">
-    Rektor & Wakil Rektor
+    Rektor &amp; Wakil Rektor
     </h1>
     <ol class="breadcrumb">
         <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Rektor & Wakil Rektor</li>
+        <li class="active">Rektor &amp; Wakil Rektor</li>
     </ol>
 </section>
 <!-- Main Content -->
@@ -19,14 +168,14 @@
         <div class="col-xs-12">
             <div class="box card-custom">
                 <div class="box-header">
-                    <h2 class="box-title"><b>Rektor & Wakil Rektor List</b></h2>
+                    <h2 class="box-title"><b>Rektor &amp; Wakil Rektor List</b></h2>
                 </div>
                 <div class="box-body">
-                    @* <div>
+                    <div>
                         <label>
-                            <a class="btn btn-sm btn-success card-btn" data-toggle="modal" data-target="#AddEditModal" id="Add-btn"><strong>Add Staff Kategori</strong></a>
+                            <a class="btn btn-sm btn-success card-btn" data-toggle="modal" data-target="#AddEditModal" id="Add-btn"><strong>Add Site</strong></a>
                         </label>
-                    </div> *@
+                    </div>
                     <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
                         <div id="spinner" class=""></div></div>
                         <div class="row">
@@ -34,9 +183,11 @@
                                 <table id="tblSite" class="table table-bordered table-striped table-hover">
                                     <thead class="bg-me">
                                         <tr>
+                                            <th>Photo</th>
                                             <th>Username<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Nama Lengkap<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Nik<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Jabatan<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Status<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
                                             <th>Action</th>
                                         </tr>

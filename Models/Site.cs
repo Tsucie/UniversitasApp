@@ -25,5 +25,12 @@ namespace UniversitasApp.Models
         public int? u_r_id { get; set; }
         public string u_username { get; set; }
         public string u_password { get; set; }
+
+        // user_photo
+        public string up_filename { get; set; }
+        public byte[] up_photo { get; set; }
+
+        // Role
+        public string r_desc { get; set; }
     }
 }
