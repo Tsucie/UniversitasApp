@@ -139,6 +139,15 @@
         <form id="form-stf" class="form-horizontal">
             <div class="box-body">
                 <div class="form-group">
+                    <div class="col-sm-5">
+                        <img id="profile-img" src="images/DefaultPPimg.jpg" width="100" height="100"/>
+                        <div>
+                            <label for="u_file" class="control-label">Photo Profile</label>
+                            <input type="file" class="form-control-file" id="u_file" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="u_username" class="col-sm-2 control-label">UserName</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control form-inputs" name="UserName" placeholder="UserName" id="u_username">
@@ -169,7 +178,27 @@
                 <div class="form-group">
                     <label for="stf_sc_id" class="col-sm-2 control-label">Kategori Staff</label>
                     <div class="col-sm-2">
-                        <select class="form-control form-inputs" id="select-stfcategory"></select>
+                        <select class="form-control form-inputs" id="select-stfcategory" name="stf_sc_id"></select>
+                    </div>
+                </div>
+                <div class="form-group" id="fakultas-input" hidden>
+                    <label for="stf_fks_id" class="col-sm-2 control-label">Fakultas</label>
+                    <div class="col-sm-2">
+                        <select class="form-control form-inputs" id="select-fakultas" name="stf_fks_id">
+                            <option selected>Pilih</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="prodi-input" hidden>
+                    <label for="stf_ps_id" class="col-sm-2 control-label">Program Studi</label>
+                    <div class="col-sm-3">
+                        <select class="form-control form-inputs" id="select-prodi" name="stf_ps_id"></select>
+                    </div>
+                </div>
+                <div class="form-group" id="matkul-input" hidden>
+                    <label for="stf_mk_id" class="col-sm-2 control-label">Mata Kuliah</label>
+                    <div class="col-sm-4">
+                        <select class="form-control form-inputs" id="select-matkul" name="stf_mk_id"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -258,7 +287,7 @@
                 </div>
             </div>
             <div class="box-footer card-custom">
-                <button class="btn btn-default" role="button" id="btn-cancel-stf">Cancel</button>
+                <button class="btn btn-default" type="button" id="btn-cancel-stf">Cancel</button>
                 <a><button type="button" class="btn btn-success pull-right" id="btn-create-stf">Create</button></a>
                 <a><button type="button" class="btn btn-success pull-right" id="btn-edit-stf">Edit</button></a>
             </div>

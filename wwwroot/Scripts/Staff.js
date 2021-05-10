@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $("#active-link").text('Kategori Staff & Staff');
     StaffDetailDataTable();
+    GetFakultas();
     $("#add-staff-btn").click(function () {
         addStaffPage();
         $("#active-link").text('Add Staff');
@@ -21,6 +22,55 @@ $(document).ready(function () {
     });
 });
 
+$('#u_file').on('change', function () {
+    readUrl(this, '#profile-img');
+});
+
+function readUrl(input, selector) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $(selector).attr('src',e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Responsive Select Box
+$('#select-stfcategory').on('change', function () {
+    if (this.value === '1' || this.value === '2' || this.value === '3') {
+        $('#fakultas-input').show();
+        if (this.value === '2' || this.value === '3') {
+            GetProdi(parseInt($("#select-fakultas").val()));
+            if (this.value === '3') {
+                GetMatkul(parseInt(this.value));
+            }
+            else {
+                $('#matkul-input').hide();
+            }
+        }
+        else {
+            $('#prodi-input').hide();
+            $('#matkul-input').hide();
+        }
+    }
+    else {
+        $('#fakultas-input').hide();
+        $('#prodi-input').hide();
+        $('#matkul-input').hide();
+    }
+});
+$("#select-fakultas").on('change', function () {
+    if ($('#select-stfcategory').val() === '2' || $('#select-stfcategory').val() === '3') {
+        GetProdi(parseInt(this.value));
+    }
+});
+$("#select-prodi").on('change', function () {
+    if ($('#select-stfcategory').val() === '3') {
+        GetMatkul(parseInt(this.value));
+    }
+});
+
 function ShowForm() {
     $("#category-table").hide();
     $("#staff-table").hide();
@@ -32,6 +82,29 @@ function ShowTables() {
     $("#form-content").hide();
     $("#category-table").show();
     $("#staff-table").show();
+    $('#select-fakultas').empty();
+    $('#fakultas-input').hide();
+    $('#prodi-input').hide();
+    $('#matkul-input').hide();
+    ClearInputs();
+}
+
+function ClearInputs() {
+    $('#profile-img').attr('src','images/DefaultPPimg.jpg');
+    $('#u_file').val(null);
+    $('#u_username').val('');
+    $('#u_password').val('');
+    $('#stf_fullname').val('');
+    $('#stf_email').val('');
+    $('#stf_contact').val('');
+    $('#stf_nik').val('');
+    $('#stf_address').val('');
+    $('#stf_city').val('');
+    $('#stf_province').val('');
+    $('#stf_birthplace').val('');
+    $('#stf_birthdate').val('');
+    $('#stf_religion').val('');
+    $('#stf_state').val('');
 }
 
 function StaffDetailDataTable() {
@@ -103,7 +176,8 @@ function addStaffPage() {
         dataType: "json",
         data: null,
         success: function (data) {
-            $(comboBox).children('select').empty();
+            $(comboBox).empty();
+            $(comboBox).append('<option selected>Pilih</option>'); // default option
             var opsi = '';
             for (let i = 0; i < data[0].nomor.length; i++) {
                 opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[2].deskripsi[i]+'">'+data[1].kategori[i]+'</option>';
@@ -134,35 +208,50 @@ function addStaff() {
     if(res == false) {
         return false;
     }
-    var Data = {
-        //users
-        "u_username": $("#u_username").val(),
-        "u_password": $("#u_password").val(),
-        //stf_detail
-        "stf_sc_id": parseInt($("#select-stfcategory").val()),
-        // "stf_fks_id": parseInt($("#select-fakultas").val()),
-        "stf_fullname": $("#stf_fullname").val(),
-        "stf_nik": $("#stf_nik").val(),
-        "stf_address": $("#stf_address").val(),
-        "stf_province": $("#stf_province").val(),
-        "stf_city": $("#stf_city").val(),
-        "stf_birthplace": $("#stf_birthplace").val(),
-        "stf_birthdate": $("#stf_birthdate").val(),
-        "stf_gender": $("#select-gender").val(),
-        "stf_religion": $("#stf_religion").val(),
-        "stf_state": $("#stf_state").val(),
-        "stf_email": $("#stf_email").val(),
-        "stf_stat": parseInt($("#select-status").val()),
-        "stf_contact": $("#stf_contact").val()
-    };
+    var formData = new FormData();
+    let imgFile = $('#u_file');
+    if (imgFile[0].files[0] != null)
+        formData.append("u_file", imgFile[0].files[0], imgFile.val());
+    
+    let sc_id = parseInt($('#select-stfcategory').val());
+    formData.append("u_username", $('#u_username').val());
+    formData.append("u_password", $('#u_password').val());
+    formData.append("stf_sc_id", sc_id);
+    if (sc_id === 1 || sc_id === 2 || sc_id === 3) {
+        formData.append("stf_fks_id", parseInt($('#select-fakultas').val()));
+        if (sc_id === 2 || sc_id === 3)
+        {
+            formData.append("stf_ps_id", parseInt($('#select-prodi').val()));
+            if (sc_id === 3) {
+                formData.append("stf_mk_id", parseInt($('#select-matkul').val()));
+            }
+        }
+    }
+    formData.append("stf_fullname", $('#stf_fullname').val());
+    formData.append("stf_email", $('#stf_email').val());
+    formData.append("stf_contact", $('#stf_contact').val());
+    formData.append("stf_nik", $('#stf_nik').val());
+    formData.append("stf_address", $('#stf_address').val());
+    formData.append("stf_city", $('#stf_city').val());
+    formData.append("stf_province", $('#stf_province').val());
+    formData.append("stf_birthdate", $('#stf_birthdate').val());
+    formData.append("stf_birthplace", $('#stf_birthplace').val());
+    formData.append("stf_gender", $('#select-gender').val());
+    formData.append("stf_religion", $('#stf_religion').val());
+    formData.append("stf_state", $('#stf_state').val());
+    formData.append("stf_stat", parseInt($('#select-status').val()));
+
     $.ajax({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
+        // headers: {
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json'
+        // },
         type: "POST",
         url: "/StaffCategory/AddStaff/Create",
-        data: JSON.stringify(Data),
+        // data: JSON.stringify(Data),
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
@@ -208,6 +297,10 @@ function clickStaffEdit(obj) {
             }
             else {
                 obj_id.stf_id = data.stf_id;
+                if (data.up_photo !== null) {
+                    let fileExt = data.up_filename.split('.').pop();
+                    $('#profile-img').attr('src', 'data:image/'+fileExt+';base64,'+data.up_photo+'');
+                }
                 $("#u_username").val(data.u_username);
                 $("#select-stfcategory").val(''+data.stf_sc_id);
                 $("#stf_fullname").val(data.stf_fullname);
@@ -240,31 +333,39 @@ function updateStaff() {
         $("#username-alrt").show();
         return false;
     }
-    var Data = {
-        "stf_id": edit.stf_id,
-        "stf_u_id": edit.stf_u_id,
-        "u_username": $("#u_username").val(),
-        "stf_sc_id": parseInt($("#select-stfcategory").val()),
-        "stf_fullname": $("#stf_fullname").val(),
-        "stf_nik": $("#stf_nik").val(),
-        "stf_address": $("#stf_address").val(),
-        "stf_province": $("#stf_province").val(),
-        "stf_city": $("#stf_city").val(),
-        "stf_birthplace": $("#stf_birthplace").val(),
-        "stf_birthdate": $("#stf_birthdate").val(),
-        "stf_gender": $("#select-gender").val(),
-        "stf_religion": $("#stf_religion").val(),
-        "stf_state": $("#stf_state").val(),
-        "stf_email": $("#stf_email").val(),
-        "stf_stat": parseInt($("#select-status").val()),
-        "stf_contact": $("#stf_contact").val()
-    };
+    var formData = new FormData();
+    let imgFile = $('#u_file');
+    if (imgFile[0].files[0] != null)
+        formData.append("u_file", imgFile[0].files[0], imgFile.val());
+    
+    formData.append("stf_id", edit.stf_id);
+    formData.append("stf_u_id", edit.stf_u_id);
+    formData.append("u_username", $('#u_username').val());
+    formData.append("u_password", $('#u_password').val());
+    formData.append("stf_sc_id", parseInt($("#select-stfcategory").val()));
+    formData.append("stf_fullname", $('#stf_fullname').val());
+    formData.append("stf_email", $('#stf_email').val());
+    formData.append("stf_contact", $('#stf_contact').val());
+    formData.append("stf_nik", $('#stf_nik').val());
+    formData.append("stf_address", $('#stf_address').val());
+    formData.append("stf_city", $('#stf_city').val());
+    formData.append("stf_province", $('#stf_province').val());
+    formData.append("stf_birthdate", $('#stf_birthdate').val());
+    formData.append("stf_birthplace", $('#stf_birthplace').val());
+    formData.append("stf_gender", $('#select-gender').val());
+    formData.append("stf_religion", $('#stf_religion').val());
+    formData.append("stf_state", $('#stf_state').val());
+    formData.append("stf_stat", parseInt($('#select-status').val()));
+
     $.ajax({
         type: "PUT",
         url: "/StaffCategory/UpdateStaff/Update",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(Data),
+        // contentType: "application/json",
+        // dataType: "json",
+        // data: JSON.stringify(Data),
+        processData: false,
+        contentType: false,
+        data: formData,
         success: function (data) {
             if(data.code === 1) {
                 pesanAlert(data);
@@ -306,4 +407,88 @@ function clickStaffDelete(obj) {
             }
         });
     }
+}
+
+function GetFakultas() {
+    let comboBox = $('#select-fakultas');
+    $.ajax({
+        type: "GET",
+        url: "/Fakultas/GetList",
+        contentType: "application/json",
+        dataType: "json",
+        data: null,
+        success: function (data) {
+            // $(comboBox).empty();
+            let opsi = '';
+            for (let i = 0; i < data[0].nomor.length; i++) {
+                opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[2].deskripsi[i]+'">'+data[1].fakultas[i]+'</option>';
+                $(comboBox).append(opsi);
+            }
+        },
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        }
+    });
+}
+
+function GetProdi(fks_id = 0) {
+    let comboBox = $('#select-prodi');
+    $.ajax({
+        type: "GET",
+        url: "/Fakultas/GetListById/" + fks_id,
+        contentType: "application/json",
+        dataType: "json",
+        data: fks_id,
+        success: function (data) {
+            if(data.code === 0 || data.code === -1) {
+                pesanAlert(data);
+            }
+            else {
+                $(comboBox).empty(); // Set to empty every Fakultas ComboBox Change event
+                $(comboBox).append('<option selected>Pilih</option>'); // default option
+                let opsi = '';
+                for (let i = 0; i < data[0].nomor.length; i++) {
+                    opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[3].deskripsi[i]+'">'+data[2].prodi[i]+'</option>';
+                    $(comboBox).append(opsi);
+                }
+            }
+        },
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        },
+        complete: function () {
+            $('#prodi-input').show();
+        }
+    });
+}
+
+function GetMatkul(ps_id = 0) {
+    let comboBox = $('#select-matkul');
+    $.ajax({
+        type: "GET",
+        url: "/MataKuliah/GetListById/" + ps_id,
+        contentType: "application/json",
+        dataType: "json",
+        data: ps_id,
+        success: function (data) {
+            if(data.code === 0 || data.code === -1) {
+                pesanAlert(data);
+            }
+            else {
+                $(comboBox).empty(); // Set to empty every Prodi ComboBox Change event
+                $(comboBox).append('<option selected>Pilih</option>'); // default option
+                let opsi = '';
+                for (let i = 0; i < data[0].nomor.length; i++) {
+                    opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[7].desc[i]+'">('+data[8].smcode[i]+') ('+data[5].mkcode[i]+') '+data[6].name[i]+'</option>';
+                    $(comboBox).append(opsi);
+                }
+            }
+        },
+        error: function () {
+            notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
+        },
+        complete: function () {
+            $('#matkul-input').show();
+        }
+    });
 }

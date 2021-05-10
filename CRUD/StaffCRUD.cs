@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using System.Data;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
 
@@ -11,7 +9,7 @@ namespace UniversitasApp.CRUD
     public sealed class StaffCRUD
     {
         // Read All staff Table
-        public static async Task<List<UserStaff>> ReadAllAsync(string connStr)
+        public static List<UserStaff> ReadAll(string connStr)
         {
             List<UserStaff> us = new List<UserStaff>();
             using var _conn = new MySqlConnection(connStr);
@@ -25,22 +23,9 @@ namespace UniversitasApp.CRUD
                             "INNER JOIN db_kampus.staff_category sc ON stf.stf_sc_id = sc.sc_id;";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            // using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
-            // while (_data.ReadAsync().Result)
-            // {
-            //     us.Add(new UserStaff {
-            //         stf_u_id = _data.GetInt32("stf_u_id"),
-            //         stf_fullname = _data.GetString("stf_fullname"),
-            //         sc_name = _data.GetString("sc_name"),
-            //         stf_nik = _data.GetString("stf_nik"),
-            //         stf_email = _data.GetString("stf_email"),
-            //         stf_contact = (_data.GetString("stf_contact") == null) ? null : _data.GetString("stf_contact"),
-            //         stf_stat = _data.GetInt16("stf_stat")
-            //     });
-            // }
             DataTable dt = new DataTable();
             MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
-            await dataAdapter.FillAsync(dt);
+            dataAdapter.Fill(dt);
 
             if (dt.Rows.Count > 0)
             {
@@ -69,39 +54,76 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT stf.stf_id, stf.stf_u_id, stf.stf_sc_id, stf.stf_fullname, stf.stf_nik, stf.stf_address, stf.stf_province, stf.stf_city, stf.stf_birthplace, stf.stf_birthdate, stf.stf_gender, stf.stf_religion, stf.stf_state, stf.stf_email, stf.stf_stat, stf.stf_contact, u.u_id, u.u_ut_id, u.u_username"+ 
-            //stf.stf_fks_id, stf.stf_ps_id, stf.stf_mk_id"+
+            string sqlStr = "SELECT stf.stf_id, stf.stf_u_id, stf.stf_sc_id, stf.stf_fullname, stf.stf_nik, stf.stf_address, stf.stf_province, stf.stf_city, stf.stf_birthplace, stf.stf_birthdate, stf.stf_gender, stf.stf_religion, stf.stf_state, stf.stf_email, stf.stf_stat, stf.stf_contact, u.u_id, u.u_ut_id, u.u_username, stf.stf_fks_id, stf.stf_ps_id, stf.stf_mk_id,"+
+            " (SELECT up_photo FROM db_kampus.user_photo WHERE stf.stf_u_id = up_u_id) AS up_photo,"+
+            " (SELECT up_filename FROM db_kampus.user_photo WHERE stf.stf_u_id = up_u_id) AS up_filename"+
             " FROM db_kampus.staff stf INNER JOIN users u ON stf.stf_u_id = u.u_id"+
             " WHERE stf.stf_u_id = '"+stf_u_id+"';";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _cmd.ExecuteReader();
-            if(_data.Read())
+            DataTable dt = new DataTable();
+
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            dataAdapter.Fill(dt);
+
+            if (dt.Rows.Count > 0)
             {
                 stf = new UserStaff();
-                stf.stf_id = _data.GetInt32(0);
-                stf.stf_u_id = _data.GetInt32(1);
-                stf.stf_sc_id = _data.GetInt32(2);
-                stf.stf_fullname = _data.GetString(3);
-                stf.stf_nik = _data.GetString(4);
-                stf.stf_address = _data.GetString(5);
-                stf.stf_province = _data.GetString(6);
-                stf.stf_city = _data.GetString(7);
-                stf.stf_birthplace = _data.GetString(8);
-                stf.stf_birthdate = _data.GetDateTime(9).ToString("yyyy-MM-dd");
-                stf.stf_gender = _data.GetString(10);
-                stf.stf_religion = _data.GetString(11);
-                stf.stf_state = _data.GetString(12);
-                stf.stf_email = _data.GetString(13);
-                stf.stf_stat = _data.GetInt16(14);
-                stf.stf_contact = _data.GetString(15);
-                stf.u_id = _data.GetInt32(16);
-                stf.u_ut_id = _data.GetInt32(17);
-                stf.u_username = _data.GetString(18).Replace("@","");
-                // stf.stf_fks_id = (_data.GetInt32(19).Equals(null)) ? (int?)null : _data.GetInt32(19);
-                // stf.stf_ps_id = (_data.GetInt32(20).Equals(null)) ? (int?)null : _data.GetInt32(20);
-                // stf.stf_mk_id = (_data.GetInt32(21).Equals(null)) ? (int?)null : _data.GetInt32(21);
+                if (dt.Rows[0]["up_filename"] != DBNull.Value)
+                {
+                    stf.up_photo = (byte[])dt.Rows[0]["up_photo"];
+                    stf.up_filename = (string)dt.Rows[0]["up_filename"];
+                }
+                stf.stf_id = (int)dt.Rows[0]["stf_id"];
+                stf.stf_u_id = (int)dt.Rows[0]["stf_u_id"];
+                stf.stf_sc_id = (int)dt.Rows[0]["stf_sc_id"];
+                stf.stf_fullname = (string)dt.Rows[0]["stf_fullname"];
+                stf.stf_nik = (string)dt.Rows[0]["stf_nik"];
+                stf.stf_address = (string)dt.Rows[0]["stf_address"];
+                stf.stf_province = (string)dt.Rows[0]["stf_province"];
+                stf.stf_city = (string)dt.Rows[0]["stf_city"];
+                stf.stf_birthplace = (string)dt.Rows[0]["stf_birthplace"];
+                stf.stf_birthdate = Convert.ToDateTime(dt.Rows[0]["stf_birthdate"]).ToString("yyyy-MM-dd");
+                stf.stf_gender = (string)dt.Rows[0]["stf_gender"];
+                stf.stf_religion = (string)dt.Rows[0]["stf_religion"];
+                stf.stf_state = (string)dt.Rows[0]["stf_state"];
+                stf.stf_email = (string)dt.Rows[0]["stf_email"];
+                stf.stf_stat = (short)dt.Rows[0]["stf_stat"];
+                stf.stf_contact = (string)dt.Rows[0]["stf_contact"];
+                stf.u_id = (int)dt.Rows[0]["u_id"];
+                stf.u_ut_id = (int)dt.Rows[0]["u_ut_id"];
+                stf.u_username = dt.Rows[0]["u_username"].ToString().Replace("@","");
+                stf.stf_fks_id = (dt.Rows[0]["stf_fks_id"] == DBNull.Value) ? (int?)null : (int)dt.Rows[0]["stf_fks_id"];
+                stf.stf_ps_id = (dt.Rows[0]["stf_ps_id"] == DBNull.Value) ? (int?)null : (int)dt.Rows[0]["stf_ps_id"];
+                stf.stf_mk_id = (dt.Rows[0]["stf_mk_id"] == DBNull.Value) ? (int?)null : (int)dt.Rows[0]["stf_mk_id"];
             }
+            // using MySqlDataReader _data = _cmd.ExecuteReader();
+            // if(_data.Read())
+            // {
+            //     stf = new UserStaff();
+            //     stf.stf_id = _data.GetInt32(0);
+            //     stf.stf_u_id = _data.GetInt32(1);
+            //     stf.stf_sc_id = _data.GetInt32(2);
+            //     stf.stf_fullname = _data.GetString(3);
+            //     stf.stf_nik = _data.GetString(4);
+            //     stf.stf_address = _data.GetString(5);
+            //     stf.stf_province = _data.GetString(6);
+            //     stf.stf_city = _data.GetString(7);
+            //     stf.stf_birthplace = _data.GetString(8);
+            //     stf.stf_birthdate = _data.GetDateTime(9).ToString("yyyy-MM-dd");
+            //     stf.stf_gender = _data.GetString(10);
+            //     stf.stf_religion = _data.GetString(11);
+            //     stf.stf_state = _data.GetString(12);
+            //     stf.stf_email = _data.GetString(13);
+            //     stf.stf_stat = _data.GetInt16(14);
+            //     stf.stf_contact = _data.GetString(15);
+            //     stf.u_id = _data.GetInt32(16);
+            //     stf.u_ut_id = _data.GetInt32(17);
+            //     stf.u_username = _data.GetString(18).Replace("@","");
+            //     stf.stf_fks_id = (_data.GetInt32(19).Equals(null)) ? (int?)null : _data.GetInt32(19);
+            //     stf.stf_ps_id = (_data.GetInt32(20).Equals(null)) ? (int?)null : _data.GetInt32(20);
+            //     stf.stf_mk_id = (_data.GetInt32(21).Equals(null)) ? (int?)null : _data.GetInt32(21);
+            // }
             _conn.Close();
             return stf;
         }
@@ -140,6 +162,7 @@ namespace UniversitasApp.CRUD
             _connection.Close();
             return affectedRow;
         }
+
         public static int CreateAlive(MySqlConnection _conn, UserStaff stf)
         {
             int affectedRow = 0;
@@ -172,25 +195,52 @@ namespace UniversitasApp.CRUD
 
             return affectedRow;
         }
-        public static bool CreateStaffAndUsers(string connStr, UserStaff stf, Users u)
+
+        public static bool CreateStaffAndUsers(string connStr, UserStaff stf, Users u, Role r = null, RolePreviledge rp = null, UserPhoto up = null)
         {
             bool result = false;
+            Random rand = null;
             MySqlConnection _conn = null;
             MySqlCommand _cmd = null;
             MySqlTransaction sqlTrans = null;
             try
             {
+                rand = new Random();
                 _cmd = new MySqlCommand();
                 _conn = new MySqlConnection(connStr);
                 _conn.Open();
                 sqlTrans = _conn.BeginTransaction();
                 _cmd.Transaction = sqlTrans;
 
-                int affectedRow = 0;
-                affectedRow += UserCRUD.CreateAlive(_conn, u);
-                affectedRow += CreateAlive(_conn, stf);
+                int affectedRows = 0;
+                u.u_id = rand.Next(int.MinValue, int.MaxValue);
+                stf.stf_id = rand.Next(int.MinValue, int.MaxValue);
+                stf.stf_u_id = u.u_id;
+                Console.WriteLine("\nCreating Data :");
+                if (r != null && rp != null)
+                {
+                    r.r_id = rand.Next(int.MinValue, int.MaxValue);
+                    u.u_r_id = r.r_id;
+                    rp.rp_id = rand.Next(int.MinValue, int.MaxValue);
+                    rp.rp_r_id = r.r_id;
+                    affectedRows += RoleCRUD.CreateAlive(_conn, r);
+                    Console.WriteLine("\n Role : {0}", affectedRows);
+                    affectedRows += RolePreviledgeCRUD.CreateAlive(_conn, rp);
+                    Console.WriteLine("\n RolePreviledge : {0}", affectedRows);
+                }
+                affectedRows += UserCRUD.CreateAlive(_conn, u);
+                Console.WriteLine("\n Users : {0}", affectedRows);
+                if(up != null)
+                {
+                    up.up_id = rand.Next(int.MinValue, int.MaxValue);
+                    up.up_u_id = u.u_id;
+                    affectedRows += UserCRUD.CreatePhotoAlive(_conn, up);
+                    Console.WriteLine("\n Photo : {0}", affectedRows);
+                }
+                affectedRows += CreateAlive(_conn, stf);
+                Console.WriteLine("\n Staff : {0}", affectedRows);
 
-                if(affectedRow != 2) throw new Exception();
+                if(affectedRows != 2 + (((r != null && rp != null) ? 2 : 0) + (up != null ? 1 : 0))) throw new Exception();
 
                 sqlTrans.Commit();
                 result = true;
@@ -263,7 +313,7 @@ namespace UniversitasApp.CRUD
 
             return affectedRow;
         }
-        public static bool UpdateStaffandUser(string connStr, UserStaff stf, Users u)
+        public static bool UpdateStaffandUser(string connStr, UserStaff stf, Users u, UserPhoto up = null)
         {
             bool result = false;
             MySqlConnection _conn = null;
@@ -278,10 +328,42 @@ namespace UniversitasApp.CRUD
                 _cmd.Transaction = sqlTrans;
 
                 int affectedRow = 0;
+                if (up != null)
+                {
+                    // Create or Update
+                    if (up.up_photo != null)
+                    {
+                        // Create
+                        if (up.up_id == null)
+                        {
+                            Console.WriteLine("\n Image Create");
+                            up.up_id = new Random().Next(int.MinValue, int.MaxValue);
+                            up.up_u_id = u.u_id;
+                            up.up_rec_status = 1;
+                            affectedRow += UserCRUD.CreatePhotoAlive(_conn, up);
+                            Console.WriteLine("\n Image Create Success");
+                        }
+                        // Update
+                        else
+                        {
+                            Console.WriteLine("\n Image Update");
+                            affectedRow += UserCRUD.UpdatePhotoAlive(_conn, (int)u.u_id, up);
+                            Console.WriteLine("\n Image Update Success");
+                        }
+                    }
+                    // Delete
+                    else
+                    {
+                        Console.WriteLine("\n Image Delete");
+                        if (up.up_id == null) throw new Exception("Unknown operation of image because either photo data and ID is null");
+                        affectedRow += UserCRUD.DeletePhotoAlive(_conn, (int)u.u_id, (int)up.up_id);
+                        Console.WriteLine("\n Image Delete Success");
+                    }
+                }
                 affectedRow += UserCRUD.UpdateAlive(_conn, (int)u.u_id, u);
                 affectedRow += UpdateAlive(_conn, (int)stf.stf_id, (int)stf.stf_u_id, stf);
 
-                if(affectedRow != 2) throw new Exception();
+                if(affectedRow != 3-(up == null ? 1 : 0)) throw new Exception();
 
                 sqlTrans.Commit();
                 result = true;

@@ -31,8 +31,8 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<Fakultas> fks = await Task.Run(() => FakultasCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(fks.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<Fakultas> fks = await Task.Run(() => FakultasCRUD.ReadAll(Startup.db_kampus_ConnStr));
+                if(fks == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = fks.Select(c => c.fks_id).ToArray()},
@@ -60,12 +60,12 @@ namespace UniversitasApp.Controllers
             {
                 if(ps_fks_id == null) throw new Exception("", new Exception("Fail to render Program Studi Data, no data parameter!"));
 
-                List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFksAsync(Startup.db_kampus_ConnStr, (int)ps_fks_id));
-                if(ps.Count == 0) throw new Exception("", new Exception("Data not Found!"));
+                List<ProgramStudi> ps = await Task.Run(() => ProgramStudiCRUD.ReadListByFks(Startup.db_kampus_ConnStr, (int)ps_fks_id));
+                if(ps == null) throw new Exception("", new Exception("Data not Found!"));
 
                 Object[] data = {
                     new {Nomor = ps.Select(s => s.ps_id).ToArray()},
-                    new {pnumber = ps.Select(s => s.ps_fks_id).ToArray()},
+                    new {Fksnomor = ps.Select(s => s.ps_fks_id).ToArray()},
                     new {Prodi = ps.Select(s => s.ps_name).ToArray()},
                     new {Deskripsi = ps.Select(s => s.ps_desc).ToArray()}
                 };
@@ -135,10 +135,7 @@ namespace UniversitasApp.Controllers
             try
             {
                 if(string.IsNullOrEmpty(fks.fks_name)) throw new Exception("", new Exception("Data Not added, incomplete Data!"));
-
-                fks.fks_name = fks.fks_name;
-                fks.fks_desc = fks.fks_desc;
-
+                
                 if(FakultasCRUD.Create(Startup.db_kampus_ConnStr, fks) != 1) throw new Exception("", new Exception("Data not added in database!"));
 
                 ress.Code = 1;
@@ -164,9 +161,6 @@ namespace UniversitasApp.Controllers
                 if(ps.ps_fks_id == null || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not added, incomplete Data!"));
 
                 ps.ps_id = rand.Next();
-                ps.ps_fks_id = ps.ps_fks_id;
-                ps.ps_name = ps.ps_name;
-                ps.ps_desc = ps.ps_desc;
 
                 if(ProgramStudiCRUD.Create(Startup.db_kampus_ConnStr, ps) != 1) throw new Exception("", new Exception("Data not added in database!"));
 
@@ -191,9 +185,6 @@ namespace UniversitasApp.Controllers
             {
                 if(fks.fks_id == null || string.IsNullOrEmpty(fks.fks_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
 
-                fks.fks_name = fks.fks_name;
-                fks.fks_desc = fks.fks_desc;
-
                 if(FakultasCRUD.Update(Startup.db_kampus_ConnStr, (int)fks.fks_id, fks) != 1) throw new Exception("", new Exception("Data is not updated in database!"));
 
                 ress.Code = 1;
@@ -216,9 +207,6 @@ namespace UniversitasApp.Controllers
             try
             {
                 if(ps.ps_id == null || ps.ps_fks_id == null || string.IsNullOrEmpty(ps.ps_name)) throw new Exception("", new Exception("Data Not updated, incomplete Data!"));
-
-                ps.ps_name = ps.ps_name;
-                ps.ps_desc = ps.ps_desc;
 
                 if(ProgramStudiCRUD.Update(Startup.db_kampus_ConnStr, (int)ps.ps_id, (int)ps.ps_fks_id, ps) != 1) throw new Exception("", new Exception("Data is not updated in database!"));
 

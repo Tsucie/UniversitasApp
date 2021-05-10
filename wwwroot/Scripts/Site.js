@@ -163,7 +163,7 @@ function AddSite() {
     formData.append("s_religion", $('#s_religion').val());
     formData.append("s_state", $('#s_state').val());
     formData.append("s_stat", parseInt($('#s_stat').val()));
-    console.log(formData.get("u_file"));
+    //console.log(formData.get("u_file"));
 
     $.ajax({
         type: "POST",

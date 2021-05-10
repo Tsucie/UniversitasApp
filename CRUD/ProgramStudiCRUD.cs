@@ -1,8 +1,4 @@
-using System;
-using System.Linq;
 using System.Data;
-using System.Collections;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
@@ -11,7 +7,7 @@ namespace UniversitasApp.CRUD
 {
     public sealed class ProgramStudiCRUD
     {
-        public static async Task<List<ProgramStudi>> ReadListByFksAsync(string connStr, int ps_fks_id)
+        public static List<ProgramStudi> ReadListByFks(string connStr, int ps_fks_id)
         {
             List<ProgramStudi> ps = new List<ProgramStudi>();
             using var _conn = new MySqlConnection(connStr);
@@ -20,16 +16,21 @@ namespace UniversitasApp.CRUD
             string sqlStr = "SELECT * FROM `db_kampus`.`program_studi` WHERE (ps_fks_id = '"+ps_fks_id+"');";
 
             using var _cmd = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = await Task.Run(() => _cmd.ExecuteReader());
-            
-            while (_data.ReadAsync().Result)
+            DataTable dt = new DataTable();
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            dataAdapter.Fill(dt);
+
+            if (dt.Rows.Count > 0)
             {
-                ps.Add(new ProgramStudi {
-                    ps_id = _data.GetInt32(0),
-                    ps_fks_id = _data.GetInt32(1),
-                    ps_name = _data.GetString(2),
-                    ps_desc = _data.GetString(3)
-                });
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ps.Add(new ProgramStudi {
+                        ps_id = (int)dr["ps_id"],
+                        ps_fks_id = (int)dr["ps_fks_id"],
+                        ps_name = (string)dr["ps_name"],
+                        ps_desc = (string)dr["ps_desc"]
+                    });
+                }
             }
             _conn.Close();
             return ps;
@@ -41,15 +42,18 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
             string sqlStr = "SELECT * FROM db_kampus.program_studi WHERE (`ps_id` = '"+ps_id+"');";
-            using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _command.ExecuteReader();
-            if(_data.Read().Equals(true))
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            dataAdapter.Fill(dt);
+
+            if (dt.Rows.Count > 0)
             {
                 ps = new ProgramStudi();
-                ps.ps_id = _data.GetInt32(0);
-                ps.ps_fks_id = _data.GetInt32(1);
-                ps.ps_name = _data.GetString(2);
-                ps.ps_desc = _data.GetString(3);
+                ps.ps_id = (int)dt.Rows[0]["ps_id"];
+                ps.ps_fks_id = (int)dt.Rows[0]["ps_fks_id"];
+                ps.ps_name = (string)dt.Rows[0]["ps_name"];
+                ps.ps_desc = (string)dt.Rows[0]["ps_desc"];
             }
             _conn.Close();
             return ps;

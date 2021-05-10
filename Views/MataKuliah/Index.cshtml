@@ -1,0 +1,125 @@
+@{
+    ViewBag.Title = "Mata Kuliah";
+    ViewBag.Logo = "Mata Kuliah";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- .modal -->
+<div class="modal fade" id="AddEditModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="prodi" class="col-sm-2 control-label">Program Studi</label>
+                    <div class="col-sm-5">
+                        <select class="form-control form-inputs" name="prodi" id="select-prodi"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="semester" class="col-sm-2 control-label">Semester</label>
+                    <div class="col-sm-5">
+                        <select class="form-control form-inputs" name="semester" id="select-semester"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mk_code" class="col-sm-2 control-label">Kode</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="mk_code" placeholder="Kode Mata Kuliah" id="mk_code">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mk_name" class="col-sm-2 control-label">Nama</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="mk_name" placeholder="Nama Mata Kuliah" id="mk_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mk_desc" class="col-sm-2 control-label">Deskripsi</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control form-inputs" name="mk_desc" placeholder="Deskripsi Mata Kuliah" id="mk_desc">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mk_sks" class="col-sm-2 control-label">Jumlah SKS</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control form-inputs" name="mk_sks" placeholder="Jumlah Satuan Kredit Semester Mata Kuliah" id="mk_sks">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mk_mutu" class="col-sm-2 control-label">Syarat Mutu</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control form-inputs" name="mk_mutu" placeholder="Syarat Mutu Mata Kuliah" id="mk_mutu">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Kembali</button>
+        <button type="button" class="btn btn-success" id="btn-add-matkul">Tambah</button>
+        <button type="button" class="btn btn-success" id="btn-edit-matkul">Edit</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- Contet Header -->
+<section class="content-header">
+    <h1 class="card-text">
+    Mata Kuliah
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active" id="active-link"></li>
+    </ol>
+</section>
+<!-- Mata Kuliah Table Content -->
+<section class="content" id="category-table">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box card-custom">
+                <div class="box-header">
+                    <h2 class="box-title"><b>Mata Kuliah</b></h2>
+                </div>
+                <div class="box-body">
+                    <div>
+                        <label>
+                            <a class="btn btn-sm btn-success card-btn" data-toggle="modal" data-target="#AddEditModal" id="Add-btn"><strong>Add Mata Kuliah</strong></a>
+                        </label>
+                    </div>
+                    <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
+                        <div id="tbl-loading-1" class=""></div>
+                        <div class="row">
+                            <div class="col-sm-12 table-responsive">
+                                <table id="tblStaff" class="table table-bordered table-striped table-hover">
+                                    <thead class="bg-me">
+                                        <tr>
+                                            <th>Semester<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Kode<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Mata Kuliah<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>SKS<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Mutu<i class="pull-right glyphicon glyphicon-sort-by-attributes"></i></th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/Scripts/MataKuliah.js" type="text/javascript"></script>
+}

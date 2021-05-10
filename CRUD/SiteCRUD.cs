@@ -96,7 +96,7 @@ namespace UniversitasApp.CRUD
                 ust.s_stat = (short)dt.Rows[0]["s_stat"];
                 ust.s_contact = (string)dt.Rows[0]["s_contact"];
                 ust.u_ut_id = (int)dt.Rows[0]["u_ut_id"];
-                ust.u_username = (string)dt.Rows[0]["u_username"].ToString().Replace("@","");
+                ust.u_username = dt.Rows[0]["u_username"].ToString().Replace("@","");
                 ust.r_desc = (string)dt.Rows[0]["r_desc"];
             }
 
@@ -257,9 +257,10 @@ namespace UniversitasApp.CRUD
                     // Delete
                     else
                     {
-                        // Console.WriteLine("\n Image Delete");
+                        Console.WriteLine("\n Image Delete");
                         if (up.up_id == null) throw new Exception("Unknown operation of image because either photo data and ID is null");
-                        // Console.WriteLine("\n Image Delete Success");
+                        affectedRow += UserCRUD.DeletePhotoAlive(_conn, (int)u.u_id, (int)up.up_id);
+                        Console.WriteLine("\n Image Delete Success");
                     }
                 }
                 affectedRow += UserCRUD.UpdateAlive(_conn, (int)u.u_id, u);

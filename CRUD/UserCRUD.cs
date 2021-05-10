@@ -332,6 +332,22 @@ namespace UniversitasApp.CRUD
             return affectedRow;
         }
 
+        public static int DeletePhotoAlive(MySqlConnection _conn, int u_id, int up_id)
+        {
+            int affectedRow = 0;
+            string sqlStr =
+                "DELETE FROM `db_kampus`.`user_photo` WHERE up_u_id = " + u_id.ToString() + " AND up_id = " + up_id.ToString();
+
+            using var _cmd = new MySqlCommand();
+            _cmd.Connection = _conn;
+
+            if(_conn.State == ConnectionState.Closed) _conn.Open();
+            _cmd.CommandText = sqlStr;
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            return affectedRow;
+        }
+
         // Update users table
         public static int Update(string connStr, int u_id, Users u)
         {

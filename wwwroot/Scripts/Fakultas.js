@@ -278,8 +278,8 @@ function ProdiDataTable(obj_id) {
                       '<td class="tb-content">' + data[2].prodi[i] + '</td>' +
                       '<td class="tb-content">' + data[3].deskripsi[i] + '</td>' +
                       '<td class="tb-content">'+
-                        '<a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnEditProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].pnumber[i] + '\' data_item="Program Studi"><i class="fa fa-edit" style="color: blue;"></i></a>'+
-                        '<a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnDeleteProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].pnumber[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a>'+
+                        '<a data-toggle="tooltip" data-html="true" title="Edit Data" id=\'btnEditProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].fksnomor[i] + '\' data_item="Program Studi"><i class="fa fa-edit" style="color: blue;"></i></a>'+
+                        '<a data-toggle="tooltip" data-html="true" title="Delete Data" id=\'btnDeleteProdi' + i + '\' class="btn" dataId=\'' + data[0].nomor[i] + '\' dataParentId=\'' + data[1].fksnomor[i] + '\'><i class="fa fa-remove" style="color: red;"></i></a>'+
                       '</td>' +
                     '</tr>';
 

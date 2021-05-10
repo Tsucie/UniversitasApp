@@ -276,3 +276,4 @@ D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\Fakultas\In
 D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\User\Profile.cshtml.g.cs
 D:\UniversitasApp\UniversitasApp\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Redis.dll
 D:\UniversitasApp\UniversitasApp\bin\Debug\netcoreapp3.1\StackExchange.Redis.StrongName.dll
+D:\UniversitasApp\UniversitasApp\obj\Debug\netcoreapp3.1\Razor\Views\MataKuliah\Index.cshtml.g.cs

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -26,13 +27,13 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public JsonResult GetAllDataClient()
+        public async Task<JsonResult> GetAllDataClient()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<Client> clients = ClientCRUD.ReadAll(Startup.db_kampus_ConnStr);
-                if(clients.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<Client> clients = await Task.Run(() => ClientCRUD.ReadAll(Startup.db_kampus_ConnStr));
+                if(clients == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] obj = {
                     new {DataId = clients.Select(s => s.c_u_id).ToArray()},

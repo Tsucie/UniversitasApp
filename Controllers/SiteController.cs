@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Data;
 using System.Linq;
 using MySql.Data.MySqlClient;
@@ -26,13 +27,13 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public JsonResult TakeAllSite()
+        public async Task<JsonResult> TakeAllSite()
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<Site> sites = SiteCRUD.ReadAll(Startup.db_kampus_ConnStr);
-                if(sites.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<Site> sites = await Task.Run(() => SiteCRUD.ReadAll(Startup.db_kampus_ConnStr));
+                if(sites == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new {Nomor = sites.Select(s => s.s_u_id).ToArray()},

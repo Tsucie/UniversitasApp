@@ -1,18 +1,13 @@
-using System;
-using System.Linq;
 using System.Data;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
-using UniversitasApp.Controllers;
 
 namespace UniversitasApp.CRUD
 {
     public sealed class FakultasCRUD
     {
-        public static async Task<List<Fakultas>> ReadAllAsync(string connStr)
+        public static List<Fakultas> ReadAll(string connStr)
         {
             List<Fakultas> fks = new List<Fakultas>();
             using var _conn = new MySqlConnection(connStr);
@@ -20,16 +15,21 @@ namespace UniversitasApp.CRUD
 
             string sqlStr = "SELECT * FROM db_kampus.fakultas;";
 
-            using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _dtrdr = await Task.Run(() => _command.ExecuteReader());
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            dataAdapter.Fill(dt);
 
-            while(_dtrdr.ReadAsync().Result)
+            if (dt.Rows.Count > 0)
             {
-                fks.Add(new Fakultas {
-                    fks_id = _dtrdr.GetInt32(0),
-                    fks_name = _dtrdr.GetString(1),
-                    fks_desc = _dtrdr.GetString(2)
-                });
+                foreach (DataRow dr in dt.Rows)
+                {
+                    fks.Add(new Fakultas {
+                        fks_id = (int)dr["fks_id"],
+                        fks_name = (string)dr["fks_name"],
+                        fks_desc = (string)dr["fks_desc"]
+                    });
+                }
             }
             _conn.Close();
             return fks;
@@ -40,15 +40,20 @@ namespace UniversitasApp.CRUD
             Fakultas fks = null;
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
+
             string sqlStr = "SELECT * FROM db_kampus.fakultas WHERE (`fks_id` = '"+fks_id+"');";
-            using var _command = new MySqlCommand(sqlStr, _conn);
-            using MySqlDataReader _data = _command.ExecuteReader();
-            if(_data.Read().Equals(true))
+
+            using var _cmd = new MySqlCommand(sqlStr, _conn);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(_cmd);
+            dataAdapter.Fill(dt);
+
+            if (dt.Rows.Count > 0)
             {
                 fks = new Fakultas();
-                fks.fks_id = _data.GetInt32(0);
-                fks.fks_name = _data.GetString(1);
-                fks.fks_desc = _data.GetString(2);
+                fks.fks_id = (int)dt.Rows[0]["fks_id"];
+                fks.fks_name = (string)dt.Rows[0]["fks_name"];
+                fks.fks_desc = (string)dt.Rows[0]["fks_desc"];
             }
             _conn.Close();
             return fks;

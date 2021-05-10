@@ -32,8 +32,9 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<StaffCategory> list = await Task.Run(() => StaffCategoryCRUD.ReadAllAsync(Startup.db_kampus_ConnStr));
-                if(list.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<StaffCategory> list = await Task.Run(() => StaffCategoryCRUD.ReadAll(Startup.db_kampus_ConnStr));
+                if(list == null || list.Count == 0)
+                    throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] data = {
                     new{Nomor = list.Select(c => c.sc_id).ToArray()},
@@ -84,9 +85,8 @@ namespace UniversitasApp.Controllers
             try
             {
                 if(string.IsNullOrEmpty(sc.sc_name)) throw new Exception("", new Exception("Data not added, Incomplete Data!"));
+                
                 sc.sc_id = rand.Next();
-                sc.sc_name = sc.sc_name;
-                sc.sc_desc = sc.sc_desc;
 
                 if(StaffCategoryCRUD.Create(Startup.db_kampus_ConnStr, sc) != 1) throw new Exception("", new Exception("Data is not added in Database!"));
 
@@ -181,8 +181,8 @@ namespace UniversitasApp.Controllers
             ReturnMessage ress = new ReturnMessage();
             try
             {
-                List<UserStaff> staff = await StaffCRUD.ReadAllAsync(Startup.db_kampus_ConnStr);
-                if(staff.Count == 0) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
+                List<UserStaff> staff = await Task.Run(() => StaffCRUD.ReadAll(Startup.db_kampus_ConnStr));
+                if(staff == null) throw new Exception("", new Exception(HttpStatusCode.InternalServerError.ToString()));
 
                 Object[] obj = {
                     new {Nomor = staff.Select(s => s.stf_u_id).ToArray()},
@@ -210,47 +210,76 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpPost("AddStaff/Create")]
-        public JsonResult CreateStf([FromBody] UserStaff stf)
+        public JsonResult CreateStf([FromForm] UserStaff stf, [FromForm] IFormFile u_file)
         {
             ReturnMessage ress = new ReturnMessage();
             Random rand = new Random();
             try
             {
-                if(string.IsNullOrEmpty(stf.u_username) || string.IsNullOrEmpty(stf.u_password) || stf.stf_sc_id == null  || string.IsNullOrEmpty(stf.stf_fullname) || string.IsNullOrEmpty(stf.stf_nik) || string.IsNullOrEmpty(stf.stf_address) || string.IsNullOrEmpty(stf.stf_province) || string.IsNullOrEmpty(stf.stf_city) || string.IsNullOrEmpty(stf.stf_birthplace) || string.IsNullOrEmpty(stf.stf_birthdate) || string.IsNullOrEmpty(stf.stf_gender) || string.IsNullOrEmpty(stf.stf_religion) || string.IsNullOrEmpty(stf.stf_state) || string.IsNullOrEmpty(stf.stf_email) || stf.stf_stat == null || string.IsNullOrEmpty(stf.stf_contact)) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
+                if (string.IsNullOrEmpty(stf.u_username) ||
+                    string.IsNullOrEmpty(stf.u_password) ||
+                    stf.stf_sc_id == null  ||
+                    string.IsNullOrEmpty(stf.stf_fullname) ||
+                    string.IsNullOrEmpty(stf.stf_nik) ||
+                    string.IsNullOrEmpty(stf.stf_address) ||
+                    string.IsNullOrEmpty(stf.stf_province) ||
+                    string.IsNullOrEmpty(stf.stf_city) ||
+                    string.IsNullOrEmpty(stf.stf_birthplace) ||
+                    string.IsNullOrEmpty(stf.stf_birthdate) ||
+                    string.IsNullOrEmpty(stf.stf_gender) ||
+                    string.IsNullOrEmpty(stf.stf_religion) ||
+                    string.IsNullOrEmpty(stf.stf_state) ||
+                    string.IsNullOrEmpty(stf.stf_email) ||
+                    stf.stf_stat == null ||
+                    string.IsNullOrEmpty(stf.stf_contact) ||
+                    (stf.stf_sc_id == 1 ? (stf.stf_fks_id == null) : false) || // Dekan
+                    (stf.stf_sc_id == 2 ? (stf.stf_fks_id == null || stf.stf_ps_id == null) : false) || // Kaprodi
+                    (stf.stf_sc_id == 3 ? (stf.stf_fks_id == null || stf.stf_ps_id == null || stf.stf_mk_id == null) : false) // Dosen
+                ) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
 
-                stf.stf_id = rand.Next();
-                stf.stf_sc_id = stf.stf_sc_id;
-                stf.stf_fks_id = stf.stf_fks_id;
-                stf.stf_ps_id = stf.stf_ps_id;
-                stf.stf_mk_id = stf.stf_mk_id;
-                stf.stf_fullname = stf.stf_fullname;
-                stf.stf_nik = stf.stf_nik;
-                stf.stf_address = stf.stf_address;
-                stf.stf_province = stf.stf_province;
-                stf.stf_city = stf.stf_city;
-                stf.stf_birthplace = stf.stf_birthplace;
                 stf.stf_birthdate = Convert.ToDateTime(stf.stf_birthdate).ToString("yyyy-MM-dd");
-                stf.stf_gender = stf.stf_gender;
-                stf.stf_religion = stf.stf_religion;
-                stf.stf_state = stf.stf_state;
-                stf.stf_email = stf.stf_email;
-                stf.stf_stat = stf.stf_stat;
-                stf.stf_contact = stf.stf_contact;
 
                 Users u = new Users();
-                u.u_id = rand.Next();
-                stf.stf_u_id = u.u_id;
-                u.u_ut_id = 3;
+                u.u_ut_id = UserEnum.Staff_user.GetHashCode();
                 u.u_username = stf.u_username;
                 u.u_password = Crypto.Hash(stf.u_password);
                 u.u_login_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 u.u_logout_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                u.u_login_status = Convert.ToInt16(false);
-                u.u_rec_status = Convert.ToInt16(true);
+                u.u_login_status = 0;
+                u.u_rec_status = 1;
                 u.u_rec_creator = HttpContext.Session.GetString("u_username");
                 u.u_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                if(!StaffCRUD.CreateStaffAndUsers(Startup.db_kampus_ConnStr, stf, u)) throw new Exception("", new Exception("Data is not added in Database!"));
+                UserPhoto up = null;
+                if (u_file != null)
+                {
+                    up = ImageProcessor.ConvertToThumbnail(u_file, "Staff", stf.u_username);
+                    up.up_rec_status = 1;
+                }
+
+                Role r = null;
+                RolePreviledge rp = null;
+                if (stf.sc_id == 1 || stf.sc_id == 2) // Staff is Dekan or Kaprodi
+                {
+                    r = new Role();
+                    r.r_rt_id = (stf.sc_id == 1) ? RoleEnum.Principal_Staff_User.GetHashCode() : RoleEnum.CoPrincipal_Staff_User.GetHashCode();
+                    r.r_name = (stf.sc_id == 1) ? "Dekan" : "Kaprodi";
+                    r.r_desc = r.r_name;
+                    r.r_rec_status = 1;
+                    r.r_rec_creator = HttpContext.Session.GetString("u_username");
+                    r.r_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                    rp = new RolePreviledge();
+                    rp.rp_view = 1;
+                    rp.rp_add = 1;
+                    rp.rp_edit = 1;
+                    rp.rp_delete = 1;
+                    rp.rp_rec_status = 1;
+                    rp.rp_rec_creator = HttpContext.Session.GetString("u_username");
+                    rp.rp_rec_created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                }
+
+                if(!StaffCRUD.CreateStaffAndUsers(Startup.db_kampus_ConnStr, stf, u, r, rp, up)) throw new Exception("", new Exception("Data is not added in Database!"));
                 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil ditambahkan!";
@@ -302,39 +331,32 @@ namespace UniversitasApp.Controllers
         }
 
         [HttpPut("UpdateStaff/Update")]
-        public JsonResult EditUS([FromBody] UserStaff stf)
+        public JsonResult EditUS([FromForm] UserStaff stf, [FromForm] IFormFile u_file)
         {
             ReturnMessage ress = new ReturnMessage();
             try
             {
                 if(stf.stf_id == null || stf.stf_u_id == null || string.IsNullOrEmpty(stf.u_username)) throw new Exception("", new Exception("Data is not Updated, Incomplete Data!"));
 
-                stf.stf_sc_id = stf.stf_sc_id;
-                stf.stf_fks_id = stf.stf_fks_id;
-                stf.stf_ps_id = stf.stf_ps_id;
-                stf.stf_mk_id = stf.stf_mk_id;
-                stf.stf_fullname = stf.stf_fullname;
-                stf.stf_nik = stf.stf_nik;
-                stf.stf_address = stf.stf_address;
-                stf.stf_province = stf.stf_province;
-                stf.stf_city = stf.stf_city;
-                stf.stf_birthplace = stf.stf_birthplace;
+                if(u_file != null) ImageProcessor.CheckExtention(u_file);
+
                 stf.stf_birthdate = Convert.ToDateTime(stf.stf_birthdate).ToString("yyyy-MM-dd");
-                stf.stf_gender = stf.stf_gender;
-                stf.stf_religion = stf.stf_religion;
-                stf.stf_state = stf.stf_state;
-                stf.stf_email = stf.stf_email;
-                stf.stf_stat = stf.stf_stat;
-                stf.stf_contact = stf.stf_contact;
 
                 Users u = new Users();
                 u.u_id = stf.stf_u_id;
                 u.u_username = stf.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if(stf.u_password != null) u.u_password = Crypto.Hash(stf.u_password);
+                u.u_password = (stf.u_password == null) ? null : Crypto.Hash(stf.u_password, UserEnum.Staff_user.GetHashCode());
 
-                if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, stf, u)) throw new Exception("", new Exception("Data gagal di update di Database!"));
+                UserPhoto up = null;
+                if(u_file != null)
+                {
+                    up = ImageProcessor.ConvertToThumbnail(u_file, "Staff", stf.u_username);
+                    up.up_id = UserCRUD.ReadPhoto(Startup.db_kampus_ConnStr, (int)u.u_id);
+                }
+
+                if(!StaffCRUD.UpdateStaffandUser(Startup.db_kampus_ConnStr, stf, u, up)) throw new Exception("", new Exception("Data gagal di update di Database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";

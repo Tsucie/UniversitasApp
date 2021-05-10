@@ -20561,6 +20561,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "d:\\UniversitasApp\\UniversitasApp\\Views\\MataKuliah\\Index.cshtml",
+      "TargetPath": "Views\\MataKuliah\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "d:\\UniversitasApp\\UniversitasApp\\Views\\_ViewStart.cshtml",
       "TargetPath": "Views\\_ViewStart.cshtml",
       "FileKind": "mvc"
