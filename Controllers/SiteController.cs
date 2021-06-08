@@ -172,7 +172,6 @@ namespace UniversitasApp.Controllers
                 u.u_username = s.u_username;
                 u.u_rec_updator = HttpContext.Session.GetString("u_username");
                 u.u_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                u.u_r_id = (s.u_r_id == null) ? null : s.u_r_id;
                 u.u_password = (s.u_password == null) ? null : Crypto.Hash(s.u_password, UserEnum.Site_user.GetHashCode());
 
                 UserPhoto up = null;
@@ -182,7 +181,17 @@ namespace UniversitasApp.Controllers
                     up.up_id = UserCRUD.ReadPhoto(Startup.db_kampus_ConnStr, (int)u.u_id);
                 }
 
-                if(!SiteCRUD.UpdateSiteAndUser(Startup.db_kampus_ConnStr, s, u, up)) throw new Exception("", new Exception("Data gagal di update di Database!"));
+                Role r = null;
+                if (s.u_r_id != null)
+                {
+                    u.u_r_id = s.u_r_id;
+                    r = new Role();
+                    r.r_desc = s.r_desc;
+                    r.r_rec_updator = HttpContext.Session.GetString("u_username");
+                    r.r_rec_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                }
+
+                if(!SiteCRUD.UpdateSiteAndUser(Startup.db_kampus_ConnStr, s, u, up, r)) throw new Exception("", new Exception("Data gagal di update di Database!"));
 
                 ress.Code = 1;
                 ress.Message = "Data Berhasil Di Update!";

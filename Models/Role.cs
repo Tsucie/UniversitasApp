@@ -32,7 +32,7 @@ namespace UniversitasApp.Models
         public string r_rec_deleted { get; set; }
 
         //role_type
-        public int rt_id { get; set; }
+        public int? rt_id { get; set; }
         public string rt_name { get; set; }
         public string rt_desc { get; set; }
 

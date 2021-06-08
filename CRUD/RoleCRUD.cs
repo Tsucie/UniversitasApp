@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using UniversitasApp.Models;
@@ -59,6 +60,45 @@ namespace UniversitasApp.CRUD
             " VALUES ('"+r.r_id+"','"+r.r_rt_id+"',"+sqlRcIdVal+sqlRsIdVal+"'"+r.r_name+"','"+r.r_desc+"','"+r.r_rec_status+"','"+r.r_rec_creator+"','"+r.r_rec_created+"');";
             Console.WriteLine("\n Role Create : {0}", sqlStr);
 
+            using var _cmd = new MySqlCommand(sqlStr);
+            _cmd.Connection = _conn;
+
+            if (_conn.State == ConnectionState.Closed) _conn.Open();
+            affectedRow = _cmd.ExecuteNonQuery();
+
+            return affectedRow;
+        }
+
+        public static int UpdateAlive(MySqlConnection _conn, int r_id, Role r)
+        {
+            int affectedRow = 0;
+            PropertyInfo[] propInfos = r.GetType().GetProperties();
+            PropertyInfo pi;
+            Object v;
+            string field;
+            string value;
+            string sqlUpdateVal = "";
+            for (int i = 0; i < propInfos.Length; i++)
+            {
+                pi = propInfos[i];
+                v = pi.GetValue(r);
+                if (v != null)
+                {
+                    value = null;
+                    if (v.GetType().Equals(typeof(string))) value = "'"+Convert.ToString(v)+"'";
+                    else value = Convert.ToString(v);
+
+                    if (value != string.Empty)
+                    {
+                        field = pi.Name;
+                        sqlUpdateVal += (field + "=" + value + ",");
+                    }
+                }
+            }
+
+            string sqlStr = "UPDATE `db_kampus`.`role` SET " + sqlUpdateVal + ". WHERE (`r_id`="+r_id+");";
+            sqlStr = sqlStr.Replace(",.","");
+            Console.WriteLine("\n Role Update Sql: {0}", sqlStr);
             using var _cmd = new MySqlCommand(sqlStr);
             _cmd.Connection = _conn;
 

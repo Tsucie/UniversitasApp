@@ -59,7 +59,7 @@ namespace UniversitasApp.CRUD
             using var _conn = new MySqlConnection(connStr);
             _conn.Open();
 
-            string sqlStr = "SELECT s.s_id, s.s_u_id, s.s_fullname, s.s_nik, s.s_address, s.s_province, s.s_city, s.s_birthplace, s.s_birthdate, s.s_gender, s.s_religion, s.s_state, s.s_email, s.s_stat, s.s_contact, u.u_ut_id, u.u_username,"+ 
+            string sqlStr = "SELECT s.s_id, s.s_u_id, s.s_fullname, s.s_nik, s.s_address, s.s_province, s.s_city, s.s_birthplace, s.s_birthdate, s.s_gender, s.s_religion, s.s_state, s.s_email, s.s_stat, s.s_contact, u.u_ut_id, u.u_r_id, u.u_username,"+ 
                             " (SELECT up_photo FROM db_kampus.user_photo WHERE s.s_u_id = up_u_id) AS up_photo, "+
                             " (SELECT up_filename FROM db_kampus.user_photo WHERE s.s_u_id = up_u_id) AS up_filename, "+
                             " (SELECT r_desc FROM db_kampus.role WHERE u.u_r_id = r_id) AS r_desc"+
@@ -97,6 +97,7 @@ namespace UniversitasApp.CRUD
                 ust.s_contact = (string)dt.Rows[0]["s_contact"];
                 ust.u_ut_id = (int)dt.Rows[0]["u_ut_id"];
                 ust.u_username = dt.Rows[0]["u_username"].ToString().Replace("@","");
+                ust.u_r_id = (int)dt.Rows[0]["u_r_id"];
                 ust.r_desc = (string)dt.Rows[0]["r_desc"];
             }
 
@@ -216,7 +217,7 @@ namespace UniversitasApp.CRUD
             return affectedRow;
         }
 
-        public static bool UpdateSiteAndUser(string connStr, Site s, Users u, UserPhoto up = null)
+        public static bool UpdateSiteAndUser(string connStr, Site s, Users u, UserPhoto up = null, Role r = null)
         {
             bool result = false;
             MySqlConnection _conn = null;
@@ -230,7 +231,7 @@ namespace UniversitasApp.CRUD
                 sqlTrans = _conn.BeginTransaction();
                 _cmd.Transaction = sqlTrans;
 
-                int affectedRow = 0;
+                int affectedRows = 0;
                 if (up != null)
                 {
                     // Create or Update
@@ -243,14 +244,14 @@ namespace UniversitasApp.CRUD
                             up.up_id = new Random().Next(int.MinValue, int.MaxValue);
                             up.up_u_id = u.u_id;
                             up.up_rec_status = 1;
-                            affectedRow += UserCRUD.CreatePhotoAlive(_conn, up);
+                            affectedRows += UserCRUD.CreatePhotoAlive(_conn, up);
                             Console.WriteLine("\n Image Create Success");
                         }
                         // Update
                         else
                         {
                             Console.WriteLine("\n Image Update");
-                            affectedRow += UserCRUD.UpdatePhotoAlive(_conn, (int)u.u_id, up);
+                            affectedRows += UserCRUD.UpdatePhotoAlive(_conn, (int)u.u_id, up);
                             Console.WriteLine("\n Image Update Success");
                         }
                     }
@@ -259,14 +260,15 @@ namespace UniversitasApp.CRUD
                     {
                         Console.WriteLine("\n Image Delete");
                         if (up.up_id == null) throw new Exception("Unknown operation of image because either photo data and ID is null");
-                        affectedRow += UserCRUD.DeletePhotoAlive(_conn, (int)u.u_id, (int)up.up_id);
+                        affectedRows += UserCRUD.DeletePhotoAlive(_conn, (int)u.u_id, (int)up.up_id);
                         Console.WriteLine("\n Image Delete Success");
                     }
                 }
-                affectedRow += UserCRUD.UpdateAlive(_conn, (int)u.u_id, u);
-                affectedRow += UpdateAlive(_conn, (int)s.s_id, (int)s.s_u_id, s);
+                if (r != null) affectedRows += RoleCRUD.UpdateAlive(_conn, (int)u.u_r_id, r);
+                affectedRows += UserCRUD.UpdateAlive(_conn, (int)u.u_id, u);
+                affectedRows += UpdateAlive(_conn, (int)s.s_id, (int)s.s_u_id, s);
 
-                if(affectedRow != 3-(up == null ? 1 : 0)) throw new Exception();
+                if(affectedRows != 4-(up == null ? 1 : 0)-(r == null ? 1 : 0)) throw new Exception();
 
                 sqlTrans.Commit();
                 result = true;

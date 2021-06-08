@@ -41,9 +41,9 @@ $('#select-stfcategory').on('change', function () {
     if (this.value === '1' || this.value === '2' || this.value === '3') {
         $('#fakultas-input').show();
         if (this.value === '2' || this.value === '3') {
-            GetProdi(parseInt($("#select-fakultas").val()));
+            $('#prodi-input').show();
             if (this.value === '3') {
-                GetMatkul(parseInt(this.value));
+                $('#matkul-input').show();
             }
             else {
                 $('#matkul-input').hide();
@@ -222,9 +222,8 @@ function addStaff() {
         if (sc_id === 2 || sc_id === 3)
         {
             formData.append("stf_ps_id", parseInt($('#select-prodi').val()));
-            if (sc_id === 3) {
-                formData.append("stf_mk_id", parseInt($('#select-matkul').val()));
-            }
+            if (sc_id === 3)
+                if ($('#select-matkul').val() != "Pilih") formData.append("stf_mk_id", parseInt($('#select-matkul').val()));
         }
     }
     formData.append("stf_fullname", $('#stf_fullname').val());
@@ -418,11 +417,12 @@ function GetFakultas() {
         dataType: "json",
         data: null,
         success: function (data) {
-            // $(comboBox).empty();
+            comboBox.empty();
+            comboBox.append('<option value="null" selected>Pilih</option>');
             let opsi = '';
             for (let i = 0; i < data[0].nomor.length; i++) {
                 opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[2].deskripsi[i]+'">'+data[1].fakultas[i]+'</option>';
-                $(comboBox).append(opsi);
+                comboBox.append(opsi);
             }
         },
         error: function () {
@@ -444,20 +444,17 @@ function GetProdi(fks_id = 0) {
                 pesanAlert(data);
             }
             else {
-                $(comboBox).empty(); // Set to empty every Fakultas ComboBox Change event
-                $(comboBox).append('<option selected>Pilih</option>'); // default option
+                comboBox.empty();
+                comboBox.append('<option value="null" selected>Pilih</option>');
                 let opsi = '';
                 for (let i = 0; i < data[0].nomor.length; i++) {
                     opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[3].deskripsi[i]+'">'+data[2].prodi[i]+'</option>';
-                    $(comboBox).append(opsi);
+                    comboBox.append(opsi);
                 }
             }
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
-        },
-        complete: function () {
-            $('#prodi-input').show();
         }
     });
 }
@@ -475,20 +472,17 @@ function GetMatkul(ps_id = 0) {
                 pesanAlert(data);
             }
             else {
-                $(comboBox).empty(); // Set to empty every Prodi ComboBox Change event
-                $(comboBox).append('<option selected>Pilih</option>'); // default option
+                comboBox.empty();
+                comboBox.append('<option selected>Pilih</option>');
                 let opsi = '';
                 for (let i = 0; i < data[0].nomor.length; i++) {
                     opsi = '<option value="'+data[0].nomor[i]+'" title="'+data[7].desc[i]+'">('+data[8].smcode[i]+') ('+data[5].mkcode[i]+') '+data[6].name[i]+'</option>';
-                    $(comboBox).append(opsi);
+                    comboBox.append(opsi);
                 }
             }
         },
         error: function () {
             notif({msg: "<b>Connection Error!</b>", type: "error", position: "center"});
-        },
-        complete: function () {
-            $('#matkul-input').show();
         }
     });
 }

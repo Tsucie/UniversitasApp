@@ -233,8 +233,8 @@ namespace UniversitasApp.Controllers
                     stf.stf_stat == null ||
                     string.IsNullOrEmpty(stf.stf_contact) ||
                     (stf.stf_sc_id == 1 ? (stf.stf_fks_id == null) : false) || // Dekan
-                    (stf.stf_sc_id == 2 ? (stf.stf_fks_id == null || stf.stf_ps_id == null) : false) || // Kaprodi
-                    (stf.stf_sc_id == 3 ? (stf.stf_fks_id == null || stf.stf_ps_id == null || stf.stf_mk_id == null) : false) // Dosen
+                    (stf.stf_sc_id == 2 ? (stf.stf_fks_id == null || stf.stf_ps_id == null) : false) //|| // Kaprodi
+                    // (stf.stf_sc_id == 3 ? (stf.stf_fks_id == null || stf.stf_ps_id == null || stf.stf_mk_id == null) : false) // Dosen
                 ) throw new Exception("", new Exception("Gagal menambahkan data, Data Tidak Komplit!"));
 
                 stf.stf_birthdate = Convert.ToDateTime(stf.stf_birthdate).ToString("yyyy-MM-dd");

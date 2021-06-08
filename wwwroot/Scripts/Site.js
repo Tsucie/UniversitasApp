@@ -210,7 +210,8 @@ function GetEditData(obj) {
     ShowEditModals();
     let obj_id = {
         "s_id": 0,
-        "s_u_id": parseInt(obj.attributes.data_id.value)
+        "s_u_id": parseInt(obj.attributes.data_id.value),
+        "u_r_id": 0
     };
     $.ajax({
         type: "GET",
@@ -222,6 +223,7 @@ function GetEditData(obj) {
             console.log(data);
             if(data != null) {
                 obj_id.s_id = data.s_id;
+                obj_id.u_r_id = data.u_r_id;
                 edit = obj_id;
                 if (data.up_photo !== null) {
                     let fileExt = data.up_filename.split('.').pop();
@@ -265,6 +267,7 @@ function UpdateSite() {
     
     formData.append("s_id", edit.s_id);
     formData.append("s_u_id", edit.s_u_id);
+    formData.append("u_r_id", edit.u_r_id);
     formData.append("u_username", $('#u_username').val());
     formData.append("s_fullname", $('#s_fullname').val());
     formData.append("s_email", $('#s_email').val());
@@ -280,7 +283,7 @@ function UpdateSite() {
     formData.append("s_religion", $('#s_religion').val());
     formData.append("s_state", $('#s_state').val());
     formData.append("s_stat", parseInt($('#s_stat').val()));
-    console.log(formData.get("u_file"));
+    // console.log(formData.get("u_file"));
 
     $.ajax({
         type: "PUT",
